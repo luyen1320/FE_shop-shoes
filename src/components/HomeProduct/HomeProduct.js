@@ -1,6 +1,6 @@
 import React from "react";
 import "./HomeProduct.scss";
-import shoe1 from "../../../assets/images/nike02.jpeg";
+import shoe1 from "../../assets/images/nike02.jpeg";
 import { Link } from "react-router-dom";
 
 function HomeProduct(props) {

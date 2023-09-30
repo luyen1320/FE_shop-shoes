@@ -1,8 +1,8 @@
 import React from "react";
 import "./Banner.scss";
 // import banner1 from "../../../assets/images/banner01.jpg";
-import banner2 from "../../../assets/images/banner02.jpg";
-import banner3 from "../../../assets/images/banner03.jpg";
+import banner2 from "../../assets/images/banner02.jpg";
+import banner3 from "../../assets/images/banner03.jpg";
 
 function Banner(props) {
   return (

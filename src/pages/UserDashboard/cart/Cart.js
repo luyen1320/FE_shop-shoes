@@ -1,8 +1,8 @@
 import React from "react";
 import "./Cart.scss";
 import { Link } from "react-router-dom";
-import nike02 from "../../assets/images/nike02.jpeg";
-import Navbar from "../layout/navbar/Navbar";
+import nike02 from "../../../assets/images/nike02.jpeg";
+import Navbar from "../../../components/navbar/Navbar";
 
 function Cart(props) {
   return (

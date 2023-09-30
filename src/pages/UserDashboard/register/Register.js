@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import "./Register.scss";
-import Navbar from "../layout/navbar/Navbar";
+import Navbar from "../../../components/navbar/Navbar";
 import { Link } from "react-router-dom";
-import Footer from "../layout/footer/Footer";
+import Footer from "../../../components/footer/Footer";
 import { toast } from "react-toastify";
-import { createNewUser } from "../../service/userService";
+import { createNewUser } from "../../../service/userService";
 import { useNavigate } from "react-router-dom";
 
 function Register(props) {
@@ -63,7 +63,8 @@ function Register(props) {
 
     if (check === true) {
       let response = await createNewUser(username, email, password);
-      let serverData = response.data;
+      let serverData = response;
+      console.log("check res: ", serverData);
       if (+serverData.errCode === 0) {
         toast.success(serverData.errMessage);
         navigate("/login");
