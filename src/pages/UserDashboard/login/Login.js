@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import "./Login.scss";
-import Navbar from "../layout/navbar/Navbar";
+import Navbar from "../../../components/navbar/Navbar";
 import { Link, useNavigate } from "react-router-dom";
-import Footer from "../layout/footer/Footer";
+import Footer from "../../../components/footer/Footer";
 import { toast } from "react-toastify";
-import { loginUser } from "../../service/userService";
+import { loginUser } from "../../../service/userService";
 
 function Login(props) {
   const navigate = useNavigate();
@@ -32,15 +32,15 @@ function Login(props) {
 
     let response = await loginUser(valueLogin, password);
 
-    if (response && response.data && +response.data.errCode === 0) {
+    if (response && +response.errCode === 0) {
       //success
       navigate("/");
       //redux
     }
 
-    if (response && response.data && +response.data.errCode !== 0) {
+    if (response && +response.errCode !== 0) {
       //error
-      toast.error(response.data.errMessage);
+      toast.error(response.errMessage);
     }
     console.log(">> check response: ", response);
   };

@@ -1,8 +1,7 @@
-// import axios from "../axios";
-import axios from "axios";
+import axios from "../axios";
 
 const createNewUser = (username, email, password) => {
-  return axios.post("http://localhost:6868/api/v1/create-new-user", {
+  return axios.post("/api/v1/create-new-user", {
     username,
     email,
     password,
@@ -10,10 +9,38 @@ const createNewUser = (username, email, password) => {
 };
 
 const loginUser = (valueLogin, password) => {
-  return axios.post("http://localhost:6868/api/v1/login", {
+  return axios.post("/api/v1/login", {
     valueLogin,
     password,
   });
 };
 
-export { createNewUser, loginUser };
+const fetchSizeShoes = () => {
+  return axios.get("/api/v1/size");
+};
+
+const createNewSuppiler = (selectedData) => {
+  return axios.post("/api/v1/supplier/create", { ...selectedData });
+};
+
+const fetchAllSupplier = (page, limit) => {
+  return axios.get(`/api/v1/supplier/read?page=${page}&limit=${limit}`);
+};
+
+const deleteSupplier = (supplier) => {
+  return axios.delete("/api/v1/supplier/delete", { data: { id: supplier.id } });
+};
+
+const updateSupplier = (supplier) => {
+  return axios.put("/api/v1/supplier/update", { ...supplier });
+};
+
+export {
+  createNewUser,
+  loginUser,
+  fetchSizeShoes,
+  createNewSuppiler,
+  fetchAllSupplier,
+  deleteSupplier,
+  updateSupplier,
+};

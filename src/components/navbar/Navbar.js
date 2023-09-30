@@ -22,7 +22,7 @@ function Navbar(props) {
             <Link to="">Brands</Link>
             <ul>
               <li>
-                <Link to="/jordan">Jordan</Link>
+                <Link to="/admin">Jordan</Link>
               </li>
               <li>
                 <Link to="">Adidas</Link>
