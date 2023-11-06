@@ -235,6 +235,24 @@ button{
   }
 }
 
+.button-cart{
+  outline: none;
+  height: 50px;
+  line-height: 50px;
+  // background-color: #f94e3f;
+  // border: 1px solid #f94e3f;
+  text-transform: inherit;
+  font-weight: 700;
+  font-size: 15px;
+  // transition: all .3s ease;
+  // -webkit-transition: all .3s ease;
+  // -moz-transition: all .3s ease;
+  // -o-transition: all .3s ease;
+  margin: 0 0 0 10px;
+  padding: 0 10px;
+  // color: #fff;
+}
+
 //delivery
 // .wid {
 //   width: 400px;
@@ -271,4 +289,15 @@ button{
     overflow-y:  auto;
     padding: 20px;
     color: rgba(255, 255, 255, 0.95);
+}
+
+//product
+h4{
+  text-align: center;
+  // border-left: 8px solid #ff2a2d;
+  font-size: 18px;
+  font-weight: 700;
+  background: black;
+  color: white;
+  padding: 3px 8px;
 }
