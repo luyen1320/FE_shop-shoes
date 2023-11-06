@@ -6,7 +6,7 @@ import { getBase64 } from "../../assets/data/image";
 import Dropzone from "react-dropzone";
 import { fetchSizeShoes } from "../../service/userService";
 import { toast } from "react-toastify";
-import { values } from "lodash";
+import _, { values } from "lodash";
 
 const CreateProduct = () => {
   // const [productName, setProductName] = useState("");
@@ -22,16 +22,17 @@ const CreateProduct = () => {
 
   const [shoeSize, setShoeSize] = useState([]);
 
-  const [product, setProduct] = useState({
-    productName: "",
-    image: "",
+  const defaultDataProduct = {
+    nameProduct: "",
+    singleImage: "",
+    multipleImage: "",
     description: "",
     price: null,
     discount: null,
-    // supplier: "",
-  });
+    supplier: "",
+  };
 
-  const shoeSizes = ["36", "37", "38", "39", "40", "41", "42"];
+  const [product, setProduct] = useState(defaultDataProduct);
 
   const handleSingleImage = async (files) => {
     const base64Image = await getBase64(files[0]);
@@ -75,18 +76,17 @@ const CreateProduct = () => {
     }
   };
 
-  const handleOnchangeProduct = (e) => {
-    setProduct((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  const handleOnchangeProduct = (value, name) => {
+    let _dataProduct = _.cloneDeep(product);
+    _dataProduct[name] = value;
+    setProduct(_dataProduct);
   };
 
   const handleSubmitProduct = (e) => {
     // const productData = { productName, price, description, size };
     // const productData = {}
     // console.log("check data: ", productData);
-  };
-
-  const handleClick = () => {
-    alert("click me");
+    console.log(e);
   };
 
   return (
@@ -101,10 +101,10 @@ const CreateProduct = () => {
             <input
               type="text"
               className="form-input"
-              // value={productName}
-              onChange={handleOnchangeProduct}
-              name="productName"
-              // onChange={(e) => setProductName(e.target.value)}
+              value={product.nameProduct}
+              onChange={(e) =>
+                handleOnchangeProduct(e.target.value, "nameProduct")
+              }
             />
           </div>
 
@@ -115,10 +115,8 @@ const CreateProduct = () => {
             <input
               type="text"
               className="form-input"
-              // value={price}
-              onChange={handleOnchangeProduct}
-              name="price"
-              // onChange={(e) => setPrice(e.target.value)}
+              value={product.price}
+              onChange={(e) => handleOnchangeProduct(e.target.value, "price")}
             />
           </div>
           <div className="col-md-4">
@@ -128,18 +126,15 @@ const CreateProduct = () => {
             <input
               type="text"
               className="form-input"
-              // value={discount}
-              onChange={handleOnchangeProduct}
-              name="discount"
-              // onChange={(e) => setDiscount(e.target.value)}
+              value={product.discount}
+              onChange={(e) =>
+                handleOnchangeProduct(e.target.value, "discount")
+              }
             />
           </div>
           <div className="col-md-4">
             <label className="form-label" style={{ color: "black" }}>
-              Nhà cung cấp{" "}
-              <span onClick={handleClick} style={{ cursor: "pointer" }}>
-                (Thêm)
-              </span>
+              Nhà cung cấp
             </label>
             <select className="form-select">
               <option>--- chọn ---</option>
@@ -203,6 +198,10 @@ const CreateProduct = () => {
                         objectFit: "cover",
                       }}
                       alt="Selected Image"
+                      value={product.singleImage}
+                      onChange={(e) =>
+                        handleOnchangeProduct(e.target.value, "singleImage")
+                      }
                     />
                   ) : (
                     <p>Kéo và thả ảnh hoặc click để chọn ảnh</p>
@@ -239,6 +238,10 @@ const CreateProduct = () => {
                           objectFit: "cover",
                           margin: "6px",
                         }}
+                        value={product.multipleImage}
+                        onChange={(e) =>
+                          handleOnchangeProduct(e.target.value, "multipleImage")
+                        }
                       />
                     ))
                   ) : (

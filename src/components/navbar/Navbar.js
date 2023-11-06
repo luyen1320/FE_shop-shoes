@@ -25,7 +25,7 @@ function Navbar(props) {
                 <Link to="/admin">Jordan</Link>
               </li>
               <li>
-                <Link to="">Adidas</Link>
+                <Link to="/product-page">Adidas</Link>
               </li>
               <li>
                 <Link to="">Nike</Link>

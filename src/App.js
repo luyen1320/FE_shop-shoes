@@ -16,6 +16,8 @@ import {
   Customer,
   Supplier,
 } from "./pages/AdminDashboard";
+import ProductDetails from "./components/productDetails/productDetails";
+import ProductPage from "./components/productDetails/ProductPage";
 
 function App() {
   return (
@@ -26,6 +28,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/product-details" element={<ProductDetails />} />
+          <Route path="/product-page" element={<ProductPage />} />
 
           {/*ADMIN */}
           <Route path="/admin" element={<AdminLayout />}>
