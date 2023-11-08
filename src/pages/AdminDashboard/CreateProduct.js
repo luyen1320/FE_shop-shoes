@@ -6,37 +6,29 @@ import { getBase64 } from "../../assets/data/image";
 import Dropzone from "react-dropzone";
 import { fetchSizeShoes } from "../../service/userService";
 import { toast } from "react-toastify";
-import _, { values } from "lodash";
+import _, { set, values } from "lodash";
+import { createProduct } from "../../service/productService";
 
 const CreateProduct = () => {
-  // const [productName, setProductName] = useState("");
-  // const [price, setPrice] = useState(0);
-  // const [description, setDescription] = useState("");
-  // const [size, setSize] = useState("");
-  // const [discount, setDiscount] = useState(0);
-  // const [image, setImage] = useState();
-
-  const [singleImagePreview, setSingleImagePreview] = useState(null);
-  const [multiImagesPreview, setMultiImagesPreview] = useState([]);
   const [selectItems, setSelectedItems] = useState([]);
+  const [quantityInStock, setquantityInStock] = useState([]);
 
   const [shoeSize, setShoeSize] = useState([]);
 
-  const defaultDataProduct = {
-    nameProduct: "",
-    singleImage: "",
-    multipleImage: "",
+  const [product, setProduct] = useState({
+    userId: 1,
+    productName: "",
+    image: "",
+    images: "",
     description: "",
-    price: null,
     discount: null,
-    supplier: "",
-  };
-
-  const [product, setProduct] = useState(defaultDataProduct);
+    supplier: null,
+    price: "",
+  });
 
   const handleSingleImage = async (files) => {
     const base64Image = await getBase64(files[0]);
-    setSingleImagePreview(base64Image);
+    setProduct({ ...product, image: base64Image });
     console.log("check image: ", base64Image);
   };
 
@@ -44,7 +36,7 @@ const CreateProduct = () => {
     const base64Images = await Promise.all(
       files.map((file) => getBase64(file))
     );
-    setMultiImagesPreview(base64Images);
+    setProduct({ ...product, images: base64Images });
     console.log("check images: ", base64Images);
   };
 
@@ -73,6 +65,11 @@ const CreateProduct = () => {
           return id !== value;
         });
       });
+      setquantityInStock((prevData) => {
+        return prevData.filter((item) => {
+          return item.sizeId !== value;
+        });
+      });
     }
   };
 
@@ -82,11 +79,25 @@ const CreateProduct = () => {
     setProduct(_dataProduct);
   };
 
-  const handleSubmitProduct = (e) => {
+  const handleSubmitProduct = async (e) => {
+    e.preventDefault();
     // const productData = { productName, price, description, size };
     // const productData = {}
+    let productData = { ...product, inventory: quantityInStock };
+
+    try {
+      const res = await createProduct(productData);
+      console.log(res);
+      if (res && res.errCode === 0) {
+        toast.success("Tạo sản phẩm thành công");
+      } else {
+        toast.error(res.errMessage);
+      }
+    } catch (error) {
+      console.log("error: ", error);
+      toast.error("Tạo sản phẩm thất bại");
+    }
     // console.log("check data: ", productData);
-    console.log(e);
   };
 
   return (
@@ -101,9 +112,9 @@ const CreateProduct = () => {
             <input
               type="text"
               className="form-input"
-              value={product.nameProduct}
+              value={product.productName}
               onChange={(e) =>
-                handleOnchangeProduct(e.target.value, "nameProduct")
+                handleOnchangeProduct(e.target.value, "productName")
               }
             />
           </div>
@@ -136,7 +147,12 @@ const CreateProduct = () => {
             <label className="form-label" style={{ color: "black" }}>
               Nhà cung cấp
             </label>
-            <select className="form-select">
+            <select
+              className="form-select"
+              onChange={(e) =>
+                handleOnchangeProduct(e.target.value, "supplier")
+              }
+            >
               <option>--- chọn ---</option>
               <option>Nike</option>
               <option>Adidas</option>
@@ -149,7 +165,15 @@ const CreateProduct = () => {
             <label className="form-label" style={{ color: "black" }}>
               Mô tả
             </label>
-            {/* <MarkDown /> */}
+            <textarea
+              name="description"
+              id="description"
+              rows="6"
+              className="w-100 p-2"
+              onChange={(e) =>
+                handleOnchangeProduct(e.target.value, "description")
+              }
+            ></textarea>
           </div>
 
           <div className="col-md-6">
@@ -167,7 +191,35 @@ const CreateProduct = () => {
                       onChange={checkboxHandler}
                     />
                     Size {item.sizeShoes}:
-                    <input type="number" />
+                    <input
+                      type="number"
+                      onChange={(e) => {
+                        setquantityInStock((prevQuantityInStock) => {
+                          const existingItemIndex =
+                            prevQuantityInStock.findIndex(
+                              (itemInStock) => itemInStock.sizeId === item.id
+                            );
+
+                          if (existingItemIndex !== -1) {
+                            // Nếu item.id đã tồn tại trong mảng, cập nhật giá trị
+                            prevQuantityInStock[
+                              existingItemIndex
+                            ].quantityInStock = e.target.value;
+                            return [...prevQuantityInStock]; // Trả về mảng hiện tại
+                          } else {
+                            // Nếu item.id chưa tồn tại trong mảng, thêm một phần tử mới
+                            return [
+                              ...prevQuantityInStock,
+                              {
+                                sizeId: item.id,
+                                quantityInStock: e.target.value,
+                              },
+                            ];
+                          }
+                        });
+                      }}
+                      disabled={!selectItems.includes(item.id)}
+                    />
                   </div>
                 );
               })}
@@ -188,10 +240,10 @@ const CreateProduct = () => {
               {({ getRootProps, getInputProps }) => (
                 <div {...getRootProps()} className="signle-image">
                   <input {...getInputProps()} />
-                  {singleImagePreview ? (
+                  {product?.image ? (
                     // eslint-disable-next-line jsx-a11y/img-redundant-alt
                     <img
-                      src={singleImagePreview}
+                      src={product?.image}
                       style={{
                         width: "150px",
                         height: "150px",
@@ -225,8 +277,8 @@ const CreateProduct = () => {
               {({ getRootProps, getInputProps }) => (
                 <div {...getRootProps()} className="multiple-image">
                   <input {...getInputProps()} />
-                  {multiImagesPreview.length > 0 ? (
-                    multiImagesPreview.map((base64Image) => (
+                  {product?.images.length > 0 ? (
+                    product?.images.map((base64Image) => (
                       // eslint-disable-next-line jsx-a11y/img-redundant-alt
                       <img
                         key={base64Image}
@@ -255,7 +307,7 @@ const CreateProduct = () => {
             <button
               className="btn btn-primary"
               type="submit"
-              onClick={() => handleSubmitProduct()}
+              onClick={(e) => handleSubmitProduct(e)}
             >
               Submit form
             </button>
