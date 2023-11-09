@@ -15,6 +15,25 @@ const loginUser = (valueLogin, password) => {
   });
 };
 
+const getCustomer = () => {
+  return axios.get(`/api/v1/getstaff`);
+};
+const getUser = () => {
+  return axios.get(`/api/v1/getuser`);
+};
+const getOneCustomer = (id) => {
+  return axios.get(`/api/v1/getuser/${id}`);
+};
+const deleteUser = (id) => {
+  return axios.delete(`/api/v1/user/${id}`);
+};
+const createCustomer = (data) => {
+  return axios.post(`/api/v1/create-new-user`, data);
+};
+const editCustomer = (data) => {
+  return axios.put(`/api/v1/user/update`, data);
+};
+
 const fetchSizeShoes = () => {
   return axios.get("/api/v1/size");
 };
@@ -43,4 +62,10 @@ export {
   fetchAllSupplier,
   deleteSupplier,
   updateSupplier,
+  getCustomer,
+  getOneCustomer,
+  createCustomer,
+  editCustomer,
+  deleteUser,
+  getUser,
 };

@@ -11,13 +11,13 @@ import {
   Home,
   ManageOrder,
   ManageProduct,
-  ManageUser,
   CreateProduct,
-  Customer,
   Supplier,
+  ManageUser,
 } from "./pages/AdminDashboard";
 import ProductDetails from "./components/productDetails/productDetails";
 import ProductPage from "./components/productDetails/ProductPage";
+import ManageCustomer from "./pages/AdminDashboard/ManageCustomer";
 
 function App() {
   return (
@@ -34,11 +34,11 @@ function App() {
           {/*ADMIN */}
           <Route path="/admin" element={<AdminLayout />}>
             <Route path="home" element={<Home />} />
-            <Route path="manage-user" element={<ManageUser />} />
+            <Route path="manage-user" element={<ManageCustomer />} />
             <Route path="manage-order" element={<ManageOrder />} />
             <Route path="manage-product" element={<ManageProduct />} />
             <Route path="create-product" element={<CreateProduct />} />
-            <Route path="manage-customer" element={<Customer />} />
+            <Route path="manage-customer" element={<ManageUser />} />
             <Route path="supplier" element={<Supplier />} />
           </Route>
         </Routes>

@@ -100,6 +100,7 @@ const CreateProduct = () => {
     // console.log("check data: ", productData);
   };
 
+  console.log(shoeSize);
   return (
     <div className="create-product auto">
       <Nav />

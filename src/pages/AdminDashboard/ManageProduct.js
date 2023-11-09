@@ -11,7 +11,7 @@ import { convertBase64ToImage } from "../../assets/data/image";
 
 const ManageProduct = () => {
   const [getProduct, setGetProduct] = useState([]);
-  const getSizeShoes = async () => {
+  const getAllProducts = async () => {
     let res = await getAllProduct();
     if (res && res.errCode === 0) {
       setGetProduct(res.DT);
@@ -21,7 +21,7 @@ const ManageProduct = () => {
   };
 
   useEffect(() => {
-    getSizeShoes();
+    getAllProducts();
   }, []);
   console.log(getProduct);
   return (
