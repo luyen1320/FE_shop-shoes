@@ -85,3 +85,52 @@
     }
   }
 }
+
+.desc{
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  .tabs{
+    padding-left: 0;
+
+    li{
+      position: relative;
+      float: left;
+      padding: 0px 10px 0px 10px;
+      cursor: pointer;
+
+
+      
+      // &:active{
+      //   text-decoration: none;
+      //   box-shadow: 0 3px tomato;
+      //   padding: 4px;
+      //   color: black;
+      // }
+    }
+  }
+}
+
+.content{
+  margin-top: 20px;
+  height: 20rem;
+  // text-align: center;
+  .content-desc{
+    margin: auto;
+    max-width: 800px;
+  }
+
+  .content-review{
+    margin: auto;
+    max-width: 800px;
+    text-align: center;
+  }
+}
+
+.content-none{
+  display: none;
+}
+
+.content-active{
+  display: block;
+}

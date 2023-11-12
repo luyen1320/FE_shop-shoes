@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./product.scss";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -7,8 +7,14 @@ import ProductSlider from "./productSlider/productSlider";
 import { productImages } from "../../assets/data/slider";
 import Navbar from "../navbar/Navbar";
 import Footer from "../footer/Footer";
+import Review from "./Tabs/Review";
 
 const ProductDetails = () => {
+  const [active, setActive] = useState(1);
+
+  const handleToggleClick = (id) => {
+    setActive(id);
+  };
   return (
     <>
       <Navbar />
@@ -64,6 +70,41 @@ const ProductDetails = () => {
               </button>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div className="desc col-12">
+        <ul className="tabs">
+          <li onClick={() => handleToggleClick(1)}>Description</li>
+          <li onClick={() => handleToggleClick(2)}>Đánh giá</li>
+        </ul>
+      </div>
+
+      <div className="content">
+        <div
+          className={
+            active === 1 ? "content-desc content-active" : "content-none"
+          }
+        >
+          Phiên bản năm 2023 của Air Jordan 11 Retro ‘Gratitude / Defining
+          Moments’, còn được gọi là ‘DMP’, mang lại một cách phối màu đáng thèm
+          muốn của mẫu cũ, ban đầu được kết hợp với Air Jordan 6 như một nửa của
+          ‘Gói khoảnh khắc xác định’ ‘ từ năm 2006. Lấy cảm hứng từ phối màu OG
+          ‘Concord’, hình dáng của giải vô địch có phần trên bằng da lộn màu
+          trắng với các lỗ dây vải cùng màu và tấm chắn bùn bằng da sáng chế màu
+          đen. Các điểm nhấn màu vàng kim loại xuất hiện trên các yếu tố thương
+          hiệu của giày, bao gồm logo Jumpman được dập nổi ở mắt cá chân bên và
+          con số ’23’ được đóng dấu trên tab gót chân. Giày thể thao chạy trên
+          đế giữa Phylon, được hỗ trợ bởi tấm đế bằng sợi carbon và đế ngoài
+          bằng cao su mờ.
+        </div>
+
+        <div
+          className={
+            active === 2 ? "content-review content-active" : "content-none"
+          }
+        >
+          <Review />
         </div>
       </div>
       <Footer />
