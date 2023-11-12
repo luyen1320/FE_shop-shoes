@@ -5,10 +5,46 @@ const createProduct = (data) => {
     withCredentials: true,
   });
 };
-const getAllProduct = () => {
-  return axios.get("api/v1/product", {
+const addToCart = (data) => {
+  return axios.post("/api/v1/addtocart", data, {
     withCredentials: true,
   });
 };
 
-export { createProduct, getAllProduct };
+const createOrder = (data) => {
+  return axios.post("/api/v1/createOrder", data, {
+    withCredentials: true,
+  });
+};
+const getAllProduct = () => {
+  return axios.get("/api/v1/product", {
+    withCredentials: true,
+  });
+};
+const getAllOrder = () => {
+  return axios.get("/api/v1/getallorder", {
+    withCredentials: true,
+  });
+};
+
+const getAllProductInCart = (id) => {
+  return axios.get(`/api/v1/getproductincart/${id}`, {
+    withCredentials: true,
+  });
+};
+
+const getOneProduct = (id) => {
+  return axios.get(`/api/v1/product/${id}`, {
+    withCredentials: true,
+  });
+};
+
+export {
+  createProduct,
+  getAllProduct,
+  getOneProduct,
+  addToCart,
+  getAllProductInCart,
+  createOrder,
+  getAllOrder,
+};

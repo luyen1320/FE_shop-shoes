@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 function Navbar(props) {
   return (
-    <header>
+    <header className="z-40">
       <div className="logo">
         <h1>
           <Link to="/" style={{ color: "#c72092", textDecoration: "none" }}>

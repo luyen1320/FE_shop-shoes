@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../navbar/Navbar";
 import "./ProductPage.scss";
 import { Link } from "react-router-dom";
@@ -12,8 +12,25 @@ import shoe02 from "../../assets/images/banner02.jpg";
 import shoe03 from "../../assets/images/banner03.jpg";
 import shoe04 from "../../assets/images/banner04.jpg";
 import Checkbox from "../../assets/Checkbox";
+import { getAllProduct } from "../../service/productService";
+import { toast } from "react-toastify";
+import { convertBase64ToImage } from "../../assets/data/image";
 
 const ProductPage = () => {
+  const [getProduct, setGetProduct] = useState([]);
+  const getAllProducts = async () => {
+    let res = await getAllProduct();
+    if (res && res.errCode === 0) {
+      setGetProduct(res.DT);
+    } else {
+      toast.error(res.errMessage);
+    }
+  };
+
+  useEffect(() => {
+    getAllProducts();
+  }, []);
+  console.log(getProduct);
   return (
     <>
       <Navbar />
@@ -97,177 +114,38 @@ const ProductPage = () => {
               </Swiper>
             </div>
             <div className="product-list">
-              <div className="list-item">
-                <div className="image">
-                  <Link to="/product-details">
-                    <img src={shoe1} alt="" />
-                  </Link>
-                </div>
-                <div className="list-desc">
-                  <p>
-                    Giày Nike Off-White x Air Jordan 1 Retro High OG 'Chicago'
-                    // AA3834-101
-                  </p>
-                </div>
-                <div className="price">
-                  <div>
-                    <span className="price-new">1.000.000₫</span>
-                    <span className="price-old">1.200.000₫</span>
-                  </div>
-                </div>
-              </div>
-              <div className="list-item">
-                <div className="image">
-                  <Link to="/jordan">
-                    <img src={shoe1} alt="" />
-                  </Link>
-                </div>
-                <div className="list-desc">
-                  <p>
-                    Giày Nike Off-White x Air Jordan 1 Retro High OG 'Chicago'
-                    // AA3834-101
-                  </p>
-                </div>
-                <div className="price">
-                  <div>
-                    <span className="price-new">1.000.000₫</span>
-                    <span className="price-old">1.200.000₫</span>
-                  </div>
-                </div>
-              </div>
-              <div className="list-item">
-                <div className="image">
-                  <Link to="/jordan">
-                    <img src={shoe1} alt="" />
-                  </Link>
-                </div>
-                <div className="list-desc">
-                  <p>
-                    Giày Nike Off-White x Air Jordan 1 Retro High OG 'Chicago'
-                    // AA3834-101
-                  </p>
-                </div>
-                <div className="price">
-                  <div>
-                    <span className="price-new">1.000.000₫</span>
-                    <span className="price-old">1.200.000₫</span>
-                  </div>
-                </div>
-              </div>
-              <div className="list-item">
-                <div className="image">
-                  <Link to="/jordan">
-                    <img src={shoe1} alt="" />
-                  </Link>
-                </div>
-                <div className="list-desc">
-                  <p>
-                    Giày Nike Off-White x Air Jordan 1 Retro High OG 'Chicago'
-                    // AA3834-101
-                  </p>
-                </div>
-                <div className="price">
-                  <div>
-                    <span className="price-new">1.000.000₫</span>
-                    <span className="price-old">1.200.000₫</span>
-                  </div>
-                </div>
-              </div>
-              <div className="list-item">
-                <div className="image">
-                  <Link to="/jordan">
-                    <img src={shoe1} alt="" />
-                  </Link>
-                </div>
-                <div className="list-desc">
-                  <p>
-                    Giày Nike Off-White x Air Jordan 1 Retro High OG 'Chicago'
-                    // AA3834-101
-                  </p>
-                </div>
-                <div className="price">
-                  <div>
-                    <span className="price-new">1.000.000₫</span>
-                    <span className="price-old">1.200.000₫</span>
-                  </div>
-                </div>
-              </div>
-              <div className="list-item">
-                <div className="image">
-                  <Link to="/jordan">
-                    <img src={shoe1} alt="" />
-                  </Link>
-                </div>
-                <div className="list-desc">
-                  <p>
-                    Giày Nike Off-White x Air Jordan 1 Retro High OG 'Chicago'
-                    // AA3834-101
-                  </p>
-                </div>
-                <div className="price">
-                  <div>
-                    <span className="price-new">1.000.000₫</span>
-                    <span className="price-old">1.200.000₫</span>
-                  </div>
-                </div>
-              </div>
-              <div className="list-item">
-                <div className="image">
-                  <Link to="/jordan">
-                    <img src={shoe1} alt="" />
-                  </Link>
-                </div>
-                <div className="list-desc">
-                  <p>
-                    Giày Nike Off-White x Air Jordan 1 Retro High OG 'Chicago'
-                    // AA3834-101
-                  </p>
-                </div>
-                <div className="price">
-                  <div>
-                    <span className="price-new">1.000.000₫</span>
-                    <span className="price-old">1.200.000₫</span>
-                  </div>
-                </div>
-              </div>
-              <div className="list-item">
-                <div className="image">
-                  <Link to="/jordan">
-                    <img src={shoe1} alt="" />
-                  </Link>
-                </div>
-                <div className="list-desc">
-                  <p>
-                    Giày Nike Off-White x Air Jordan 1 Retro High OG 'Chicago'
-                    // AA3834-101
-                  </p>
-                </div>
-                <div className="price">
-                  <div>
-                    <span className="price-new">1.000.000₫</span>
-                    <span className="price-old">1.200.000₫</span>
-                  </div>
-                </div>
-              </div>
-              <div className="list-item">
-                <div className="image">
-                  <Link to="/jordan">
-                    <img src={shoe1} alt="" />
-                  </Link>
-                </div>
-                <div className="list-desc">
-                  <p>
-                    Giày Nike Off-White x Air Jordan 1 Retro High OG 'Chicago'
-                    // AA3834-101
-                  </p>
-                </div>
-                <div className="price">
-                  <div>
-                    <span className="price-new">1.000.000₫</span>
-                    <span className="price-old">1.200.000₫</span>
-                  </div>
-                </div>
-              </div>
+              {getProduct?.length > 0 &&
+                getProduct?.map((item, index) => {
+                  return (
+                    <div className="list-item" key={index}>
+                      <div className="image">
+                        <Link to={`/product-details/${item?.id}`}>
+                          <img
+                            src={convertBase64ToImage(item?.image)}
+                            alt=""
+                            className="aspect-[14/15]"
+                          />
+                        </Link>
+                      </div>
+                      <div className="list-desc">
+                        <p>{item.productName}</p>
+                      </div>
+                      <div className="price">
+                        <div>
+                          <span className="price-new">
+                            {parseInt(item?.price).toLocaleString("vi-VN")}đ
+                          </span>
+                          <span className="price-old">
+                            {(parseInt(item?.price) * 1.2).toLocaleString(
+                              "vi-VN"
+                            )}
+                            đ
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
             </div>
 
             <div className="paginate">

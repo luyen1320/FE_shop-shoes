@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Nav from "./Nav";
 import "./ManageOrder.scss";
 import { Table } from "react-bootstrap";
@@ -7,6 +7,8 @@ import ReactPaginate from "react-paginate";
 import { BiEdit, BiMenuAltLeft } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import { ModalOrder } from "../../components";
+import { getAllOrder } from "../../service/productService";
+import { toast } from "react-toastify";
 
 const ManageOrder = () => {
   const [isShowModalOrder, setIsShowModalOrder] = useState(false);
@@ -22,6 +24,21 @@ const ManageOrder = () => {
   const handleClick = () => {
     alert("Mã đơn hàng");
   };
+
+  const [getOrders, setGetOrders] = useState([]);
+  const getAllOrders = async () => {
+    let res = await getAllOrder();
+    if (res && res.errCode === 0) {
+      setGetOrders(res.DT);
+    } else {
+      toast.error(res.errMessage);
+    }
+  };
+
+  useEffect(() => {
+    getAllOrders();
+  }, []);
+  console.log(getOrders);
   return (
     <div className="manage-order">
       <Nav />
@@ -65,91 +82,41 @@ const ManageOrder = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td className="code-order">
-                  <button onClick={handleClick}>#M1</button>
-                </td>
-                <td>Đinh Ngọc Luyện</td>
-                <td>luyendinh1320@gmail.com</td>
-                <td>0336909524</td>
-                <td>9/4/2023</td>
-                <td>Chờ xử lý</td>
-                <td>
-                  <button
-                    className="btn btn-primary mx-3"
-                    onClick={() => handleEditOrder()}
-                  >
-                    <BiEdit />
-                  </button>
-                  <button className="btn btn-danger">
-                    <AiFillDelete />
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>#M214542</td>
-                <td>Đinh Ngọc Luyện</td>
-                <td>luyendinh1320@gmail.com</td>
-                <td>0336909524</td>
-                <td>9/4/2023</td>
-                <td>Xác nhận</td>
-                <td>
-                  <button className="btn btn-primary mx-3">
-                    <BiEdit />
-                  </button>
-                  <button className="btn btn-danger">
-                    <AiFillDelete />
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>#M214542</td>
-                <td>Đinh Ngọc Luyện</td>
-                <td>luyendinh1320@gmail.com</td>
-                <td>0336909524</td>
-                <td>9/4/2023</td>
-                <td>Xác nhận</td>
-                <td>
-                  <button className="btn btn-primary mx-3">
-                    <BiEdit />
-                  </button>
-                  <button className="btn btn-danger">
-                    <AiFillDelete />
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>#M214542</td>
-                <td>Đinh Ngọc Luyện</td>
-                <td>luyendinh1320@gmail.com</td>
-                <td>0336909524</td>
-                <td>9/4/2023</td>
-                <td>Xác nhận</td>
-                <td>
-                  <button className="btn btn-primary mx-3">
-                    <BiEdit />
-                  </button>
-                  <button className="btn btn-danger">
-                    <AiFillDelete />
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>#M214542</td>
-                <td>Đinh Ngọc Luyện</td>
-                <td>luyendinh1320@gmail.com</td>
-                <td>0336909524</td>
-                <td>9/4/2023</td>
-                <td>Xác nhận</td>
-                <td>
-                  <button className="btn btn-primary mx-3">
-                    <BiEdit />
-                  </button>
-                  <button className="btn btn-danger">
-                    <AiFillDelete />
-                  </button>
-                </td>
-              </tr>
+              {getOrders?.length > 0 &&
+                getOrders?.map((item, index) => (
+                  <tr key={index}>
+                    <td className="code-order">
+                      <button onClick={handleClick}>#{item?.id}</button>
+                    </td>
+                    <td>{item?.username}</td>
+                    <td>{item?.email}</td>
+                    <td>{item?.phone}</td>
+                    <td>9/4/2023</td>
+                    <td>
+                      <select
+                        name="status"
+                        id="status"
+                        className="w-full h-[100%] border-none outline-none"
+                        value={item?.status}
+                      >
+                        <option value="CONFIRM">Chờ xử lý</option>
+                        <option value="PENDING">Xác nhận</option>
+                        <option value="SUCCESS">Đã giao</option>
+                      </select>
+                    </td>
+                    <td>
+                      <button
+                        className="mx-3 btn btn-primary"
+                        onClick={() => handleEditOrder()}
+                      >
+                        <BiEdit />
+                      </button>
+                      <button className="btn btn-danger">
+                        <AiFillDelete />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </Table>
           <ReactPaginate

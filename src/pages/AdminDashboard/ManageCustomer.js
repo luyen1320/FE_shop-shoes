@@ -166,15 +166,15 @@ const ManageCustomer = () => {
               id="roleId"
               defaultChecked={values.roleId}
               className="w-full px-3 py-1 border border-[#cccc] rounded-md"
-              value={"STAFF"}
+              value={values.roleId}
               onChange={handleChange}
             >
               <option value="STAFF">Nhân viên</option>
               <option value="ADMIN">Admin</option>
             </select>
-            <div className="col-span-2 flex mt-3 items-center justify-center">
+            <div className="flex items-center justify-center col-span-2 mt-3">
               <button
-                className="px-6 py-2 rounded-lg bg-blue-500 text-white"
+                className="px-6 py-2 text-white bg-blue-500 rounded-lg"
                 onClick={(e) => {
                   handleSubmit(e);
                 }}
@@ -237,7 +237,7 @@ const ManageCustomer = () => {
                     <td>{item?.status}</td>
                     <td>
                       <button
-                        className="btn btn-primary mx-3"
+                        className="mx-3 btn btn-primary"
                         onClick={() => {
                           getOneStaff(item?.id);
                           setShow(true);
