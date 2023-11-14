@@ -3,6 +3,7 @@ import "./Cart.scss";
 import { Link } from "react-router-dom";
 import nike02 from "../../../assets/images/nike02.jpeg";
 import Navbar from "../../../components/navbar/Navbar";
+import nike from "../../../assets/images/Giay-Air-Jordan-1-Retro-Hi-Premium-GS-Camo-822858-027.jpg";
 
 function Cart(props) {
   return (
@@ -37,7 +38,7 @@ function Cart(props) {
                 <div className="cart-items grid">
                   <div className="cart-item grid">
                     <div className="cart-item-img">
-                      <img src={nike02} alt="nike" />
+                      <img src={nike} alt="nike" />
                       <button
                         type="button"
                         className="btn-square rmv-from-cart-btn"
@@ -262,7 +263,7 @@ function Cart(props) {
                   </div>
                   <div className="cart-summary-btn">
                     <button type="button" className="btn-secondary">
-                      Thanh toán
+                      Đặt hàng
                     </button>
                   </div>
                 </div>
