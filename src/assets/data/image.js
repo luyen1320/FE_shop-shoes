@@ -10,6 +10,6 @@ export function getBase64(file) {
 }
 
 export const convertBase64ToImage = (base64) => {
-  let image = new Buffer(base64 || "", "base64").toString("binary");
+  let image = new Buffer(base64 || "", "base64").toString("utf-8");
   return image;
 };

@@ -131,17 +131,26 @@ const ProductPage = () => {
                         <p>{item.productName}</p>
                       </div>
                       <div className="price">
-                        <div>
-                          <span className="price-new">
-                            {parseInt(item?.price).toLocaleString("vi-VN")}đ
-                          </span>
-                          <span className="price-old">
-                            {(parseInt(item?.price) * 1.2).toLocaleString(
-                              "vi-VN"
-                            )}
-                            đ
-                          </span>
-                        </div>
+                        {item?.discount > 0 ? (
+                          <div>
+                            <span className="price-new">
+                              {(
+                                parseInt(item?.price) *
+                                ((100 - parseInt(item?.discount)) / 100)
+                              ).toLocaleString("vi-VN")}
+                              đ
+                            </span>
+                            <span className="price-old">
+                              {parseInt(item?.price).toLocaleString("vi-VN")}đ
+                            </span>
+                          </div>
+                        ) : (
+                          <div>
+                            <span className="price-new">
+                              {parseInt(item?.price).toLocaleString("vi-VN")}đ
+                            </span>
+                          </div>
+                        )}
                       </div>
                     </div>
                   );

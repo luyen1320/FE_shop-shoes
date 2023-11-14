@@ -38,6 +38,7 @@ function App() {
             <Route path="manage-order" element={<ManageOrder />} />
             <Route path="manage-product" element={<ManageProduct />} />
             <Route path="create-product" element={<CreateProduct />} />
+            <Route path="edit-product/:id" element={<CreateProduct />} />
             <Route path="manage-customer" element={<ManageUser />} />
             <Route path="supplier" element={<Supplier />} />
           </Route>

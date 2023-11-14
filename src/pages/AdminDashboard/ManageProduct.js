@@ -5,9 +5,11 @@ import { Table } from "react-bootstrap";
 import ReactPaginate from "react-paginate";
 import { AiFillDelete } from "react-icons/ai";
 import { BiEdit } from "react-icons/bi";
-import { getAllProduct } from "../../service/productService";
+import { deleteProduct, getAllProduct } from "../../service/productService";
 import { toast } from "react-toastify";
 import { convertBase64ToImage } from "../../assets/data/image";
+import { NavLink } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const ManageProduct = () => {
   const [getProduct, setGetProduct] = useState([]);
@@ -23,7 +25,28 @@ const ManageProduct = () => {
   useEffect(() => {
     getAllProducts();
   }, []);
-  console.log(getProduct);
+
+  const handleDeleteProduct = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await deleteProduct(id);
+          Swal.fire("Deleted!", "Your file has been deleted.", "success");
+          setGetProduct(getProduct.filter((product) => product.id !== id));
+        } catch (e) {
+          Swal.fire("Error", e, "error");
+        }
+      }
+    });
+  };
   return (
     <div className="manage-product auto">
       <Nav />
@@ -71,80 +94,24 @@ const ManageProduct = () => {
                       )}
                     </td>
                     <td>
-                      <button className="btn btn-primary mx-3">
+                      <NavLink
+                        to={`/admin/edit-product/${item?.id}`}
+                        className="mx-3 btn btn-primary"
+                      >
                         <BiEdit />
-                      </button>
-                      <button className="btn btn-danger">
+                      </NavLink>
+                      <button
+                        className="btn btn-danger"
+                        onClick={() => {
+                          handleDeleteProduct(item?.id);
+                        }}
+                      >
                         <AiFillDelete />
                       </button>
                     </td>
                   </tr>
                 );
               })}
-            {/* <tr>
-              <td>1</td>
-              <td>Đinh Ngọc Luyện</td>
-              <td>luyendinh1320@gmail.com</td>
-              <td>0336909524</td>
-              <td>9/4/2023</td>
-              <td>Xác nhận</td>
-              <td>
-                <button className="btn btn-primary mx-3">
-                  <BiEdit />
-                </button>
-                <button className="btn btn-danger">
-                  <AiFillDelete />
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td>1</td>
-              <td>Đinh Ngọc Luyện</td>
-              <td>luyendinh1320@gmail.com</td>
-              <td>0336909524</td>
-              <td>9/4/2023</td>
-              <td>Xác nhận</td>
-              <td>
-                <button className="btn btn-primary mx-3">
-                  <BiEdit />
-                </button>
-                <button className="btn btn-danger">
-                  <AiFillDelete />
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td>1</td>
-              <td>Đinh Ngọc Luyện</td>
-              <td>luyendinh1320@gmail.com</td>
-              <td>0336909524</td>
-              <td>9/4/2023</td>
-              <td>Xác nhận</td>
-              <td>
-                <button className="btn btn-primary mx-3">
-                  <BiEdit />
-                </button>
-                <button className="btn btn-danger">
-                  <AiFillDelete />
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td>1</td>
-              <td>Đinh Ngọc Luyện</td>
-              <td>luyendinh1320@gmail.com</td>
-              <td>0336909524</td>
-              <td>9/4/2023</td>
-              <td>Xác nhận</td>
-              <td>
-                <button className="btn btn-primary mx-3">
-                  <BiEdit />
-                </button>
-                <button className="btn btn-danger">
-                  <AiFillDelete />
-                </button>
-              </td>
-            </tr> */}
           </tbody>
         </Table>
         <ReactPaginate

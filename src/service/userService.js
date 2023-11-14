@@ -45,6 +45,9 @@ const createNewSuppiler = (selectedData) => {
 const fetchAllSupplier = (page, limit) => {
   return axios.get(`/api/v1/supplier/read?page=${page}&limit=${limit}`);
 };
+const fetchAllSupplierNoLimit = (page, limit) => {
+  return axios.get(`/api/v1/supplier/read`);
+};
 
 const deleteSupplier = (supplier) => {
   return axios.delete("/api/v1/supplier/delete", { data: { id: supplier.id } });
@@ -68,4 +71,5 @@ export {
   editCustomer,
   deleteUser,
   getUser,
+  fetchAllSupplierNoLimit,
 };

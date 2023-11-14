@@ -1,203 +1,70 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./HomeProduct.scss";
 import shoe1 from "../../assets/images/nike02.jpeg";
 import { Link } from "react-router-dom";
+import { getAllProduct } from "../../service/productService";
+import { toast } from "react-toastify";
+import { convertBase64ToImage } from "../../assets/data/image";
 
 function HomeProduct(props) {
+  const [getProduct, setGetProduct] = useState([]);
+  const getAllProducts = async () => {
+    let res = await getAllProduct();
+    if (res && res.errCode === 0) {
+      setGetProduct(res.DT);
+    } else {
+      toast.error(res.errMessage);
+    }
+  };
+
+  useEffect(() => {
+    getAllProducts();
+  }, []);
   return (
     <div className="product">
       <h2>Sản phẩm</h2>
       <div className="list">
-        <div className="list-item">
-          <div className="cart-shopping">
-            <i className="fa-solid fa-cart-shopping"></i>
-          </div>
-          <div className="image">
-            <Link to="/jordan">
-              <img src={shoe1} alt="" />
-            </Link>
-          </div>
-          <div className="list-desc">
-            <p>
-              Giày Nike Off-White x Air Jordan 1 Retro High OG 'Chicago' //
-              AA3834-101
-            </p>
-          </div>
-          <div className="price">
-            <div>
-              <span className="price-new">1.000.000₫</span>
-              <span className="price-old">1.200.000₫</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="list-item">
-          <div className="cart-shopping">
-            <i className="fa-solid fa-cart-shopping"></i>
-          </div>
-          <div className="image">
-            <img src={shoe1} alt="" />
-          </div>
-          <div className="list-desc">
-            <p>
-              Giày Nike Off-White x Air Jordan 1 Retro High OG 'Chicago' //
-              AA3834-101
-            </p>
-          </div>
-          <div className="price">
-            {/* <p>
-              <del>1.200.000đ</del> - 1.000.000₫
-            </p> */}
-            <div>
-              <span className="price-new">1.000.000₫</span>
-              <span className="price-old">1.200.000₫</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="list-item">
-          <div className="cart-shopping">
-            <i className="fa-solid fa-cart-shopping"></i>
-          </div>
-          <div className="image">
-            <img src={shoe1} alt="" />
-          </div>
-          <div className="list-desc">
-            <p>
-              Giày Nike Off-White x Air Jordan 1 Retro High OG 'Chicago' //
-              AA3834-101
-            </p>
-          </div>
-          <div className="price">
-            {/* <p>
-              <del>1.200.000đ</del> - 1.000.000₫
-            </p> */}
-            <div>
-              <span className="price-new">1.000.000₫</span>
-              <span className="price-old">1.200.000₫</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="list-item">
-          <div className="cart-shopping">
-            <i className="fa-solid fa-cart-shopping"></i>
-          </div>
-          <div className="image">
-            <img src={shoe1} alt="" />
-          </div>
-          <div className="list-desc">
-            <p>
-              Giày Nike Off-White x Air Jordan 1 Retro High OG 'Chicago' //
-              AA3834-101
-            </p>
-          </div>
-          <div className="price">
-            {/* <p>
-              <del>1.200.000đ</del> - 1.000.000₫
-            </p> */}
-            <div>
-              <span className="price-new">1.000.000₫</span>
-              <span className="price-old">1.200.000₫</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="list-item">
-          <div className="cart-shopping">
-            <i className="fa-solid fa-cart-shopping"></i>
-          </div>
-          <div className="image">
-            <img src={shoe1} alt="" />
-          </div>
-          <div className="list-desc">
-            <p>
-              Giày Nike Off-White x Air Jordan 1 Retro High OG 'Chicago' //
-              AA3834-101
-            </p>
-          </div>
-          <div className="price">
-            {/* <p>
-              <del>1.200.000đ</del> - 1.000.000₫
-            </p> */}
-            <div>
-              <span className="price-new">1.000.000₫</span>
-              <span className="price-old">1.200.000₫</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="list-item">
-          <div className="cart-shopping">
-            <i className="fa-solid fa-cart-shopping"></i>
-          </div>
-          <div className="image">
-            <img src={shoe1} alt="" />
-          </div>
-          <div className="list-desc">
-            <p>
-              Giày Nike Off-White x Air Jordan 1 Retro High OG 'Chicago' //
-              AA3834-101
-            </p>
-          </div>
-          <div className="price">
-            {/* <p>
-              <del>1.200.000đ</del> - 1.000.000₫
-            </p> */}
-            <div>
-              <span className="price-new">1.000.000₫</span>
-              <span className="price-old">1.200.000₫</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="list-item">
-          <div className="cart-shopping">
-            <i className="fa-solid fa-cart-shopping"></i>
-          </div>
-          <div className="image">
-            <img src={shoe1} alt="" />
-          </div>
-          <div className="list-desc">
-            <p>
-              Giày Nike Off-White x Air Jordan 1 Retro High OG 'Chicago' //
-              AA3834-101
-            </p>
-          </div>
-          <div className="price">
-            {/* <p>
-              <del>1.200.000đ</del> - 1.000.000₫
-            </p> */}
-            <div>
-              <span className="price-new">1.000.000₫</span>
-              <span className="price-old">1.200.000₫</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="list-item">
-          <div className="cart-shopping">
-            <i className="fa-solid fa-cart-shopping"></i>
-          </div>
-          <div className="image">
-            <img src={shoe1} alt="" />
-          </div>
-          <div className="list-desc">
-            <p>
-              Giày Nike Off-White x Air Jordan 1 Retro High OG 'Chicago' //
-              AA3834-101
-            </p>
-          </div>
-          <div className="price">
-            {/* <p>
-              <del>1.200.000đ</del> - 1.000.000₫
-            </p> */}
-            <div>
-              <span className="price-new">1.000.000₫</span>
-              <span className="price-old">1.200.000₫</span>
-            </div>
-          </div>
-        </div>
+        {getProduct?.length > 0 &&
+          getProduct?.map((item, index) => {
+            return (
+              <div className="list-item" key={index}>
+                <div className="image">
+                  <Link to={`/product-details/${item?.id}`}>
+                    <img
+                      src={convertBase64ToImage(item?.image)}
+                      alt=""
+                      className="aspect-[14/15]"
+                    />
+                  </Link>
+                </div>
+                <div className="list-desc">
+                  <p>{item.productName}</p>
+                </div>
+                <div className="price">
+                  {item?.discount > 0 ? (
+                    <div>
+                      <span className="price-new">
+                        {(
+                          parseInt(item?.price) *
+                          ((100 - parseInt(item?.discount)) / 100)
+                        ).toLocaleString("vi-VN")}
+                        đ
+                      </span>
+                      <span className="price-old">
+                        {parseInt(item?.price).toLocaleString("vi-VN")}đ
+                      </span>
+                    </div>
+                  ) : (
+                    <div>
+                      <span className="price-new">
+                        {parseInt(item?.price).toLocaleString("vi-VN")}đ
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
       </div>
     </div>
   );

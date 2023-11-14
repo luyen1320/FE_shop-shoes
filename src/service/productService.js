@@ -5,6 +5,18 @@ const createProduct = (data) => {
     withCredentials: true,
   });
 };
+
+const editProduct = (data) => {
+  return axios.put("/api/v1/product/update", data, {
+    withCredentials: true,
+  });
+};
+const deleteProduct = (id) => {
+  return axios.delete(`/api/v1/product/${id}`, {
+    withCredentials: true,
+  });
+};
+
 const addToCart = (data) => {
   return axios.post("/api/v1/addtocart", data, {
     withCredentials: true,
@@ -47,4 +59,6 @@ export {
   getAllProductInCart,
   createOrder,
   getAllOrder,
+  deleteProduct,
+  editProduct,
 };
