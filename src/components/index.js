@@ -7,3 +7,4 @@ export { default as MarkDown } from "./markdown/MarkDown";
 export { default as ModalOrder } from "./modal/ModalOrder";
 export { default as ModalSupplier } from "./modal/ModerSupplier";
 export { default as ModalDeleteSupplier } from "./modal/ModalDeleteSupplier";
+export { default as Order } from "./order/Order";

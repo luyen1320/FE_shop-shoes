@@ -18,6 +18,7 @@ import {
 } from "./pages/AdminDashboard";
 import ProductDetails from "./components/productDetails/productDetails";
 import ProductPage from "./components/productDetails/ProductPage";
+import { Order } from "./components";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/product-details" element={<ProductDetails />} />
           <Route path="/product-page" element={<ProductPage />} />
+          <Route path="/order" element={<Order />} />
 
           {/*ADMIN */}
           <Route path="/admin" element={<AdminLayout />}>
