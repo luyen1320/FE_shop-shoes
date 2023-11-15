@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Navbar.scss";
 import { Link } from "react-router-dom";
+import DropMenu from "../../pages/UserDashboard/DropdownMenu/DropMenu";
 
 function Navbar(props) {
+  const [openProfile, setOpenProfile] = useState(false);
+
   return (
     <header>
       <div className="logo">
@@ -19,7 +22,7 @@ function Navbar(props) {
             <Link to="">Giới thiệu</Link>
           </li>
           <li>
-            <Link to="">Brands</Link>
+            <Link to="">Thương hiệu</Link>
             <ul>
               <li>
                 <Link to="/admin">Jordan</Link>
@@ -45,9 +48,9 @@ function Navbar(props) {
       </nav>
 
       <div className="icons">
-        <Link>
+        {/* <Link>
           <i className="fa-solid fa-heart"></i>
-        </Link>
+        </Link> */}
 
         <Link to="/cart">
           <i className="fa-solid fa-cart-shopping"></i>
@@ -57,6 +60,9 @@ function Navbar(props) {
           <i className="fa-solid fa-user"></i>
         </Link>
       </div>
+
+      {/* {openProfile && <DropMenu />} */}
+      <DropMenu />
     </header>
   );
 }
