@@ -52,7 +52,7 @@ const CreateProduct = () => {
 
   const [product, setProduct] = useState({
     productId: null,
-    userId: 1,
+    userId: "",
     productName: "",
     image: "",
     images: "",

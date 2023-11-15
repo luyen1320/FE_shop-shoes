@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./Cart.scss";
-import { Link } from "react-router-dom";
-import nike02 from "../../../assets/images/nike02.jpeg";
+import { Link, NavLink } from "react-router-dom";
 import Navbar from "../../../components/navbar/Navbar";
 import {
+  addToCart,
   createOrder,
   getAllProductInCart,
 } from "../../../service/productService";
@@ -26,30 +26,54 @@ function Cart(props) {
     getAllProductsInCart();
   }, []);
 
-  const handleCreateOrder = async () => {
-    try {
-      let res = await createOrder({
-        userId: 8,
-        note: "",
-        totalMoney: chooseProduct?.reduce(
-          (accumulator, currentValue) =>
-            accumulator + parseInt(currentValue.price) * currentValue.quantity,
-          0
-        ),
-        listProduct: chooseProduct,
-      });
-      if (res && res.errCode === 0) {
-        toast.success("Đặt hàng thành công");
-        // history.push("/cart");
-      } else {
-        toast.error(res.errMessage);
+  useEffect(() => {
+    sessionStorage.setItem("chooseProduct", JSON.stringify(chooseProduct));
+  }, [chooseProduct]);
+
+  const handleSetQuantity = async (number, id, size) => {
+    const newArray = [...getProductCart];
+    const updatedArray = newArray.map((item) => {
+      if (
+        item.quantity === 1 &&
+        number === -1 &&
+        item?.id === id &&
+        item?.size === size
+      ) {
+        toast.warning("Số lượng sản phẩm không thể nhỏ hơn 1");
+        return item;
       }
-      getAllProductsInCart();
-    } catch (e) {
-      toast.error(e.errMessage);
-      console.log(e);
+      if (item?.id === id && item?.size === size) {
+        return { ...item, quantity: item.quantity + number };
+      } else {
+        return item;
+      }
+    });
+
+    // Cập nhật chooseProduct dựa trên updatedArray
+    const updatedChooseProduct = chooseProduct.map((item) => {
+      // Kiểm tra sản phẩm đã tồn tại trong chooseProduct chưa
+      if (item?.id === id && item?.size === size) {
+        return { ...item, quantity: item.quantity + number };
+      } else {
+        return item;
+      }
+    });
+
+    // Cập nhật state cho chooseProduct
+    setChooseProduct(updatedChooseProduct);
+    setGetProductCart(updatedArray);
+    let res = await addToCart({
+      userId: 8,
+      productId: id,
+      sizeId: size,
+      quantity: number,
+    });
+    if (res && res.errCode === 0) {
+    } else {
+      toast.error(res.errMessage);
     }
   };
+
   return (
     <>
       <Navbar />
@@ -113,7 +137,9 @@ function Cart(props) {
                                 if (e.target.checked === false) {
                                   setChooseProduct(
                                     chooseProduct.filter(
-                                      (prd) => prd.id !== item.id
+                                      (prd) =>
+                                        prd.id !== item.id ||
+                                        prd.size !== item.size
                                     )
                                   );
                                 }
@@ -129,20 +155,62 @@ function Cart(props) {
                               Số lượng:{" "}
                             </span>
                             <div className="flex qty-change">
-                              <button type="button" className="qty-dec fs-14">
-                                <i className="fas fa-minus text-light-blue">
-                                  {item?.quantity}
-                                </i>
-                              </button>
-                              <span className="flex qty-value flex-center"></span>
                               <button
                                 type="button"
-                                className="qty-inc fs-14 text-light-blue"
+                                className="flex items-center justify-center qty-dec fs-14"
+                                onClick={() => {
+                                  handleSetQuantity(-1, item?.id, item?.size);
+                                }}
                               >
-                                <i className="fas fa-plus">{item?.size}</i>
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  strokeWidth={1.5}
+                                  stroke="currentColor"
+                                  className="w-6 h-6"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M19.5 12h-15"
+                                  />
+                                </svg>
+                              </button>
+                              <span className="flex qty-value flex-center">
+                                {item?.quantity}
+                              </span>
+                              <button
+                                type="button"
+                                className="flex items-center justify-center qty-inc fs-14"
+                                onClick={() => {
+                                  handleSetQuantity(1, item?.id, item?.size);
+                                }}
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  strokeWidth={1.5}
+                                  stroke="currentColor"
+                                  className="w-6 h-6"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M12 4.5v15m7.5-7.5h-15"
+                                  />
+                                </svg>
                               </button>
                             </div>
                           </div>
+                          <div className="flex qty">
+                            <span className="text-light-blue qty-text">
+                              Size:{" "}
+                            </span>
+                            <div className="flex qty-change">{item?.size}</div>
+                          </div>
+
                           <div className="flex price flex-between">
                             <div className="text-pine-green fw-4 fs-15">
                               Giá : {parseInt(item?.price).toLocaleString()}đ
@@ -205,15 +273,12 @@ function Cart(props) {
                     <span className="fw-6"></span>
                   </div>
                   <div className="cart-summary-btn">
-                    <button
-                      type="button"
-                      className="btn-secondary"
-                      onClick={() => {
-                        handleCreateOrder();
-                      }}
+                    <NavLink
+                      to="/order"
+                      className="flex items-center justify-center w-full h-full py-2 text-white bg-yellow-500 rounded-md"
                     >
                       Đặt hàng
-                    </button>
+                    </NavLink>
                   </div>
                 </div>
               </div>

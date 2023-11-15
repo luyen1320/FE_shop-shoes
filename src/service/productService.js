@@ -28,6 +28,12 @@ const createOrder = (data) => {
     withCredentials: true,
   });
 };
+
+const updateOrder = (id, data) => {
+  return axios.put(`/api/v1/updateorder/${id}`, data, {
+    withCredentials: true,
+  });
+};
 const getAllProduct = () => {
   return axios.get("/api/v1/product", {
     withCredentials: true,
@@ -61,4 +67,5 @@ export {
   getAllOrder,
   deleteProduct,
   editProduct,
+  updateOrder,
 };

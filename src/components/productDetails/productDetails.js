@@ -20,20 +20,10 @@ const ProductDetails = () => {
   const [product, setProduct] = useState({
     userId: 8,
     productId: "",
-    // productName: "",
     sizeId: null,
-    // price: "",
     quantity: 0,
-    // status: "PENDING",
-    // total_money: 0,
-    // note: "",
-    // address: "",
-    // email: "",
-    // phone: "",
-    // fullname: "",
   });
 
-  console.log(getProduct);
   const getOnePrd = async () => {
     let res = await getOneProduct(id);
     if (res && res.errCode === 0) {
@@ -42,8 +32,6 @@ const ProductDetails = () => {
         ...product,
         productId: parseInt(id),
         userId: 8,
-        // productName: res.DT.productName,
-        // price: res.DT.price,
       });
     } else {
       toast.error(res.errMessage);
@@ -73,6 +61,7 @@ const ProductDetails = () => {
       return;
     }
     console.log(product);
+
     let res = await addToCart(product);
     if (res && res.errCode === 0) {
       toast.success("Thêm vào giỏ hàng thành công");
@@ -221,7 +210,7 @@ const ProductDetails = () => {
             active === 2 ? "content-review content-active" : "content-none"
           }
         >
-          <Review />
+          <Review productId={id} userId="" />
         </div>
       </div>
       <Footer />

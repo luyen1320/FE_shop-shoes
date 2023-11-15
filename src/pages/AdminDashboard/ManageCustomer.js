@@ -54,9 +54,29 @@ const ManageCustomer = () => {
       toast.error(res.errMessage);
     }
   };
-  console.log(values);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!values.username) {
+      toast.error("Vui lòng nhập tên người dùng");
+      return;
+    }
+    if (!values.email) {
+      toast.error("Vui lòng nhập email");
+      return;
+    }
+    if (!values.phone) {
+      toast.error("Vui lòng nhập số điện thoại");
+      return;
+    }
+    if (!values.address) {
+      toast.error("Vui lòng nhập địa chỉ");
+      return;
+    }
+    if (!values.password) {
+      toast.error("Vui lòng nhập mật khẩu");
+      return;
+    }
 
     try {
       const res = !edit

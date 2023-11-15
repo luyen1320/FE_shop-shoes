@@ -58,7 +58,7 @@ const ManageUser = () => {
               <th>Họ Tên </th>
               <th>Email</th>
               <th>Phone</th>
-              <th>Ngày Đặt</th>
+              <th>Chức vụ</th>
               <th>Trạng Thái</th>
               <th>Hành Động</th>
             </tr>
@@ -76,7 +76,7 @@ const ManageUser = () => {
                     <td>{item?.status}</td>
                     <td>
                       {/* <button
-                        className="btn btn-primary mx-3"
+                        className="mx-3 btn btn-primary"
                         onClick={() => {
                           getOneStaff(item?.id);
                           setShow(true);

@@ -7,14 +7,16 @@ import ReactPaginate from "react-paginate";
 import { BiEdit, BiMenuAltLeft } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import { ModalOrder } from "../../components";
-import { getAllOrder } from "../../service/productService";
+import { getAllOrder, updateOrder } from "../../service/productService";
 import { toast } from "react-toastify";
 
 const ManageOrder = () => {
   const [isShowModalOrder, setIsShowModalOrder] = useState(false);
+  const [valueModal, setValueModal] = useState({});
 
-  const handleEditOrder = () => {
+  const handleEditOrder = (product) => {
     setIsShowModalOrder(true);
+    setValueModal(product);
   };
 
   const handleClose = () => {
@@ -30,6 +32,15 @@ const ManageOrder = () => {
     let res = await getAllOrder();
     if (res && res.errCode === 0) {
       setGetOrders(res.DT);
+    } else {
+      toast.error(res.errMessage);
+    }
+  };
+
+  const handleUpdateOrder = async (id, value) => {
+    let res = await updateOrder(id, { status: value });
+    if (res && res.errCode === 0) {
+      toast.success("Cập nhật thành công");
     } else {
       toast.error(res.errMessage);
     }
@@ -83,40 +94,55 @@ const ManageOrder = () => {
             </thead>
             <tbody>
               {getOrders?.length > 0 &&
-                getOrders?.map((item, index) => (
-                  <tr key={index}>
-                    <td className="code-order">
-                      <button onClick={handleClick}>#{item?.id}</button>
-                    </td>
-                    <td>{item?.username}</td>
-                    <td>{item?.email}</td>
-                    <td>{item?.phone}</td>
-                    <td>9/4/2023</td>
-                    <td>
-                      <select
-                        name="status"
-                        id="status"
-                        className="w-full h-[100%] border-none outline-none"
-                        value={item?.status}
-                      >
-                        <option value="CONFIRM">Chờ xử lý</option>
-                        <option value="PENDING">Xác nhận</option>
-                        <option value="SUCCESS">Đã giao</option>
-                      </select>
-                    </td>
-                    <td>
-                      <button
-                        className="mx-3 btn btn-primary"
-                        onClick={() => handleEditOrder()}
-                      >
-                        <BiEdit />
-                      </button>
-                      <button className="btn btn-danger">
-                        <AiFillDelete />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                getOrders?.map((item, index) => {
+                  const createdAtDate = new Date(item?.createdAt);
+                  const formattedDate = `${createdAtDate.getDate()}/${
+                    createdAtDate.getMonth() + 1
+                  }/${createdAtDate.getFullYear()} ${createdAtDate.getHours()}:${
+                    createdAtDate.getMinutes() < 10
+                      ? "0" + createdAtDate.getMinutes()
+                      : createdAtDate.getMinutes()
+                  }`;
+                  return (
+                    <tr key={index}>
+                      <td className="code-order">
+                        <button onClick={handleClick}>#{item?.id}</button>
+                      </td>
+                      <td>{item?.username}</td>
+                      <td>{item?.email}</td>
+                      <td>{item?.phone}</td>
+                      <td>{formattedDate}</td>
+                      <td>
+                        <select
+                          name="status"
+                          id="status"
+                          className="w-full h-[100%] border-none outline-none"
+                          // value={item?.status}
+                          defaultValue={item?.status}
+                          onChange={(e) => {
+                            handleUpdateOrder(item?.id, e.target.value);
+                          }}
+                        >
+                          <option value="PENDING">Chờ xử lý</option>
+                          <option value="CONFIRM">Xác nhận</option>
+                          <option value="SHIPPING">Đang giao hàng</option>
+                          <option value="SUCCESS">Đã giao</option>
+                        </select>
+                      </td>
+                      <td>
+                        <button
+                          className="mx-3 btn btn-primary"
+                          onClick={() => handleEditOrder(item)}
+                        >
+                          <BiEdit />
+                        </button>
+                        <button className="btn btn-danger">
+                          <AiFillDelete />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
             </tbody>
           </Table>
           <ReactPaginate
@@ -137,7 +163,11 @@ const ManageOrder = () => {
             activeClassName="active"
           />
         </div>
-        <ModalOrder show={isShowModalOrder} handleClose={handleClose} />
+        <ModalOrder
+          show={isShowModalOrder}
+          handleClose={handleClose}
+          valueModal={valueModal}
+        />
       </div>
     </div>
   );
