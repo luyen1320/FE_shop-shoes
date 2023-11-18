@@ -2,9 +2,14 @@ import React, { useState } from "react";
 import "./Navbar.scss";
 import { Link } from "react-router-dom";
 import DropMenu from "../../pages/UserDashboard/DropdownMenu/DropMenu";
+import { IoPersonCircleOutline } from "react-icons/io5";
 
 function Navbar(props) {
   const [openProfile, setOpenProfile] = useState(false);
+
+  const handleOnChangeMenu = () => {
+    setOpenProfile(true);
+  };
 
   return (
     <header>
@@ -56,13 +61,16 @@ function Navbar(props) {
           <i className="fa-solid fa-cart-shopping"></i>
         </Link>
 
-        <Link to="/login">
+        {/* <Link to="/login">
           <i className="fa-solid fa-user"></i>
-        </Link>
+        </Link> */}
+        <span onClick={() => setOpenProfile((prev) => !prev)}>
+          <IoPersonCircleOutline />
+        </span>
       </div>
 
-      {/* {openProfile && <DropMenu />} */}
-      <DropMenu />
+      {openProfile && <DropMenu />}
+      {/* <DropMenu /> */}
     </header>
   );
 }

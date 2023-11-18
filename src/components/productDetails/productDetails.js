@@ -8,6 +8,7 @@ import { productImages } from "../../assets/data/slider";
 import Navbar from "../navbar/Navbar";
 import Footer from "../footer/Footer";
 import Review from "./Tabs/Review";
+import ReviewComments from "./Tabs/ReviewComments";
 
 const ProductDetails = () => {
   const [active, setActive] = useState(1);
@@ -105,6 +106,7 @@ const ProductDetails = () => {
           }
         >
           <Review />
+          <ReviewComments />
         </div>
       </div>
       <Footer />

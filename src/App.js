@@ -19,6 +19,7 @@ import {
 import ProductDetails from "./components/productDetails/productDetails";
 import ProductPage from "./components/productDetails/ProductPage";
 import { Order } from "./components";
+import InfoAccount from "./pages/UserDashboard/infoAccount/InfoAccount";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route path="/product-details" element={<ProductDetails />} />
           <Route path="/product-page" element={<ProductPage />} />
           <Route path="/order" element={<Order />} />
+          <Route path="/info-account" element={<InfoAccount />} />
 
           {/*ADMIN */}
           <Route path="/admin" element={<AdminLayout />}>

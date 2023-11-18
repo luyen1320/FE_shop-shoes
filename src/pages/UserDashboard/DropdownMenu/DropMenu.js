@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const Menus = [
   {
-    path: "/admin",
+    path: "/info-account",
     name: "Thông tin tài khoản",
   },
   {

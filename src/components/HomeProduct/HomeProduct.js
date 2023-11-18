@@ -3,6 +3,7 @@ import "./HomeProduct.scss";
 import shoe1 from "../../assets/images/nike02.jpeg";
 import nike from "../../assets/images/Giay-Air-Jordan-1-Retro-Hi-Premium-GS-Camo-822858-027.jpg";
 import { Link } from "react-router-dom";
+import logoSGV from "../../assets/images/next-link.svg";
 
 function HomeProduct(props) {
   return (
@@ -201,6 +202,15 @@ function HomeProduct(props) {
         </div>
       </div>
 
+      <div className="next-category">
+        <Link>
+          Xem thêm giầy...&nbsp;
+          <span className="animated">
+            <img src={logoSGV} alt="" height={20} width={20} />
+          </span>
+        </Link>
+      </div>
+
       <h2>GIẦY NIKE</h2>
       <div className="list">
         <div className="list-item">
@@ -395,6 +405,15 @@ function HomeProduct(props) {
         </div>
       </div>
 
+      <div className="next-category">
+        <Link>
+          Xem thêm giầy...&nbsp;
+          <span className="animated">
+            <img src={logoSGV} alt="" height={20} width={20} />
+          </span>
+        </Link>
+      </div>
+
       <h2>GIẦY ADIDAS</h2>
       <div className="list">
         <div className="list-item">
@@ -587,6 +606,15 @@ function HomeProduct(props) {
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="next-category">
+        <Link>
+          Xem thêm giầy...&nbsp;
+          <span className="animated">
+            <img src={logoSGV} alt="" height={20} width={20} />
+          </span>
+        </Link>
       </div>
     </div>
   );
