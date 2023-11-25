@@ -41,13 +41,13 @@ function Navbar(props) {
             </ul>
           </li>
           <li>
-            <Link to="">Sale</Link>
+            <Link to="/sale-product">Sale</Link>
           </li>
           <li>
-            <Link to="">Phụ kiện</Link>
+            <Link to="/accessory">Phụ kiện</Link>
           </li>
           <li>
-            <Link to="">Liên hệ</Link>
+            <Link to="/contact">Liên hệ</Link>
           </li>
         </ul>
       </nav>

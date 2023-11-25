@@ -1,10 +1,5 @@
-.product{
-    h2{
-        text-align: center;
-        margin: 20px 0 20px 20px;
-    }
-
-
+.sale-product{
+    margin-top: 100px;
         .list{
         --spacing: 4.9rem;
         // font-size: 62.5%;
@@ -81,34 +76,10 @@
         }
     }
 
-    .next-category{
-        text-align: center;
-        // width: 200px;
-        // height: 100px;
-        border: 1px solid;
-        margin: 0 40rem 0 40rem;
-        padding: 10px 0 10px 0;
-        
-
-        a{
-            width: 200px;
-            
-
-            @keyframes slideRight {
-                0% {
-                    transform: translateX(0);
-                }
-                 50% {
-                    transform: translateX(200px); /* Đi sang phải 200px */
-                }
-                100% {
-                    transform: translateX(0); /* Trở về vị trí cũ */
-                }
-            }
-            
-            .animated {
-                animation: slideRight 2s ease infinite; /* Thời gian 2 giây, lặp vô hạn */
-            }
-        }
+    .paginate{
+        display: flex;
+        justify-content: center;
+        align-items: stretch;
+        flex-wrap: wrap;
     }
 }

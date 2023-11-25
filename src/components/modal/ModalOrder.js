@@ -2,10 +2,6 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import "./ModalOrder.scss";
 import { Table } from "react-bootstrap";
-import { FaMoneyBillAlt } from "react-icons/fa";
-import ReactPaginate from "react-paginate";
-import { BiEdit, BiMenuAltLeft } from "react-icons/bi";
-import { AiFillDelete } from "react-icons/ai";
 
 const ModalOrder = (props) => {
   const { show, handleClose } = props;
