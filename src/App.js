@@ -1,9 +1,6 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
-import Login from "./pages/UserDashboard/login/Login";
-import Cart from "./pages/UserDashboard/cart/Cart";
-import Register from "./pages/UserDashboard/register/Register";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
@@ -16,10 +13,15 @@ import {
   Customer,
   Supplier,
 } from "./pages/AdminDashboard";
-import ProductDetails from "./components/productDetails/productDetails";
-import ProductPage from "./components/productDetails/ProductPage";
-import { Order } from "./components";
-import InfoAccount from "./pages/UserDashboard/infoAccount/InfoAccount";
+import {
+  ProductDetails,
+  ProductPage,
+  Order,
+  SaleProduct,
+  Accessory,
+  Contact,
+} from "./components";
+import { Login, Cart, Register, InfoAccount } from "./pages/UserDashboard";
 
 function App() {
   return (
@@ -34,6 +36,9 @@ function App() {
           <Route path="/product-page" element={<ProductPage />} />
           <Route path="/order" element={<Order />} />
           <Route path="/info-account" element={<InfoAccount />} />
+          <Route path="/sale-product" element={<SaleProduct />} />
+          <Route path="/accessory" element={<Accessory />} />
+          <Route path="/contact" element={<Contact />} />
 
           {/*ADMIN */}
           <Route path="/admin" element={<AdminLayout />}>

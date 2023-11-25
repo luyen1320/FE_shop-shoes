@@ -5,13 +5,12 @@ import { Link } from "react-router-dom";
 import shoe1 from "../../assets/images/nike02.jpeg";
 import ReactPaginate from "react-paginate";
 import Footer from "../footer/Footer";
-import Input from "../../assets/Input";
+// import Input from "../../assets/Input";
 import { Swiper, SwiperSlide } from "swiper/react";
 import shoe01 from "../../assets/images/sieu-sale-4.4-cata-1140x500.png";
 import shoe02 from "../../assets/images/banner02.jpg";
 import shoe03 from "../../assets/images/banner03.jpg";
 import shoe04 from "../../assets/images/banner04.jpg";
-import Checkbox from "../../assets/Checkbox";
 
 const ProductPage = () => {
   return (
@@ -34,7 +33,7 @@ const ProductPage = () => {
             <div className="price">
               <h4>GIÁ</h4>
               <ul>
-                <Input value={500} title="500.000₫" name="price" />
+                {/* <Input value={500} title="500.000₫" name="price" />
                 <Input
                   value={1000}
                   title="500.000₫ - 1.000.000₫"
@@ -54,7 +53,19 @@ const ProductPage = () => {
                   value={4000}
                   title="3.000.000₫ - 4.000.000₫"
                   name="price"
-                />
+                /> */}
+                <li>
+                  <input type="radio" />
+                  <span>500.000₫ - 1.000.000₫</span>
+                </li>
+                <li>
+                  <input type="radio" />
+                  <span>500.000₫ - 1.000.000₫</span>
+                </li>
+                <li>
+                  <input type="radio" />
+                  <span>500.000₫ - 1.000.000₫</span>
+                </li>
               </ul>
             </div>
             <div className="size">
@@ -62,19 +73,31 @@ const ProductPage = () => {
               <ul>
                 <li>
                   <input type="checkbox" />
-                  38
+                  <span>38</span>
                 </li>
                 <li>
                   <input type="checkbox" />
-                  39
+                  <span>39</span>
                 </li>
                 <li>
                   <input type="checkbox" />
-                  40
+                  <span>39</span>
                 </li>
                 <li>
                   <input type="checkbox" />
-                  41
+                  <span>39</span>
+                </li>
+                <li>
+                  <input type="checkbox" />
+                  <span>39</span>
+                </li>
+                <li>
+                  <input type="checkbox" />
+                  <span>39</span>
+                </li>
+                <li>
+                  <input type="checkbox" />
+                  <span>39</span>
                 </li>
               </ul>
             </div>
