@@ -22,6 +22,15 @@ const addToCart = (data) => {
     withCredentials: true,
   });
 };
+const removeproductcart = (data) => {
+  console.log(data);
+  return axios.delete(
+    `/api/v1/removeproductcart?userId=${data?.userId}&productId=${data?.productId}&sizeId=${data?.sizeId}`,
+    {
+      withCredentials: true,
+    }
+  );
+};
 
 const createOrder = (data) => {
   return axios.post("/api/v1/createOrder", data, {
@@ -34,13 +43,28 @@ const updateOrder = (id, data) => {
     withCredentials: true,
   });
 };
-const getAllProduct = () => {
-  return axios.get("/api/v1/product", {
-    withCredentials: true,
-  });
+const getAllProduct = (
+  page,
+  limit,
+  supplierName = "",
+  minPrice = "",
+  maxPrice = "",
+  sizes = "1,2,3,4,5,6,7"
+) => {
+  return axios.get(
+    `/api/v1/product?page=${page}&limit=${limit}&supplierName=${supplierName}&minPrice=${minPrice}&maxPrice=${maxPrice}&sizes=${sizes}`,
+    {
+      withCredentials: true,
+    }
+  );
 };
 const getAllOrder = () => {
   return axios.get("/api/v1/getallorder", {
+    withCredentials: true,
+  });
+};
+const getOrderById = (id) => {
+  return axios.get(`/api/v1/getorder/${id}`, {
     withCredentials: true,
   });
 };
@@ -57,6 +81,12 @@ const getOneProduct = (id) => {
   });
 };
 
+const getReviews = (id) => {
+  return axios.get(`/api/v1/review/${id}`, {
+    withCredentials: true,
+  });
+};
+
 export {
   createProduct,
   getAllProduct,
@@ -68,4 +98,7 @@ export {
   deleteProduct,
   editProduct,
   updateOrder,
+  removeproductcart,
+  getReviews,
+  getOrderById,
 };

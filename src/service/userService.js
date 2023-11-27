@@ -15,11 +15,11 @@ const loginUser = (valueLogin, password) => {
   });
 };
 
-const getCustomer = () => {
-  return axios.get(`/api/v1/getstaff`);
+const getCustomer = (page, limit) => {
+  return axios.get(`/api/v1/getstaff?page=${page}&limit=${limit}`);
 };
-const getUser = () => {
-  return axios.get(`/api/v1/getuser`);
+const getUser = (page, limit) => {
+  return axios.get(`/api/v1/getuser?page=${page}&limit=${limit}`);
 };
 const getOneCustomer = (id) => {
   return axios.get(`/api/v1/getuser/${id}`);

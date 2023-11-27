@@ -8,8 +8,8 @@ import ApexCharts from "react-apexcharts";
 
 const Home = () => {
   const chartRef = useRef(null);
-  const dataChart = {
-    data: [2.3, 3.1, 4.0, 10.1, 4.0, 3.6, 3.2, 2.3, 1.4, 0.8, 0.5, 0.2], // Sample prices
+  const dataChartWeek = {
+    data: [10, 41, 35, 51, 49, 62, 69, 91, 148, 150], // Sample prices
     categories: [
       "Jan",
       "Feb",
@@ -25,86 +25,127 @@ const Home = () => {
       "Dec",
     ],
   };
-  const options = {
+
+  const dataChartMonth = {
+    data: [10, 41, 35, 51, 49, 62, 69, 91], // Sample prices
+    categories: [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ],
+  };
+  const optionsbyWeek = {
     series: [
       {
-        name: "sales",
-        data: dataChart.data,
+        name: "Tổng tiền",
+        data: dataChartWeek.data,
       },
     ],
     chart: {
       height: 350,
-      type: "bar",
-    },
-    plotOptions: {
-      bar: {
-        borderRadius: 10,
-        dataLabels: {
-          position: "top", // top, center, bottom
-        },
+      type: "line",
+      zoom: {
+        enabled: false,
+      },
+      toolbar: {
+        show: false,
       },
     },
+
     dataLabels: {
-      enabled: true,
-      formatter: function (val) {
-        return val;
-      },
-      offsetY: -20,
-      style: {
-        fontSize: "12px",
-        colors: ["#304758"],
-      },
+      enabled: false,
     },
-    xaxis: {
-      categories: dataChart.categories,
-      position: "top",
-      axisBorder: {
-        show: false,
-      },
-      axisTicks: {
-        show: false,
-      },
-      crosshairs: {
-        fill: {
-          type: "gradient",
-          gradient: {
-            colorFrom: "#D8E3F0",
-            colorTo: "#BED1E6",
-            stops: [0, 100],
-            opacityFrom: 0.4,
-            opacityTo: 0.5,
-          },
-        },
-      },
-      // tooltip: {
-      //   enabled: true,
-      // },
+    stroke: {
+      curve: "straight",
     },
-    yaxis: {
-      axisBorder: {
-        show: false,
-      },
-      axisTicks: {
-        show: false,
-      },
-      labels: {
-        show: false,
-        formatter: function (val) {
-          return val;
-        },
+    title: {
+      text: "Thống kê theo tháng",
+      align: "left",
+    },
+    grid: {
+      row: {
+        colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+        opacity: 0.5,
       },
     },
     tooltip: {
+      enabled: true,
+      shared: true,
+      y: {
+        formatter: function (y) {
+          if (typeof y !== "undefined") {
+            return y.toFixed(0) + " points";
+          }
+          return y;
+        },
+      },
+
+      theme: "dark",
+    },
+    xaxis: {
+      categories: dataChartWeek.categories,
+    },
+  };
+
+  const optionsbyMonth = {
+    series: [
+      {
+        name: "Tổng tiền",
+        data: dataChartMonth.data,
+      },
+    ],
+    chart: {
+      height: 350,
+      type: "line",
+      zoom: {
+        enabled: false,
+      },
+      toolbar: {
+        show: false,
+      },
+    },
+
+    dataLabels: {
       enabled: false,
     },
+    stroke: {
+      curve: "straight",
+    },
     title: {
-      text: "",
-      floating: true,
-      offsetY: 330,
-      align: "center",
-      style: {
-        color: "#000",
+      text: "Thống kê theo năm",
+      align: "left",
+    },
+    grid: {
+      row: {
+        colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+        opacity: 0.5,
       },
+    },
+    tooltip: {
+      enabled: true,
+      shared: true,
+      y: {
+        formatter: function (y) {
+          if (typeof y !== "undefined") {
+            return y.toFixed(0) + " points";
+          }
+          return y;
+        },
+      },
+
+      theme: "dark",
+    },
+    xaxis: {
+      categories: dataChartMonth.categories,
     },
   };
 
@@ -146,13 +187,26 @@ const Home = () => {
           <h1>43</h1>
         </div>
       </div>
-      <div id="chart" ref={chartRef}>
-        <ApexCharts
-          options={options}
-          series={options.series}
-          type="bar"
-          height={350}
-        />
+      <h2 className="mt-8 font-semibold text-center text-black">
+        Thống kê doanh thu theo tháng và năm
+      </h2>
+      <div className="grid items-center w-full grid-cols-7 gap-4 mt-4">
+        <div id="chartByWeek" ref={chartRef} className="col-span-5">
+          <ApexCharts
+            options={optionsbyWeek}
+            series={optionsbyWeek.series}
+            type="line"
+            height={350}
+          />
+        </div>
+        {/* <div id="chartByMonth" ref={chartRef} className="col-span-1">
+          <ApexCharts
+            options={optionsbyMonth}
+            series={optionsbyMonth.series}
+            type="line"
+            height={350}
+          />
+        </div> */}
       </div>
     </div>
   );

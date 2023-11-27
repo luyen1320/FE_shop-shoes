@@ -13,6 +13,7 @@ import {
   getOneCustomer,
 } from "../../service/userService";
 import Swal from "sweetalert2";
+import ReactPaginate from "react-paginate";
 
 const ManageCustomer = () => {
   const [edit, setEdit] = useState(false); // [1
@@ -28,10 +29,14 @@ const ManageCustomer = () => {
   });
 
   const [getAllCustomer, setGetAllCustomer] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentLimit, setCurrentLimit] = useState(2);
+  const [totalPages, setTotalPages] = useState(0);
   const getAllCustomers = async () => {
-    let res = await getCustomer();
+    let res = await getCustomer(currentPage, currentLimit);
     if (res && res.errCode === 0) {
-      setGetAllCustomer(res.DT);
+      setGetAllCustomer(res.DT?.suppliers);
+      setTotalPages(res?.DT?.totalPages);
     } else {
       toast.error(res.errMessage);
     }
@@ -39,7 +44,7 @@ const ManageCustomer = () => {
 
   useEffect(() => {
     getAllCustomers();
-  }, [show]);
+  }, [show, currentPage]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -127,6 +132,11 @@ const ManageCustomer = () => {
       }
     });
   };
+
+  const handlePageClick = async (event) => {
+    setCurrentPage(+event.selected + 1);
+  };
+
   return (
     <div className="manage-user auto">
       <div
@@ -140,6 +150,9 @@ const ManageCustomer = () => {
           className="bg-white w-[50%] h-[50%] text-black rounded-md flex items-center justify-center"
         >
           <div className="grid grid-cols-2 gap-[5%] px-[5%] w-full">
+            <div className="flex items-center justify-center col-span-2 mb-3">
+              <h2 className="">{edit ? "Sửa nhân viên" : "Thêm nhân viên"}</h2>
+            </div>
             <input
               type="text"
               className="col-span-1 px-3 py-1 border border-[#cccc] rounded-md"
@@ -249,11 +262,13 @@ const ManageCustomer = () => {
               getAllCustomer?.map((item, index) => {
                 return (
                   <tr key={item.id}>
-                    <td>{item?.id}</td>
+                    <td>
+                      {currentPage * currentLimit - currentLimit + index + 1}
+                    </td>
                     <td>{item?.username}</td>
                     <td>{item?.email}</td>
                     <td>{item?.phone}</td>
-                    <td>{item?.roleId}</td>
+                    <td>{item?.roleId === "STAFF" ? "Nhân viên" : "Admin"}</td>
                     <td>{item?.status}</td>
                     <td>
                       <button
@@ -281,6 +296,24 @@ const ManageCustomer = () => {
               })}
           </tbody>
         </Table>
+        <ReactPaginate
+          breakLabel="..."
+          nextLabel=" >"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={3}
+          marginPagesDisplayed={4}
+          pageCount={totalPages}
+          previousLabel="< "
+          pageClassName="page-item"
+          pageLinkClassName="page-link"
+          previousLinkClassName="page-link"
+          nextClassName="page-item"
+          nextLinkClassName="page-link"
+          breakClassName="page-item"
+          breakLinkClassName="page-link"
+          containerClassName="pagination"
+          activeClassName="active"
+        />
       </div>
     </div>
   );

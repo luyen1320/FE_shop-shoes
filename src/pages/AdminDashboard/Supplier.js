@@ -119,7 +119,7 @@ const Supplier = () => {
 
                       <td>
                         <button
-                          className="btn btn-primary mx-3"
+                          className="mx-3 btn btn-primary"
                           onClick={() => handleEditSupplier(item)}
                         >
                           <BiEdit />

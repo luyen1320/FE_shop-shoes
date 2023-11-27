@@ -57,18 +57,18 @@ const ManageOrder = () => {
         <div className="main-card">
           <div className="card">
             <div className="card-inner">
-              <h3>Tổng doanh thu</h3>
+              <h3>Đơn đặt hàng</h3>
               <FaMoneyBillAlt className="card_icon" />
             </div>
-            <h1>20.000.000đ</h1>
+            <h1>tổng số đơn</h1>
           </div>
 
           <div className="card">
             <div className="card-inner">
-              <h3>Tổng doanh thu</h3>
+              <h3>Đơn chờ duyệt</h3>
               <FaMoneyBillAlt className="card_icon" />
             </div>
-            <h1>20.000.000đ</h1>
+            <h1>12</h1>
           </div>
         </div>
         <div className="content-order">

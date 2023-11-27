@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Review from "./Tabs/Review";
 import "./product.scss";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -8,22 +7,42 @@ import ProductSlider from "./productSlider/productSlider";
 import Navbar from "../navbar/Navbar";
 import Footer from "../footer/Footer";
 import { useParams } from "react-router-dom";
-import { addToCart, getOneProduct } from "../../service/productService";
+import {
+  addToCart,
+  getOneProduct,
+  getReviews,
+} from "../../service/productService";
 import { toast } from "react-toastify";
 import { convertBase64ToImage } from "../../assets/data/image";
+import Review from "./Tabs/Review";
+import ReviewComments from "./Tabs/ReviewComments";
+import { useDispatch, useSelector } from "react-redux";
+import { setProducts } from "../../redux/cartSlice";
+import { getAllProductsInCart } from "../../utils/utils";
 
 const ProductDetails = () => {
   const { id } = useParams();
-  // const [showModal, setShowModal] = useState(false);
+  const cartProducts = useSelector((state) => state.cart.cartProducts.data);
+  const dispatch = useDispatch();
   const [getProduct, setGetProduct] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const [listImage, setListImage] = useState([]);
   const [product, setProduct] = useState({
-    userId: 8,
+    userId: "",
     productId: "",
     sizeId: null,
     quantity: 0,
   });
+  const [user, setUser] = useState({});
+  useEffect(() => {
+    // Kiểm tra xem có thông tin người dùng trong Local Storage không
+    const storedUser = localStorage.getItem("user");
 
+    // Nếu có, chuyển đổi chuỗi JSON thành đối tượng và cập nhật state
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
   const getOnePrd = async () => {
     let res = await getOneProduct(id);
     if (res && res.errCode === 0) {
@@ -31,8 +50,16 @@ const ProductDetails = () => {
       setProduct({
         ...product,
         productId: parseInt(id),
-        userId: 8,
       });
+    } else {
+      toast.error(res.errMessage);
+    }
+  };
+
+  const getAllReviews = async () => {
+    let res = await getReviews(id);
+    if (res && res.errCode === 0) {
+      setReviews(res.DT);
     } else {
       toast.error(res.errMessage);
     }
@@ -49,6 +76,7 @@ const ProductDetails = () => {
 
   useEffect(() => {
     getOnePrd();
+    getAllReviews();
   }, [id]);
 
   const handleAddToCart = async () => {
@@ -60,11 +88,22 @@ const ProductDetails = () => {
       toast.error("Vui lòng chọn size");
       return;
     }
-    console.log(product);
 
-    let res = await addToCart(product);
+    console.log(user);
+    if (!user?.id) {
+      toast.error("Vui lòng đăng nhập");
+      return;
+    }
+
+    let res = await addToCart({
+      userId: user?.id,
+      productId: product?.productId,
+      sizeId: product?.sizeId,
+      quantity: product?.quantity,
+    });
     if (res && res.errCode === 0) {
       toast.success("Thêm vào giỏ hàng thành công");
+      getAllProductsInCart(user?.id, dispatch, toast);
     } else {
       toast.error(res.errMessage);
     }
@@ -108,6 +147,7 @@ const ProductDetails = () => {
               <div className="size">
                 {getProduct?.inventory
                   ?.sort((a, b) => a.sizeId - b.sizeId)
+                  ?.filter((item) => item.quantityInStock > 0)
                   ?.map((item, index) => (
                     <span
                       key={index}
@@ -143,18 +183,76 @@ const ProductDetails = () => {
                 Số lượng:
               </p>
               &nbsp;
-              <input
-                type="number"
-                onChange={(e) => {
-                  setProduct({
-                    ...product,
-                    total_money: e.target.value * parseInt(getProduct.price),
-                    quantity: e.target.value,
-                  });
-                }}
-                name="quantity"
-                className="border border-gray-400"
-              />
+              <div className="flex gap-3 qty-change">
+                <button
+                  type="button"
+                  className="flex items-center justify-center qty-dec fs-14"
+                  onClick={() => {
+                    if (product?.quantity <= 0) {
+                      return;
+                    }
+                    setProduct({
+                      ...product,
+                      total_money:
+                        (product?.quantity - 1) * parseInt(getProduct.price),
+                      quantity: product?.quantity - 1,
+                    });
+                  }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-6 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19.5 12h-15"
+                    />
+                  </svg>
+                </button>
+                <span className="flex qty-value flex-center">
+                  {product?.quantity}
+                </span>
+                <button
+                  type="button"
+                  className="flex items-center justify-center qty-inc fs-14"
+                  onClick={() => {
+                    if (
+                      product?.quantity >=
+                      getProduct?.inventory?.find(
+                        (item) => item?.sizeId === product?.sizeId
+                      )?.quantityInStock
+                    ) {
+                      return;
+                    }
+                    setProduct({
+                      ...product,
+                      total_money:
+                        (product?.quantity + 1) * parseInt(getProduct.price),
+                      quantity: product?.quantity + 1,
+                    });
+                  }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-6 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 4.5v15m7.5-7.5h-15"
+                    />
+                  </svg>
+                </button>
+              </div>
             </div>
 
             <div className="product-content-right-button">
@@ -210,7 +308,9 @@ const ProductDetails = () => {
             active === 2 ? "content-review content-active" : "content-none"
           }
         >
-          <Review productId={id} userId="" />
+          <Review productId={id} userId={user?.id} />
+          {/* <Review /> */}
+          <ReviewComments reviews={reviews} />
         </div>
       </div>
       <Footer />

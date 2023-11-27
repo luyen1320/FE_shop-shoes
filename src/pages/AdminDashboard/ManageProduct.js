@@ -13,10 +13,14 @@ import Swal from "sweetalert2";
 
 const ManageProduct = () => {
   const [getProduct, setGetProduct] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentLimit, setCurrentLimit] = useState(3);
+  const [totalPages, setTotalPages] = useState(0);
   const getAllProducts = async () => {
-    let res = await getAllProduct();
+    let res = await getAllProduct(currentPage, currentLimit);
     if (res && res.errCode === 0) {
-      setGetProduct(res.DT);
+      setGetProduct(res.DT?.suppliers);
+      setTotalPages(res?.DT?.totalPages);
     } else {
       toast.error(res.errMessage);
     }
@@ -24,7 +28,7 @@ const ManageProduct = () => {
 
   useEffect(() => {
     getAllProducts();
-  }, []);
+  }, [currentPage]);
 
   const handleDeleteProduct = (id) => {
     Swal.fire({
@@ -47,6 +51,9 @@ const ManageProduct = () => {
       }
     });
   };
+  const handlePageClick = async (event) => {
+    setCurrentPage(+event.selected + 1);
+  };
   return (
     <div className="manage-product auto">
       <Nav />
@@ -68,7 +75,9 @@ const ManageProduct = () => {
               getProduct?.map((item, index) => {
                 return (
                   <tr key={item?.id}>
-                    <td>{item?.id}</td>
+                    <td>
+                      {currentPage * currentLimit - currentLimit + index + 1}
+                    </td>
                     <td>{item?.productName}</td>
                     <td>
                       <img
@@ -117,9 +126,10 @@ const ManageProduct = () => {
         <ReactPaginate
           breakLabel="..."
           nextLabel=" >"
-          // onPageChange={handlePageClick}
-          pageRangeDisplayed={5}
-          // pageCount={totalPages}
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={3}
+          marginPagesDisplayed={4}
+          pageCount={totalPages}
           previousLabel="< "
           pageClassName="page-item"
           pageLinkClassName="page-link"

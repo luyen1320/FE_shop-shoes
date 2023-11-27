@@ -7,13 +7,15 @@ import WardDropdown from "../modal/Provinces/Ward";
 import nike from "./../../assets/images/Giay-Air-Jordan-1-Retro-Hi-Premium-GS-Camo-822858-027.jpg";
 import nike01 from "./../../assets/images/Giay-Air-Jordan-11-Retro-Gratitude-Defining-Moments-CT8012-170.jpg";
 import { convertBase64ToImage } from "../../assets/data/image";
-import { createOrder } from "../../service/productService";
+import { createOrder, getAllProductInCart } from "../../service/productService";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 const Order = () => {
   const [selectedProvinceCode, setSelectedProvinceCode] = useState("");
+  const cartProducts = useSelector((state) => state.cart.cartProducts.data);
   const [selectedDistrictCode, setSelectedDistrictCode] = useState("");
-  const [storedValue, setStoredValue] = useState([]);
+  // const [storedValue, setStoredValue] = useState([]);
   const [detailOrder, setDetailOrder] = useState({
     username: "",
     email: "",
@@ -22,31 +24,49 @@ const Order = () => {
     note: "",
     totalMoney: "",
     userId: "",
-    paymentType: "",
-    deliveryType: "",
+    paymentType: "COD",
+    deliveryType: "STANDARD",
     province: "",
     district: "",
     ward: "",
   });
-  useEffect(() => {
-    const dataStorage = JSON.parse(sessionStorage.getItem("chooseProduct"));
 
-    setStoredValue(dataStorage);
-    if (dataStorage?.length === 0) {
-      window.location.href = "/";
+  // const getAllProductsInCart = async (id) => {
+  //   let res = await getAllProductInCart(id);
+  //   if (res && res.errCode === 0) {
+  //     setStoredValue(res.DT);
+  //   } else {
+  //     toast.error(res.errMessage);
+  //   }
+  // };
+
+  const [user, setUser] = useState({});
+  useEffect(() => {
+    // Kiểm tra xem có thông tin người dùng trong Local Storage không
+    const storedUser = localStorage.getItem("user");
+
+    // Nếu có, chuyển đổi chuỗi JSON thành đối tượng và cập nhật state
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
     }
   }, []);
+
+  // useEffect(() => {
+  //   getAllProductsInCart(user?.id);
+  // }, [user?.id]);
+
   useEffect(() => {
     const init = detailOrder?.deliveryType === "FAST" ? 65000 : 45000;
     setDetailOrder({
       ...detailOrder,
-      totalMoney: storedValue?.reduce(
+      userId: user?.id,
+      totalMoney: cartProducts?.reduce(
         (accumulator, currentValue) =>
           accumulator + parseInt(currentValue?.price) * currentValue?.quantity,
         init
       ),
     });
-  }, [detailOrder.deliveryType]);
+  }, [detailOrder.deliveryType, user?.id]);
   const handleProvinceChange = (event) => {
     const selectedOptions = event.target.selectedOptions;
 
@@ -84,10 +104,50 @@ const Order = () => {
   const handleCreateOrder = async (e) => {
     e.preventDefault();
     console.log(detailOrder);
+    if (!detailOrder.username) {
+      toast.error("Vui lòng nhập họ tên");
+      return;
+    }
+    if (!detailOrder.email) {
+      toast.error("Vui lòng nhập email");
+      return;
+    } else if (!detailOrder.email.includes("@")) {
+      toast.error("Email không hợp lệ");
+      return;
+    }
+    if (!detailOrder.phone) {
+      toast.error("Vui lòng nhập số điện thoại");
+      return;
+    }
+    if (!detailOrder.addressDetail) {
+      toast.error("Vui lòng nhập địa chỉ");
+      return;
+    }
+    if (!detailOrder.province) {
+      toast.error("Vui lòng chọn tỉnh/thành phố");
+      return;
+    }
+    if (!detailOrder.district) {
+      toast.error("Vui lòng chọn quận/huyện");
+      return;
+    }
+    if (!detailOrder.ward) {
+      toast.error("Vui lòng chọn xã/phường");
+      return;
+    }
+    if (!detailOrder.deliveryType) {
+      toast.error("Vui lòng chọn hình thức giao hàng");
+      return;
+    }
+    if (!detailOrder.paymentType) {
+      toast.error("Vui lòng chọn hình thức thanh toán");
+      return;
+    }
+
     try {
       let res = await createOrder({
         ...detailOrder,
-        listProduct: storedValue,
+        listProduct: cartProducts,
       });
       if (res && res.errCode === 0) {
         toast.success("Đặt hàng thành công");
@@ -126,7 +186,7 @@ const Order = () => {
               <div className="col-md-12">
                 <label className="form-label">Email</label>
                 <input
-                  type="text"
+                  type="email"
                   className="form-input"
                   onChange={(e) => {
                     setDetailOrder({ ...detailOrder, email: e.target.value });
@@ -243,6 +303,7 @@ const Order = () => {
                   <input
                     type="radio"
                     name="paied"
+                    defaultChecked
                     onChange={() =>
                       setDetailOrder({
                         ...detailOrder,
@@ -271,8 +332,8 @@ const Order = () => {
           <div className="content-right">
             <label className="form-label">Đơn hàng của bạn</label>
             <tbody className="order-review">
-              {storedValue?.length > 0 &&
-                storedValue.map((item, key) => (
+              {cartProducts?.length > 0 &&
+                cartProducts.map((item, key) => (
                   <tr className="cart-item" key={key}>
                     <td className="product-name">
                       <div className="p-1 product-thumbnail">
@@ -316,7 +377,7 @@ const Order = () => {
               Tổng:{" "}
               {detailOrder?.deliveryType === "FAST" ? (
                 <span>
-                  {storedValue
+                  {cartProducts
                     ?.reduce(
                       (accumulator, currentValue) =>
                         accumulator +
@@ -328,7 +389,7 @@ const Order = () => {
                 </span>
               ) : (
                 <span>
-                  {storedValue
+                  {cartProducts
                     ?.reduce(
                       (accumulator, currentValue) =>
                         accumulator +

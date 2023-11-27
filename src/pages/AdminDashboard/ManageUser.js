@@ -11,10 +11,14 @@ import Swal from "sweetalert2";
 
 const ManageUser = () => {
   const [getAllUser, setGetAllUser] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentLimit, setCurrentLimit] = useState(2);
+  const [totalPages, setTotalPages] = useState(0);
   const getAllUsers = async () => {
-    let res = await getUser();
+    let res = await getUser(currentPage, currentLimit);
     if (res && res.errCode === 0) {
-      setGetAllUser(res.DT);
+      setGetAllUser(res.DT?.suppliers);
+      setTotalPages(res?.DT?.totalPages);
     } else {
       toast.error(res.errMessage);
     }
@@ -22,7 +26,7 @@ const ManageUser = () => {
 
   useEffect(() => {
     getAllUsers();
-  }, []);
+  }, [currentPage]);
 
   const handleDelete = async (id) => {
     console.log(id);
@@ -46,7 +50,9 @@ const ManageUser = () => {
       }
     });
   };
-
+  const handlePageClick = async (event) => {
+    setCurrentPage(+event.selected + 1);
+  };
   return (
     <div className="manage-customer auto">
       <Nav />
@@ -68,7 +74,9 @@ const ManageUser = () => {
               getAllUser?.map((item, index) => {
                 return (
                   <tr key={item.id}>
-                    <td>{item?.id}</td>
+                    <td>
+                      {currentPage * currentLimit - currentLimit + index + 1}
+                    </td>
                     <td>{item?.username}</td>
                     <td>{item?.email}</td>
                     <td>{item?.phone}</td>
@@ -103,9 +111,10 @@ const ManageUser = () => {
         <ReactPaginate
           breakLabel="..."
           nextLabel=" >"
-          // onPageChange={handlePageClick}
-          pageRangeDisplayed={5}
-          // pageCount={totalPages}
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={3}
+          marginPagesDisplayed={4}
+          pageCount={totalPages}
           previousLabel="< "
           pageClassName="page-item"
           pageLinkClassName="page-link"

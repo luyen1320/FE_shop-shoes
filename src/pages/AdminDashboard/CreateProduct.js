@@ -21,6 +21,17 @@ import { useParams } from "react-router-dom";
 const CreateProduct = () => {
   const { id } = useParams();
 
+  const [user, setUser] = useState({});
+  useEffect(() => {
+    // Kiểm tra xem có thông tin người dùng trong Local Storage không
+    const storedUser = localStorage.getItem("user");
+
+    // Nếu có, chuyển đổi chuỗi JSON thành đối tượng và cập nhật state
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
   //fetch one product by id
   const fetchOneProduct = async () => {
     let res = await getOneProduct(id);
@@ -52,7 +63,7 @@ const CreateProduct = () => {
 
   const [product, setProduct] = useState({
     productId: null,
-    userId: "",
+    userId: user?.id,
     productName: "",
     image: "",
     images: "",
@@ -62,6 +73,22 @@ const CreateProduct = () => {
     price: "",
   });
 
+  const handleReset = () => {
+    console.log(quantityInStock);
+    setProduct({
+      productId: null,
+      userId: user?.id,
+      productName: "",
+      image: "",
+      images: "",
+      discount: "",
+      supplier: "",
+      price: "",
+    });
+    setDescription("");
+    setSelectedItems([]);
+    setquantityInStock();
+  };
   //handle single image
   const handleSingleImage = async (files) => {
     const base64Image = await getBase64(files[0]);
@@ -171,6 +198,7 @@ const CreateProduct = () => {
       ...product,
       inventory: quantityInStock,
       description: description,
+      userId: user?.id,
     };
 
     try {
@@ -182,6 +210,7 @@ const CreateProduct = () => {
         id
           ? toast.success("Sửa sản phẩm thành công")
           : toast.success("Tạo sản phẩm thành công");
+        handleReset();
       } else {
         toast.error(res.errMessage);
       }
@@ -235,9 +264,13 @@ const CreateProduct = () => {
               placeholder="Nhập phần trăm giảm giá"
               className="form-input"
               value={product.discount}
-              onChange={(e) =>
-                handleOnchangeProduct(e.target.value, "discount")
-              }
+              onChange={(e) => {
+                if (e.target.value > 99) {
+                  toast.error("Giảm giá không được lớn hơn 99%");
+                } else {
+                  handleOnchangeProduct(e.target.value, "discount");
+                }
+              }}
             />
           </div>
           <div className="col-md-4">
@@ -293,9 +326,9 @@ const CreateProduct = () => {
                       type="number"
                       className="border"
                       value={
-                        quantityInStock.find(
+                        quantityInStock?.find(
                           (quantity) => quantity.sizeId === item.id
-                        )?.quantityInStock
+                        )?.quantityInStock || ""
                       }
                       onChange={(e) => {
                         setquantityInStock((prevQuantityInStock) => {
