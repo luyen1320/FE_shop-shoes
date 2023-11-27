@@ -244,7 +244,7 @@ function Cart(props) {
                       <span className="fw-4">Giá</span>
                       <span className="fw-7"></span>
                     </li>
-                    <li className="flex flex-between">
+                    {/* <li className="flex flex-between">
                       <span className="fw-4">Giảm giá</span>
                       <span className="fw-7">
                         <span className="fw-5 text-red">-&nbsp;</span>
@@ -255,7 +255,7 @@ function Cart(props) {
                       <span className="fw-7">
                         <span className="fw-5 text-gold">+&nbsp;</span>
                       </span>
-                    </li>
+                    </li> */}
                   </ul>
                   <div className="cart-summary-total flex flex-between fs-18">
                     <span className="fw-6">Tạm tính: </span>
