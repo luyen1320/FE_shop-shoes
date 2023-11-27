@@ -7,12 +7,30 @@ import ReactPaginate from "react-paginate";
 import { BiEdit, BiMenuAltLeft } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import { ModalOrder } from "../../components";
-import { getAllOrder, updateOrder } from "../../service/productService";
+import {
+  getAllOrder,
+  getDataManageAdmin,
+  updateOrder,
+} from "../../service/productService";
 import { toast } from "react-toastify";
 
 const ManageOrder = () => {
   const [isShowModalOrder, setIsShowModalOrder] = useState(false);
   const [valueModal, setValueModal] = useState({});
+  const [dataManage, setDataManage] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentLimit, setCurrentLimit] = useState(10);
+  const [totalPages, setTotalPages] = useState(0);
+  const [sortByName, setSortByName] = useState(false);
+
+  const fectchDtManage = async () => {
+    let res = await getDataManageAdmin();
+    if (res && res.errCode === 0) {
+      setDataManage(res.DT);
+    } else {
+      toast.error(res.errMessage);
+    }
+  };
 
   const handleEditOrder = (product) => {
     setIsShowModalOrder(true);
@@ -29,9 +47,10 @@ const ManageOrder = () => {
 
   const [getOrders, setGetOrders] = useState([]);
   const getAllOrders = async () => {
-    let res = await getAllOrder();
+    let res = await getAllOrder(currentPage, currentLimit, sortByName);
     if (res && res.errCode === 0) {
-      setGetOrders(res.DT);
+      setGetOrders(res.DT?.suppliers);
+      setTotalPages(res?.DT?.totalPages);
     } else {
       toast.error(res.errMessage);
     }
@@ -41,15 +60,23 @@ const ManageOrder = () => {
     let res = await updateOrder(id, { status: value });
     if (res && res.errCode === 0) {
       toast.success("Cập nhật thành công");
+      fectchDtManage();
     } else {
       toast.error(res.errMessage);
     }
   };
 
   useEffect(() => {
-    getAllOrders();
+    fectchDtManage();
   }, []);
-  console.log(getOrders);
+  useEffect(() => {
+    getAllOrders();
+  }, [currentPage, sortByName]);
+
+  const handlePageClick = async (event) => {
+    setCurrentPage(+event.selected + 1);
+  };
+
   return (
     <div className="manage-order">
       <Nav />
@@ -60,7 +87,7 @@ const ManageOrder = () => {
               <h3>Đơn đặt hàng</h3>
               <FaMoneyBillAlt className="card_icon" />
             </div>
-            <h1>tổng số đơn</h1>
+            <h1>{dataManage?.totalOrders}</h1>
           </div>
 
           <div className="card">
@@ -68,13 +95,18 @@ const ManageOrder = () => {
               <h3>Đơn chờ duyệt</h3>
               <FaMoneyBillAlt className="card_icon" />
             </div>
-            <h1>12</h1>
+            <h1>{dataManage?.totalOrdersPending}</h1>
           </div>
         </div>
         <div className="content-order">
           <div className="title-order">
             <h3>Đơn hàng đang xử lý</h3>
-            <div className="filter-order">
+            <div
+              className="filter-order"
+              onClick={() => {
+                setSortByName(!sortByName);
+              }}
+            >
               Lọc
               <BiMenuAltLeft />
             </div>
@@ -148,9 +180,10 @@ const ManageOrder = () => {
           <ReactPaginate
             breakLabel="..."
             nextLabel=" >"
-            // onPageChange={handlePageClick}
-            pageRangeDisplayed={5}
-            // pageCount={totalPages}
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={3}
+            marginPagesDisplayed={4}
+            pageCount={totalPages}
             previousLabel="< "
             pageClassName="page-item"
             pageLinkClassName="page-link"

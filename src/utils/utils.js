@@ -5,12 +5,13 @@ import { getAllProductInCart } from "../service/productService";
 export const login = (user) => {
   // Lưu thông tin người dùng vào Local Storage khi đăng nhập
   localStorage.setItem("user", JSON.stringify(user));
+  localStorage.removeItem("chooseProduct");
 };
 
 export const logout = () => {
   // Xóa thông tin người dùng khỏi Local Storage khi đăng xuất
   localStorage.removeItem("user");
-
+  // window.location.href = "/login";
   window.location.reload();
 };
 

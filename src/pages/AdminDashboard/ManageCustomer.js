@@ -18,6 +18,7 @@ import ReactPaginate from "react-paginate";
 const ManageCustomer = () => {
   const [edit, setEdit] = useState(false); // [1
   const [show, setShow] = useState(false);
+  const [sortByName, setSortByName] = useState(false);
   const [values, setValues] = useState({
     id: "",
     username: "",
@@ -30,10 +31,10 @@ const ManageCustomer = () => {
 
   const [getAllCustomer, setGetAllCustomer] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [currentLimit, setCurrentLimit] = useState(2);
+  const [currentLimit, setCurrentLimit] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
   const getAllCustomers = async () => {
-    let res = await getCustomer(currentPage, currentLimit);
+    let res = await getCustomer(currentPage, currentLimit, sortByName);
     if (res && res.errCode === 0) {
       setGetAllCustomer(res.DT?.suppliers);
       setTotalPages(res?.DT?.totalPages);
@@ -44,7 +45,7 @@ const ManageCustomer = () => {
 
   useEffect(() => {
     getAllCustomers();
-  }, [show, currentPage]);
+  }, [show, currentPage, sortByName]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -87,7 +88,6 @@ const ManageCustomer = () => {
       const res = !edit
         ? await createCustomer(values)
         : await editCustomer(values);
-      console.log(res);
       if (res && res.errCode === 0) {
         toast.success("Thành công");
       } else {
@@ -240,7 +240,13 @@ const ManageCustomer = () => {
               <i className="fa-solid fa-circle-plus"></i> Tạo tài khoản
             </Button>
           </div>
-          <div className="filter-user" style={{ color: "black" }}>
+          <div
+            className="filter-user"
+            style={{ color: "black" }}
+            onClick={() => {
+              setSortByName(!sortByName);
+            }}
+          >
             Lọc
             <BiMenuAltLeft />
           </div>

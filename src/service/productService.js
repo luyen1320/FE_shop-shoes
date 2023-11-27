@@ -58,10 +58,13 @@ const getAllProduct = (
     }
   );
 };
-const getAllOrder = () => {
-  return axios.get("/api/v1/getallorder", {
-    withCredentials: true,
-  });
+const getAllOrder = (page, limit, sortByName) => {
+  return axios.get(
+    `/api/v1/getallorder?page=${page}&limit=${limit}&sortByName=${sortByName}`,
+    {
+      withCredentials: true,
+    }
+  );
 };
 const getOrderById = (id) => {
   return axios.get(`/api/v1/getorder/${id}`, {
@@ -81,8 +84,24 @@ const getOneProduct = (id) => {
   });
 };
 
+const getBestSellerProduct = () => {
+  return axios.get(`/api/v1/product/bestseller`, {
+    withCredentials: true,
+  });
+};
+const getProductSale = (page, limit) => {
+  return axios.get(`/api/v1/product/sale?page=${page}&limit=${limit}`, {
+    withCredentials: true,
+  });
+};
+
 const getReviews = (id) => {
   return axios.get(`/api/v1/review/${id}`, {
+    withCredentials: true,
+  });
+};
+const getDataManageAdmin = () => {
+  return axios.get(`/api/v1/product/dtadmin`, {
     withCredentials: true,
   });
 };
@@ -101,4 +120,7 @@ export {
   removeproductcart,
   getReviews,
   getOrderById,
+  getBestSellerProduct,
+  getProductSale,
+  getDataManageAdmin,
 };

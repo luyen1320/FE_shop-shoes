@@ -81,7 +81,7 @@ export const routes = [
     subRoutes: [
       {
         path: "/settings/profile",
-        name: "Profile ",
+        name: "Logout",
         icon: <FaUser />,
       },
       {

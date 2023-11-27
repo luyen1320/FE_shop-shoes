@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
-import Login from "./pages/UserDashboard/login/Login";
-import Cart from "./pages/UserDashboard/cart/Cart";
-import Register from "./pages/UserDashboard/register/Register";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
@@ -14,12 +11,17 @@ import {
   CreateProduct,
   Supplier,
   ManageUser,
+  ManageCustomer,
 } from "./pages/AdminDashboard";
-import ProductDetails from "./components/productDetails/productDetails";
-import ProductPage from "./components/productDetails/ProductPage";
-import ManageCustomer from "./pages/AdminDashboard/ManageCustomer";
-import { Order } from "./components";
-import InfoAccount from "./pages/UserDashboard/infoAccount/InfoAccount";
+import {
+  ProductDetails,
+  ProductPage,
+  Order,
+  SaleProduct,
+  Accessory,
+  Contact,
+} from "./components";
+import { Login, Cart, Register, InfoAccount } from "./pages/UserDashboard";
 
 function App() {
   const [user, setUser] = useState({});
@@ -43,17 +45,22 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/product-details/:id" element={<ProductDetails />} />
           <Route path="/product-page" element={<ProductPage />} />
+          <Route path="/product-page/:slug" element={<ProductPage />} />
           <Route path="/order" element={<Order />} />
           <Route path="/info-account" element={<InfoAccount />} />
+          <Route path="/sale-product" element={<SaleProduct />} />
+          <Route path="/accessory" element={<Accessory />} />
+          <Route path="/contact" element={<Contact />} />
 
           {/*ADMIN */}
           {/* {user && user.roleId !== "USER" ? ( */}
-          <Route
+          {/* <Route
             path="/admin"
             element={
               user.roleId !== "USER" ? <AdminLayout /> : <Navigate to="/" />
             }
-          >
+          > */}
+          <Route path="/admin" element={<AdminLayout />}>
             <Route path="home" element={<Home />} />
             <Route path="manage-user" element={<ManageCustomer />} />
             <Route path="manage-order" element={<ManageOrder />} />
@@ -62,6 +69,7 @@ function App() {
             <Route path="edit-product/:id" element={<CreateProduct />} />
             <Route path="manage-customer" element={<ManageUser />} />
             <Route path="supplier" element={<Supplier />} />
+            {/* </Route> */}
           </Route>
           {/* ) : (
             

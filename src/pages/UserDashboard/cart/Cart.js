@@ -224,14 +224,15 @@ function Cart(props) {
 
                           <div className="flex items-center justify-between w-full price flex-between">
                             <div className="text-pine-green fw-4 fs-15">
-                              Giá : {parseInt(item?.price).toLocaleString()}đ
+                              Giá :{" "}
+                              {parseInt(item?.price).toLocaleString("vi-VN")}đ
                             </div>
                             <div className="sub-total fw-6 fs-18 text-regal-blue">
                               <span>
                                 Tổng:{" "}
                                 {(
                                   parseInt(item?.price) * item?.quantity
-                                ).toLocaleString()}
+                                ).toLocaleString("vi-VN")}
                                 đ
                               </span>
                               <span className=""></span>
@@ -263,7 +264,7 @@ function Cart(props) {
                                   currentValue.quantity,
                               0
                             )
-                        ).toLocaleString()}
+                        ).toLocaleString("vi-VN")}
                       </span>
                     </li>
                     <li className="flex flex-between">

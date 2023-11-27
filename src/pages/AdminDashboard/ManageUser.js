@@ -14,6 +14,7 @@ const ManageUser = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [currentLimit, setCurrentLimit] = useState(2);
   const [totalPages, setTotalPages] = useState(0);
+  const [sortByName, setSortByName] = useState(false);
   const getAllUsers = async () => {
     let res = await getUser(currentPage, currentLimit);
     if (res && res.errCode === 0) {
@@ -65,7 +66,7 @@ const ManageUser = () => {
               <th>Email</th>
               <th>Phone</th>
               <th>Chức vụ</th>
-              <th>Trạng Thái</th>
+              {/* <th>Trạng Thái</th> */}
               <th>Hành Động</th>
             </tr>
           </thead>
@@ -81,7 +82,7 @@ const ManageUser = () => {
                     <td>{item?.email}</td>
                     <td>{item?.phone}</td>
                     <td>{item?.roleId}</td>
-                    <td>{item?.status}</td>
+                    {/* <td>{item?.status}</td> */}
                     <td>
                       {/* <button
                         className="mx-3 btn btn-primary"

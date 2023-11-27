@@ -79,7 +79,9 @@ const ModalOrder = (props) => {
                           </ul>
                         </td>
                         <td>{item?.quantity}</td>
-                        <td>{parseInt(item?.price).toLocaleString()}đ</td>
+                        <td>
+                          {parseInt(item?.price).toLocaleString("vi-VN")}đ
+                        </td>
                         <td>
                           <select className="form-select">
                             <option>Chờ xử lý</option>
@@ -102,7 +104,7 @@ const ModalOrder = (props) => {
                       0
                     )) +
                   parseInt(valueModal?.deliveryType === "FAST" ? 65000 : 45000)
-                ).toLocaleString()}
+                ).toLocaleString("vi-VN")}
                 đ
               </div>
             </div>

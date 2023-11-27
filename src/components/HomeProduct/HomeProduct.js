@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { convertBase64ToImage } from "../../assets/data/image";
 import logoSGV from "../../assets/images/next-link.svg";
 import ItemProductCart from "../card/ItemProductCart";
+import SellingProducts from "./SellingProducts";
 
 function HomeProduct(props) {
   const [getProduct, setGetProduct] = useState([]);
@@ -36,7 +37,7 @@ function HomeProduct(props) {
   return (
     <div className="product">
       <h2>SẢN PHẨM BÁN CHẠY</h2>
-      <div className="list">
+      {/* <div className="list">
         {getProduct?.length > 0 &&
           getProduct?.map((item, index) => {
             return <ItemProductCart item={item} key={index}></ItemProductCart>;
@@ -48,7 +49,8 @@ function HomeProduct(props) {
           <span className="text-center ">Xem thêm giầy...&nbsp;</span>
           <img src={logoSGV} alt="" height={20} width={20} />
         </Link>
-      </div>
+      </div> */}
+      <SellingProducts />
 
       <h2 className="uppercase">GIẦY jordan</h2>
       <div className="list">
@@ -59,7 +61,10 @@ function HomeProduct(props) {
       </div>
 
       <div className="flex items-center justify-center next-category">
-        <Link className="flex items-center justify-center">
+        <Link
+          to={"/product-page/jordan"}
+          className="flex items-center justify-center"
+        >
           <span className="text-center ">Xem thêm giầy...&nbsp;</span>
           <img src={logoSGV} alt="" height={20} width={20} />
         </Link>
@@ -74,7 +79,10 @@ function HomeProduct(props) {
       </div>
 
       <div className="flex items-center justify-center mb-3 next-category">
-        <Link className="flex items-center justify-center">
+        <Link
+          to={"/product-page/adidas"}
+          className="flex items-center justify-center"
+        >
           <span className="text-center ">Xem thêm giầy...&nbsp;</span>
           <img src={logoSGV} alt="" height={20} width={20} />
         </Link>

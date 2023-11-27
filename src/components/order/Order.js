@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 const Order = () => {
   const [selectedProvinceCode, setSelectedProvinceCode] = useState("");
   const cartProducts = useSelector((state) => state.cart.cartProducts.data);
+  const [orderProduct, setOrderProduct] = useState(cartProducts);
   const [selectedDistrictCode, setSelectedDistrictCode] = useState("");
   // const [storedValue, setStoredValue] = useState([]);
   const [detailOrder, setDetailOrder] = useState({
@@ -31,14 +32,15 @@ const Order = () => {
     ward: "",
   });
 
-  // const getAllProductsInCart = async (id) => {
-  //   let res = await getAllProductInCart(id);
-  //   if (res && res.errCode === 0) {
-  //     setStoredValue(res.DT);
-  //   } else {
-  //     toast.error(res.errMessage);
-  //   }
-  // };
+  useEffect(() => {
+    // Kiểm tra xem có thông tin người dùng trong Local Storage không
+    const storedUser = localStorage.getItem("chooseProduct");
+
+    // Nếu có, chuyển đổi chuỗi JSON thành đối tượng và cập nhật state
+    if (storedUser) {
+      setOrderProduct(JSON.parse(storedUser) || cartProducts);
+    }
+  }, []);
 
   const [user, setUser] = useState({});
   useEffect(() => {
@@ -48,6 +50,14 @@ const Order = () => {
     // Nếu có, chuyển đổi chuỗi JSON thành đối tượng và cập nhật state
     if (storedUser) {
       setUser(JSON.parse(storedUser));
+      setDetailOrder({
+        ...detailOrder,
+        userId: JSON.parse(storedUser)?.id,
+        username: JSON.parse(storedUser)?.username,
+        email: JSON.parse(storedUser)?.email,
+        phone: JSON.parse(storedUser)?.phone,
+        addressDetail: JSON.parse(storedUser)?.addressDetails,
+      });
     }
   }, []);
 
@@ -151,7 +161,8 @@ const Order = () => {
       });
       if (res && res.errCode === 0) {
         toast.success("Đặt hàng thành công");
-        // history.push("/cart");
+        localStorage.removeItem("chooseProduct");
+        window.location.href = "/";
       } else {
         toast.error(res.errMessage);
       }
@@ -174,6 +185,7 @@ const Order = () => {
                 <input
                   type="text"
                   className="form-input"
+                  defaultValue={user?.username}
                   onChange={(e) => {
                     setDetailOrder({
                       ...detailOrder,
@@ -188,6 +200,7 @@ const Order = () => {
                 <input
                   type="email"
                   className="form-input"
+                  defaultValue={user?.email}
                   onChange={(e) => {
                     setDetailOrder({ ...detailOrder, email: e.target.value });
                   }}
@@ -199,6 +212,7 @@ const Order = () => {
                 <input
                   type="text"
                   className="form-input"
+                  defaultValue={user?.phone}
                   onChange={(e) => {
                     setDetailOrder({ ...detailOrder, phone: e.target.value });
                   }}
@@ -210,6 +224,7 @@ const Order = () => {
                 <input
                   type="text"
                   className="form-input"
+                  defaultValue={user?.addressDetails}
                   onChange={(e) => {
                     setDetailOrder({
                       ...detailOrder,
@@ -332,7 +347,7 @@ const Order = () => {
           <div className="content-right">
             <label className="form-label">Đơn hàng của bạn</label>
             <tbody className="order-review">
-              {cartProducts?.length > 0 &&
+              {cartProducts?.length > 0 ? (
                 cartProducts.map((item, key) => (
                   <tr className="cart-item" key={key}>
                     <td className="product-name">
@@ -354,7 +369,7 @@ const Order = () => {
                             <bdi>
                               {(
                                 parseInt(item?.price) * parseInt(item?.quantity)
-                              ).toLocaleString()}
+                              ).toLocaleString("vi-VN")}
                               ₫
                             </bdi>
                           </dd>
@@ -362,7 +377,53 @@ const Order = () => {
                       </div>
                     </td>
                   </tr>
-                ))}
+                ))
+              ) : (
+                <tr className="cart-item">
+                  <td className="product-name">
+                    <div className="p-1 product-thumbnail">
+                      <img
+                        src={convertBase64ToImage(orderProduct?.image)}
+                        alt=""
+                        className="w-[100%] h-[100%] object-cover"
+                      />
+                    </div>
+                    <div className="product-desc">
+                      <span>{orderProduct?.productName}&nbsp;</span>
+                      <strong className="product-quantity">
+                        &nbsp;× {orderProduct?.quantity}
+                      </strong>
+                      <dl className="variation-price">
+                        <dt className="variation">
+                          Size:{" "}
+                          {orderProduct?.sizeId === 1
+                            ? "38"
+                            : orderProduct?.sizeId === 2
+                            ? "39"
+                            : orderProduct?.sizeId === 3
+                            ? "40"
+                            : orderProduct?.sizeId === 4
+                            ? "41"
+                            : orderProduct?.sizeId === 5
+                            ? "42"
+                            : orderProduct?.sizeId === 6
+                            ? "43"
+                            : "44"}
+                        </dt>
+                        <dd className="price" style={{ float: "right" }}>
+                          <bdi>
+                            {(
+                              parseInt(orderProduct?.price) *
+                              parseInt(orderProduct?.quantity)
+                            ).toLocaleString("vi-VN")}
+                            ₫
+                          </bdi>
+                        </dd>
+                      </dl>
+                    </div>
+                  </td>
+                </tr>
+              )}
             </tbody>
 
             <div className="order-total">
@@ -385,7 +446,7 @@ const Order = () => {
                           parseInt(currentValue?.quantity),
                       65000
                     )
-                    .toLocaleString()}
+                    .toLocaleString("vi-VN")}
                 </span>
               ) : (
                 <span>
@@ -397,7 +458,7 @@ const Order = () => {
                           parseInt(currentValue?.quantity),
                       45000
                     )
-                    .toLocaleString()}
+                    .toLocaleString("vi-VN")}
                 </span>
               )}
               ₫

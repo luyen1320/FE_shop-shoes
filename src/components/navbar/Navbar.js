@@ -46,11 +46,11 @@ function Navbar(props) {
       <nav className="navbar">
         <ul>
           <li>
-            <Link to="">Giới thiệu</Link>
+            <Link to="/">Giới thiệu</Link>
           </li>
           <li>
-            <Link to="">Thương hiệu</Link>
-            <ul>
+            <Link to="/product-page">Thương hiệu</Link>
+            {/* <ul>
               <li>
                 <Link to="/admin">Jordan</Link>
               </li>
@@ -60,16 +60,16 @@ function Navbar(props) {
               <li>
                 <Link to="/order">Nike</Link>
               </li>
-            </ul>
+            </ul> */}
           </li>
           <li>
-            <Link to="">Sale</Link>
+            <Link to="/sale-product">Sale</Link>
           </li>
           <li>
-            <Link to="">Phụ kiện</Link>
+            <Link to="/accessory">Phụ kiện</Link>
           </li>
           <li>
-            <Link to="">Liên hệ</Link>
+            <Link to="/contact">Liên hệ</Link>
           </li>
         </ul>
       </nav>

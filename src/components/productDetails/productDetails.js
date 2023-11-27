@@ -22,7 +22,6 @@ import { getAllProductsInCart } from "../../utils/utils";
 
 const ProductDetails = () => {
   const { id } = useParams();
-  const cartProducts = useSelector((state) => state.cart.cartProducts.data);
   const dispatch = useDispatch();
   const [getProduct, setGetProduct] = useState([]);
   const [reviews, setReviews] = useState([]);
@@ -31,7 +30,7 @@ const ProductDetails = () => {
     userId: "",
     productId: "",
     sizeId: null,
-    quantity: 0,
+    quantity: 1,
   });
   const [user, setUser] = useState({});
   useEffect(() => {
@@ -114,6 +113,21 @@ const ProductDetails = () => {
     setActive(id);
   };
 
+  const handleOrder = async () => {
+    if (product?.quantity <= 0) {
+      toast.error("Số lượng không hợp lệ");
+      return;
+    }
+    localStorage.setItem(
+      "chooseProduct",
+      JSON.stringify({
+        ...getProduct,
+        sizeId: product?.sizeId,
+        quantity: product?.quantity,
+      })
+    );
+    window.location.href = "/order";
+  };
   return (
     <>
       <Navbar />
@@ -266,9 +280,9 @@ const ProductDetails = () => {
               </button>
               <button
                 className="btn btn-lg button-cart buy-now"
-                // onClick={() => {
-                //   handleShowModal();
-                // }}
+                onClick={() => {
+                  handleOrder();
+                }}
               >
                 Đặt hàng
               </button>
@@ -308,7 +322,13 @@ const ProductDetails = () => {
             active === 2 ? "content-review content-active" : "content-none"
           }
         >
-          <Review productId={id} userId={user?.id} />
+          {!user?.id ? (
+            <button className="px-4 py-2 text-white bg-red-500 rounded-md">
+              Vui lòng đăng nhập để đánh giá
+            </button>
+          ) : (
+            <Review productId={id} userId={user?.id} />
+          )}
           {/* <Review /> */}
           <ReviewComments reviews={reviews} />
         </div>

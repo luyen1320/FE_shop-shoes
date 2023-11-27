@@ -8,6 +8,7 @@ import Tab from "react-bootstrap/Tab";
 import { Table } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { getOrderById } from "../../../service/productService";
+import { editCustomer } from "../../../service/userService";
 
 const InfoAccount = () => {
   const [user, setUser] = useState({});
@@ -36,7 +37,29 @@ const InfoAccount = () => {
     getAllOrderById(user?.id);
   }, [user?.id]);
 
-  console.log(user);
+  const handleUpdateUser = async (e) => {
+    e.preventDefault();
+    if (!user?.username) {
+      toast.error("Vui lòng nhập tên!");
+      return;
+    }
+    if (!user?.email) {
+      toast.error("Vui lòng nhập email!");
+      return;
+    }
+    try {
+      let res = await editCustomer(user);
+      if (res && res.errCode === 0) {
+        toast.success("Cập nhật thành công!");
+        localStorage.setItem("user", JSON.stringify(user));
+      } else {
+        toast.error(res.errMessage);
+      }
+    } catch (e) {
+      toast.error(e.message);
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -72,41 +95,117 @@ const InfoAccount = () => {
                       <form className="row g-3 needs-validation">
                         <div className="col-md-6">
                           <label className="form-label">Tên</label>
-                          <input type="text" className="form-input" />
+                          <input
+                            type="text"
+                            defaultValue={user?.username}
+                            className="form-input"
+                            onCanPlay={(e) =>
+                              setUser({
+                                ...user,
+                                username: e.target.value,
+                              })
+                            }
+                          />
                         </div>
 
                         <div className="col-md-6">
                           <label className="form-label">Email</label>
-                          <input type="text" className="form-input" />
+                          <input
+                            type="email"
+                            defaultValue={user?.email}
+                            className="form-input"
+                            onChange={(e) =>
+                              setUser({
+                                ...user,
+                                email: e.target.value,
+                              })
+                            }
+                          />
                         </div>
 
                         <div className="col-md-6">
                           <label className="form-label">Điện thoại</label>
-                          <input type="text" className="form-input" />
+                          <input
+                            type="text"
+                            className="form-input"
+                            onChange={(e) =>
+                              setUser({
+                                ...user,
+                                phone: e.target.value,
+                              })
+                            }
+                            defaultValue={user?.phone || ""}
+                          />
                         </div>
 
                         <div className="col-md-6">
                           <label className="form-label">Địa chỉ</label>
-                          <input type="text" className="form-input" />
+                          <input
+                            type="text"
+                            className="form-input"
+                            defaultValue={user?.addressDetails || ""}
+                            onChange={(e) =>
+                              setUser({
+                                ...user,
+                                addressDetails: e.target.value,
+                              })
+                            }
+                          />
                         </div>
 
                         <div className="col-md-4">
                           <label className="form-label">Tỉnh/Thành phố</label>
-                          <input type="text" className="form-input" />
+                          <input
+                            type="text"
+                            className="form-input"
+                            defaultValue={user?.province || ""}
+                            onChange={(e) =>
+                              setUser({
+                                ...user,
+                                province: e.target.value,
+                              })
+                            }
+                          />
                         </div>
 
                         <div className="col-md-4">
                           <label className="form-label">Quận/Huyện</label>
-                          <input type="text" className="form-input" />
+                          <input
+                            type="text"
+                            className="form-input"
+                            defaultValue={user?.district || ""}
+                            onChange={(e) =>
+                              setUser({
+                                ...user,
+                                district: e.target.value,
+                              })
+                            }
+                          />
                         </div>
 
                         <div className="col-md-4">
                           <label className="form-label">Xã/Phường</label>
-                          <input type="text" className="form-input" />
+                          <input
+                            type="text"
+                            className="form-input"
+                            defaultValue={user?.ward || ""}
+                            onChange={(e) =>
+                              setUser({
+                                ...user,
+                                ward: e.target.value,
+                              })
+                            }
+                          />
                         </div>
 
                         <div className="col-12">
-                          <button className="btn btn-primary" type="submit">
+                          <button
+                            className="btn btn-primary"
+                            onClick={(e) => {
+                              handleUpdateUser(e);
+                            }}
+                            type="submit"
+                          >
                             Cập nhật
                           </button>
                         </div>
@@ -120,6 +219,8 @@ const InfoAccount = () => {
                           <th>STT</th>
                           <th>Sản phẩm</th>
                           <th>Giá</th>
+                          <th>Số lượng</th>
+
                           <th>Tổng tiền</th>
                           <th>Ngày đặt</th>
                           <th>Trạng thái</th>
@@ -153,12 +254,24 @@ const InfoAccount = () => {
                                       <p key={i}>
                                         {parseInt(
                                           product?.price
-                                        ).toLocaleString()}
+                                        ).toLocaleString("vi-VN")}
                                       </p>
                                     ))}
                                 </td>
                                 <td>
-                                  {parseInt(item?.totalMoney).toLocaleString()}
+                                  {item?.orderDetail?.length > 0 &&
+                                    item?.orderDetail?.map((product, i) => (
+                                      <p key={i}>
+                                        {parseInt(
+                                          product?.quantity
+                                        ).toLocaleString("vi-VN")}
+                                      </p>
+                                    ))}
+                                </td>
+                                <td>
+                                  {parseInt(item?.totalMoney).toLocaleString(
+                                    "vi-VN"
+                                  )}
                                 </td>
                                 <td>{formattedDate}</td>
                                 <td>{item?.status}</td>

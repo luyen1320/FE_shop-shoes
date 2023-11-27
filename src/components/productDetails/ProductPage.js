@@ -3,7 +3,7 @@ import Navbar from "../navbar/Navbar";
 import "./ProductPage.scss";
 import ReactPaginate from "react-paginate";
 import Footer from "../footer/Footer";
-import Input from "../../assets/Input";
+// import Input from "../../assets/Input";
 import { Swiper, SwiperSlide } from "swiper/react";
 import shoe01 from "../../assets/images/sieu-sale-4.4-cata-1140x500.png";
 import shoe02 from "../../assets/images/banner02.jpg";
@@ -13,6 +13,7 @@ import { getAllProduct } from "../../service/productService";
 import { toast } from "react-toastify";
 import ItemProductCart from "../card/ItemProductCart";
 import { fetchAllSupplierNoLimit } from "../../service/userService";
+import Input from "../../assets/Input";
 
 const priceRanges = [
   { value: 500, title: "500.000₫", minPrice: 0, maxPrice: 500000 },
@@ -50,6 +51,8 @@ const priceRanges = [
 ];
 
 const ProductPage = () => {
+  const slug = window.location.pathname.split("/")[2];
+
   const [listSupplier, setListSupplier] = useState([]);
   const [getProduct, setGetProduct] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -81,6 +84,12 @@ const ProductPage = () => {
       setListSupplier(res.DT);
     }
   };
+
+  useEffect(() => {
+    if (slug) {
+      setSupplierActive(slug);
+    }
+  }, [slug]);
   useEffect(() => {
     fetchSupplier();
   }, []);
@@ -152,73 +161,86 @@ const ProductPage = () => {
                     }
                   />
                 ))}
+
+                {/* <li>
+                  <input type="radio" />
+                  <span>500.000₫ - 1.000.000₫</span>
+                </li>
+                <li>
+                  <input type="radio" />
+                  <span>500.000₫ - 1.000.000₫</span>
+                </li>
+                <li>
+                  <input type="radio" />
+                  <span>500.000₫ - 1.000.000₫</span>
+                </li> */}
               </ul>
             </div>
             <div className="size">
               <h4>SIZE</h4>
               <ul>
-                <li className="flex items-center gap-2">
+                <li className="">
                   <input
                     type="checkbox"
                     onChange={() => {
                       handleFilterSize(1);
                     }}
                   />
-                  38
+                  <span>38</span>
                 </li>
-                <li className="flex items-center gap-2">
+                <li className="">
                   <input
                     type="checkbox"
                     onChange={() => {
                       handleFilterSize(2);
                     }}
                   />
-                  39
+                  <span>39</span>
                 </li>
-                <li className="flex items-center gap-2">
+                <li className="">
                   <input
                     type="checkbox"
                     onChange={() => {
                       handleFilterSize(3);
                     }}
                   />
-                  40
+                  <span>40</span>
                 </li>
-                <li className="flex items-center gap-2">
+                <li className="">
                   <input
                     type="checkbox"
                     onChange={() => {
                       handleFilterSize(4);
                     }}
                   />
-                  41
+                  <span>41</span>
                 </li>
-                <li className="flex items-center gap-2">
+                <li className="">
                   <input
                     type="checkbox"
                     onChange={() => {
                       handleFilterSize(5);
                     }}
                   />
-                  42
+                  <span>42</span>
                 </li>
-                <li className="flex items-center gap-2">
+                <li className="">
                   <input
                     type="checkbox"
                     onChange={() => {
                       handleFilterSize(6);
                     }}
                   />
-                  43
+                  <span>43</span>
                 </li>
-                <li className="flex items-center gap-2">
+                <li className="">
                   <input
                     type="checkbox"
                     onChange={() => {
                       handleFilterSize(7);
                     }}
                   />
-                  44
+                  <span>44</span>
                 </li>
               </ul>
             </div>
