@@ -6,6 +6,7 @@ import {
   addToCart,
   createOrder,
   getAllProductInCart,
+  removeallproductcart,
   removeproductcart,
 } from "../../../service/productService";
 import { toast } from "react-toastify";
@@ -242,7 +243,40 @@ function Cart(props) {
                       </div>
                     </div>
                   ))}
-                <button type="button" className="btn-danger">
+                <button
+                  type="button"
+                  className="btn-danger"
+                  onClick={async () => {
+                    Swal.fire({
+                      title: "Are you sure?",
+                      text: "You won't be able to revert this!",
+                      icon: "warning",
+                      showCancelButton: true,
+                      confirmButtonColor: "#3085d6",
+                      cancelButtonColor: "#d33",
+                      confirmButtonText: "Yes, delete it!",
+                    }).then(async (result) => {
+                      if (result.isConfirmed) {
+                        try {
+                          const data = {
+                            userId: user?.id,
+                          };
+
+                          await removeallproductcart(data);
+                          Swal.fire(
+                            "Deleted!",
+                            "Your file has been deleted.",
+                            "success"
+                          );
+
+                          dispatch(setProducts([]));
+                        } catch (e) {
+                          Swal.fire("Error", e, "error");
+                        }
+                      }
+                    });
+                  }}
+                >
                   <span className="fs-16">Xóa hết</span>
                 </button>
               </div>

@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 const Order = () => {
   const [selectedProvinceCode, setSelectedProvinceCode] = useState("");
   const cartProducts = useSelector((state) => state.cart.cartProducts.data);
-  const [orderProduct, setOrderProduct] = useState(cartProducts);
+  const [orderProduct, setOrderProduct] = useState([]);
   const [selectedDistrictCode, setSelectedDistrictCode] = useState("");
   // const [storedValue, setStoredValue] = useState([]);
   const [detailOrder, setDetailOrder] = useState({
@@ -31,17 +31,16 @@ const Order = () => {
     district: "",
     ward: "",
   });
-
+  console.log(detailOrder);
   useEffect(() => {
     // Kiểm tra xem có thông tin người dùng trong Local Storage không
-    const storedUser = localStorage.getItem("chooseProduct");
+    const chooseProduct = localStorage.getItem("chooseProduct");
 
     // Nếu có, chuyển đổi chuỗi JSON thành đối tượng và cập nhật state
-    if (storedUser) {
-      setOrderProduct(JSON.parse(storedUser) || cartProducts);
+    if (chooseProduct) {
+      setOrderProduct([JSON.parse(chooseProduct)]);
     }
   }, []);
-
   const [user, setUser] = useState({});
   useEffect(() => {
     // Kiểm tra xem có thông tin người dùng trong Local Storage không
@@ -50,33 +49,16 @@ const Order = () => {
     // Nếu có, chuyển đổi chuỗi JSON thành đối tượng và cập nhật state
     if (storedUser) {
       setUser(JSON.parse(storedUser));
-      setDetailOrder({
-        ...detailOrder,
-        userId: JSON.parse(storedUser)?.id,
-        username: JSON.parse(storedUser)?.username,
-        email: JSON.parse(storedUser)?.email,
-        phone: JSON.parse(storedUser)?.phone,
-        addressDetail: JSON.parse(storedUser)?.addressDetails,
-      });
     }
   }, []);
 
-  // useEffect(() => {
-  //   getAllProductsInCart(user?.id);
-  // }, [user?.id]);
-
   useEffect(() => {
-    const init = detailOrder?.deliveryType === "FAST" ? 65000 : 45000;
-    setDetailOrder({
-      ...detailOrder,
-      userId: user?.id,
-      totalMoney: cartProducts?.reduce(
-        (accumulator, currentValue) =>
-          accumulator + parseInt(currentValue?.price) * currentValue?.quantity,
-        init
-      ),
-    });
-  }, [detailOrder.deliveryType, user?.id]);
+    return () => {
+      // Xóa dữ liệu trong localStorage khi component unmount
+      localStorage.removeItem("chooseProduct");
+    };
+  }, []);
+
   const handleProvinceChange = (event) => {
     const selectedOptions = event.target.selectedOptions;
 
@@ -113,7 +95,6 @@ const Order = () => {
 
   const handleCreateOrder = async (e) => {
     e.preventDefault();
-    console.log(detailOrder);
     if (!detailOrder.username) {
       toast.error("Vui lòng nhập họ tên");
       return;
@@ -157,7 +138,7 @@ const Order = () => {
     try {
       let res = await createOrder({
         ...detailOrder,
-        listProduct: cartProducts,
+        listProduct: orderProduct?.length > 0 ? orderProduct : cartProducts,
       });
       if (res && res.errCode === 0) {
         toast.success("Đặt hàng thành công");
@@ -171,7 +152,52 @@ const Order = () => {
       console.log(e);
     }
   };
+  // useEffect(() => {
+  //   console.log(user);
+  //   setDetailOrder({
+  //     ...detailOrder,
 
+  //   });
+  // }, [user]);
+
+  useEffect(() => {
+    const init = detailOrder?.deliveryType === "FAST" ? 65000 : 45000;
+    if (orderProduct?.length > 0) {
+      console.log(123);
+      setDetailOrder({
+        ...detailOrder,
+        userId: user?.id,
+        username: user?.username,
+        email: user?.email,
+        phone: user?.phone,
+        addressDetail: user?.addressDetails,
+        totalMoney:
+          parseInt(orderProduct[0]?.price) *
+            ((100 - parseInt(orderProduct[0]?.discount)) / 100) *
+            parseInt(orderProduct[0]?.quantity) +
+          init,
+      });
+      return;
+    } else {
+      setDetailOrder({
+        ...detailOrder,
+        userId: user?.id,
+        username: user?.username,
+        email: user?.email,
+        phone: user?.phone,
+        addressDetail: user?.addressDetails,
+        totalMoney: cartProducts?.reduce(
+          (accumulator, currentValue) =>
+            accumulator +
+            parseInt(currentValue?.price) *
+              ((100 - parseInt(currentValue?.discount)) / 100) *
+              currentValue?.quantity,
+          init
+        ),
+      });
+    }
+  }, [detailOrder.deliveryType, orderProduct, cartProducts, user]);
+  console.log(cartProducts);
   return (
     <>
       <Navbar />
@@ -185,7 +211,7 @@ const Order = () => {
                 <input
                   type="text"
                   className="form-input"
-                  defaultValue={user?.username}
+                  value={detailOrder?.username}
                   onChange={(e) => {
                     setDetailOrder({
                       ...detailOrder,
@@ -200,7 +226,7 @@ const Order = () => {
                 <input
                   type="email"
                   className="form-input"
-                  defaultValue={user?.email}
+                  value={detailOrder?.email}
                   onChange={(e) => {
                     setDetailOrder({ ...detailOrder, email: e.target.value });
                   }}
@@ -212,7 +238,7 @@ const Order = () => {
                 <input
                   type="text"
                   className="form-input"
-                  defaultValue={user?.phone}
+                  value={detailOrder?.phone}
                   onChange={(e) => {
                     setDetailOrder({ ...detailOrder, phone: e.target.value });
                   }}
@@ -224,7 +250,7 @@ const Order = () => {
                 <input
                   type="text"
                   className="form-input"
-                  defaultValue={user?.addressDetails}
+                  value={detailOrder?.addressDetail}
                   onChange={(e) => {
                     setDetailOrder({
                       ...detailOrder,
@@ -347,7 +373,54 @@ const Order = () => {
           <div className="content-right">
             <label className="form-label">Đơn hàng của bạn</label>
             <tbody className="order-review">
-              {cartProducts?.length > 0 ? (
+              {orderProduct?.length > 0 ? (
+                <tr className="cart-item">
+                  <td className="product-name">
+                    <div className="p-1 product-thumbnail">
+                      <img
+                        src={convertBase64ToImage(orderProduct[0]?.image)}
+                        alt=""
+                        className="w-[100%] h-[100%] object-cover"
+                      />
+                    </div>
+                    <div className="product-desc">
+                      <span>{orderProduct[0]?.productName}&nbsp;</span>
+                      <strong className="product-quantity">
+                        &nbsp;× {orderProduct[0]?.quantity}
+                      </strong>
+                      <dl className="variation-price">
+                        <dt className="variation">
+                          Size:{" "}
+                          {orderProduct[0]?.sizeId === 1
+                            ? "38"
+                            : orderProduct[0]?.sizeId === 2
+                            ? "39"
+                            : orderProduct[0]?.sizeId === 3
+                            ? "40"
+                            : orderProduct[0]?.sizeId === 4
+                            ? "41"
+                            : orderProduct[0]?.sizeId === 5
+                            ? "42"
+                            : orderProduct[0]?.sizeId === 6
+                            ? "43"
+                            : "44"}
+                        </dt>
+                        <dd className="price" style={{ float: "right" }}>
+                          <bdi>
+                            {Math.round(
+                              parseInt(orderProduct[0]?.price) *
+                                parseInt(orderProduct[0]?.quantity) *
+                                ((100 - parseInt(orderProduct[0]?.discount)) /
+                                  100)
+                            ).toLocaleString("vi-VN")}
+                            ₫
+                          </bdi>
+                        </dd>
+                      </dl>
+                    </div>
+                  </td>
+                </tr>
+              ) : (
                 cartProducts.map((item, key) => (
                   <tr className="cart-item" key={key}>
                     <td className="product-name">
@@ -367,8 +440,10 @@ const Order = () => {
                           <dt className="variation">Size: {item?.size}</dt>
                           <dd className="price" style={{ float: "right" }}>
                             <bdi>
-                              {(
-                                parseInt(item?.price) * parseInt(item?.quantity)
+                              {Math.round(
+                                parseInt(item?.price) *
+                                  parseInt(item?.quantity) *
+                                  ((100 - parseInt(item?.discount)) / 100)
                               ).toLocaleString("vi-VN")}
                               ₫
                             </bdi>
@@ -378,51 +453,6 @@ const Order = () => {
                     </td>
                   </tr>
                 ))
-              ) : (
-                <tr className="cart-item">
-                  <td className="product-name">
-                    <div className="p-1 product-thumbnail">
-                      <img
-                        src={convertBase64ToImage(orderProduct?.image)}
-                        alt=""
-                        className="w-[100%] h-[100%] object-cover"
-                      />
-                    </div>
-                    <div className="product-desc">
-                      <span>{orderProduct?.productName}&nbsp;</span>
-                      <strong className="product-quantity">
-                        &nbsp;× {orderProduct?.quantity}
-                      </strong>
-                      <dl className="variation-price">
-                        <dt className="variation">
-                          Size:{" "}
-                          {orderProduct?.sizeId === 1
-                            ? "38"
-                            : orderProduct?.sizeId === 2
-                            ? "39"
-                            : orderProduct?.sizeId === 3
-                            ? "40"
-                            : orderProduct?.sizeId === 4
-                            ? "41"
-                            : orderProduct?.sizeId === 5
-                            ? "42"
-                            : orderProduct?.sizeId === 6
-                            ? "43"
-                            : "44"}
-                        </dt>
-                        <dd className="price" style={{ float: "right" }}>
-                          <bdi>
-                            {(
-                              parseInt(orderProduct?.price) *
-                              parseInt(orderProduct?.quantity)
-                            ).toLocaleString("vi-VN")}
-                            ₫
-                          </bdi>
-                        </dd>
-                      </dl>
-                    </div>
-                  </td>
-                </tr>
               )}
             </tbody>
 
@@ -436,32 +466,7 @@ const Order = () => {
             </div>
             <div className="text-lg font-semibold order-total">
               Tổng:{" "}
-              {detailOrder?.deliveryType === "FAST" ? (
-                <span>
-                  {cartProducts
-                    ?.reduce(
-                      (accumulator, currentValue) =>
-                        accumulator +
-                        parseInt(currentValue?.price) *
-                          parseInt(currentValue?.quantity),
-                      65000
-                    )
-                    .toLocaleString("vi-VN")}
-                </span>
-              ) : (
-                <span>
-                  {cartProducts
-                    ?.reduce(
-                      (accumulator, currentValue) =>
-                        accumulator +
-                        parseInt(currentValue?.price) *
-                          parseInt(currentValue?.quantity),
-                      45000
-                    )
-                    .toLocaleString("vi-VN")}
-                </span>
-              )}
-              ₫
+              {Math.round(detailOrder?.totalMoney)?.toLocaleString("vi-VN")}₫
             </div>
             <div className="payment">
               <button

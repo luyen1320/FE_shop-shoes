@@ -24,7 +24,7 @@ const ManageCustomer = () => {
     username: "",
     email: "",
     phone: "",
-    address: "",
+    addressDetails: "",
     password: "",
     roleId: "STAFF",
   });
@@ -37,6 +37,7 @@ const ManageCustomer = () => {
     let res = await getCustomer(currentPage, currentLimit, sortByName);
     if (res && res.errCode === 0) {
       setGetAllCustomer(res.DT?.suppliers);
+
       setTotalPages(res?.DT?.totalPages);
     } else {
       toast.error(res.errMessage);
@@ -55,7 +56,16 @@ const ManageCustomer = () => {
   const getOneStaff = async (id) => {
     let res = await getOneCustomer(id);
     if (res && res.errCode === 0) {
-      setValues(res.DT);
+      console.log(res.DT);
+      setValues({
+        id: res?.DT?.id,
+        username: res?.DT?.username,
+        email: res?.DT?.email,
+        phone: res?.DT?.phone,
+        addressDetails: res?.DT?.addressDetails || "",
+        password: res?.DT?.password,
+        roleId: res?.DT?.roleId,
+      });
     } else {
       toast.error(res.errMessage);
     }
@@ -75,11 +85,11 @@ const ManageCustomer = () => {
       toast.error("Vui lòng nhập số điện thoại");
       return;
     }
-    if (!values.address) {
+    if (!values.addressDetails) {
       toast.error("Vui lòng nhập địa chỉ");
       return;
     }
-    if (!values.password) {
+    if (!values.password && !edit) {
       toast.error("Vui lòng nhập mật khẩu");
       return;
     }
@@ -98,7 +108,7 @@ const ManageCustomer = () => {
         username: "",
         email: "",
         phone: "",
-        address: "",
+        addressDetails: "",
         password: "",
         roleId: "STAFF",
       });
@@ -137,6 +147,7 @@ const ManageCustomer = () => {
     setCurrentPage(+event.selected + 1);
   };
 
+  console.log(values);
   return (
     <div className="manage-user auto">
       <div
@@ -180,8 +191,8 @@ const ManageCustomer = () => {
             <input
               type="text"
               className="w-full px-3 py-1 border border-[#cccc] rounded-md"
-              name="address"
-              value={values?.address}
+              name="addressDetails"
+              value={values?.addressDetails}
               placeholder="Nhập Address..."
               onChange={handleChange}
             />
@@ -227,7 +238,7 @@ const ManageCustomer = () => {
                 username: "",
                 email: "",
                 phone: "",
-                address: "",
+                addressDetails: "",
                 password: "",
                 roleId: "STAFF",
               });

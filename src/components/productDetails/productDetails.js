@@ -114,6 +114,10 @@ const ProductDetails = () => {
   };
 
   const handleOrder = async () => {
+    if (product?.sizeId === null) {
+      toast.error("Vui lòng chọn size");
+      return;
+    }
     if (product?.quantity <= 0) {
       toast.error("Số lượng không hợp lệ");
       return;
@@ -151,7 +155,11 @@ const ProductDetails = () => {
 
             <div className="product-content-right-price">
               <p>
-                {parseInt(getProduct?.price).toLocaleString("vi-VN")}
+                {/* {parseInt(getProduct?.price).toLocaleString("vi-VN")} */}
+                {Math.round(
+                  parseInt(getProduct?.price) *
+                    ((100 - parseInt(getProduct?.discount)) / 100)
+                ).toLocaleString("vi-VN")}
                 <sup>đ</sup>
               </p>
             </div>

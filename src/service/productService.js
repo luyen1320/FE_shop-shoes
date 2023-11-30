@@ -31,6 +31,12 @@ const removeproductcart = (data) => {
     }
   );
 };
+const removeallproductcart = (data) => {
+  console.log(data);
+  return axios.delete(`/api/v1/removeallproductcart?userId=${data?.userId}`, {
+    withCredentials: true,
+  });
+};
 
 const createOrder = (data) => {
   return axios.post("/api/v1/createOrder", data, {
@@ -122,5 +128,6 @@ export {
   getOrderById,
   getBestSellerProduct,
   getProductSale,
+  removeallproductcart,
   getDataManageAdmin,
 };

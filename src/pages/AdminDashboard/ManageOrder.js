@@ -57,6 +57,7 @@ const ManageOrder = () => {
   };
 
   const handleUpdateOrder = async (id, value) => {
+    console.log(id);
     let res = await updateOrder(id, { status: value });
     if (res && res.errCode === 0) {
       toast.success("Cập nhật thành công");
@@ -136,7 +137,7 @@ const ManageOrder = () => {
                       : createdAtDate.getMinutes()
                   }`;
                   return (
-                    <tr key={index}>
+                    <tr key={item?.id}>
                       <td className="code-order">
                         <button onClick={handleClick}>#{item?.id}</button>
                       </td>
@@ -168,9 +169,9 @@ const ManageOrder = () => {
                         >
                           <BiEdit />
                         </button>
-                        <button className="btn btn-danger">
+                        {/* <button className="btn btn-danger">
                           <AiFillDelete />
-                        </button>
+                        </button> */}
                       </td>
                     </tr>
                   );
