@@ -173,7 +173,9 @@ const Order = () => {
         addressDetail: user?.addressDetails,
         totalMoney:
           parseInt(orderProduct[0]?.price) *
-            ((100 - parseInt(orderProduct[0]?.discount)) / 100) *
+            (orderProduct[0]?.discount
+              ? (100 - parseInt(orderProduct[0]?.discount)) / 100
+              : 1) *
             parseInt(orderProduct[0]?.quantity) +
           init,
       });
@@ -410,8 +412,11 @@ const Order = () => {
                             {Math.round(
                               parseInt(orderProduct[0]?.price) *
                                 parseInt(orderProduct[0]?.quantity) *
-                                ((100 - parseInt(orderProduct[0]?.discount)) /
-                                  100)
+                                (orderProduct[0]?.discount
+                                  ? (100 -
+                                      parseInt(orderProduct[0]?.discount)) /
+                                    100
+                                  : 1)
                             ).toLocaleString("vi-VN")}
                             ₫
                           </bdi>
@@ -443,7 +448,9 @@ const Order = () => {
                               {Math.round(
                                 parseInt(item?.price) *
                                   parseInt(item?.quantity) *
-                                  ((100 - parseInt(item?.discount)) / 100)
+                                  (item?.discount
+                                    ? (100 - parseInt(item?.discount)) / 100
+                                    : 1)
                               ).toLocaleString("vi-VN")}
                               ₫
                             </bdi>

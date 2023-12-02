@@ -8,11 +8,13 @@ import { BiEdit, BiMenuAltLeft } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import { ModalOrder } from "../../components";
 import {
+  deleteOrder,
   getAllOrder,
   getDataManageAdmin,
   updateOrder,
 } from "../../service/productService";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 const ManageOrder = () => {
   const [isShowModalOrder, setIsShowModalOrder] = useState(false);
@@ -169,9 +171,45 @@ const ManageOrder = () => {
                         >
                           <BiEdit />
                         </button>
-                        {/* <button className="btn btn-danger">
+                        <button
+                          className="btn btn-danger"
+                          onClick={async () => {
+                            // await deleteOrder(item?.id);
+                            // fectchDtManage();
+                            // setGetOrders(
+                            //   getOrders.filter((x) => x.id !== item.id)
+                            // );
+
+                            Swal.fire({
+                              title: "Are you sure?",
+                              text: "You won't be able to revert this!",
+                              icon: "warning",
+                              showCancelButton: true,
+                              confirmButtonColor: "#3085d6",
+                              cancelButtonColor: "#d33",
+                              confirmButtonText: "Yes, delete it!",
+                            }).then(async (result) => {
+                              if (result.isConfirmed) {
+                                try {
+                                  await deleteOrder(item?.id);
+                                  fectchDtManage();
+                                  setGetOrders(
+                                    getOrders.filter((x) => x.id !== item.id)
+                                  );
+                                  Swal.fire(
+                                    "Deleted!",
+                                    "Your file has been deleted.",
+                                    "success"
+                                  );
+                                } catch (e) {
+                                  Swal.fire("Error", e, "error");
+                                }
+                              }
+                            });
+                          }}
+                        >
                           <AiFillDelete />
-                        </button> */}
+                        </button>
                       </td>
                     </tr>
                   );

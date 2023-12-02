@@ -27,7 +27,7 @@ function Cart(props) {
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
-  }, []);
+  }, [user]);
 
   const handleSetQuantity = async (number, id, size) => {
     const newArray = [...cartProducts];
@@ -226,13 +226,23 @@ function Cart(props) {
                           <div className="flex items-center justify-between w-full price flex-between">
                             <div className="text-pine-green fw-4 fs-15">
                               Giá :{" "}
-                              {parseInt(item?.price).toLocaleString("vi-VN")}đ
+                              {Math.round(
+                                parseInt(item?.price) *
+                                  (item?.discount
+                                    ? (100 - parseInt(item?.discount)) / 100
+                                    : 1)
+                              ).toLocaleString("vi-VN")}
+                              đ
                             </div>
                             <div className="sub-total fw-6 fs-18 text-regal-blue">
                               <span>
                                 Tổng:{" "}
-                                {(
-                                  parseInt(item?.price) * item?.quantity
+                                {Math.round(
+                                  parseInt(item?.price) *
+                                    (item?.discount
+                                      ? (100 - parseInt(item?.discount)) / 100
+                                      : 1) *
+                                    item?.quantity
                                 ).toLocaleString("vi-VN")}
                                 đ
                               </span>
@@ -289,15 +299,21 @@ function Cart(props) {
                     <li className="flex flex-between">
                       <span className="fw-4">Giá</span>
                       <span className="fw-7">
-                        {(cartProducts?.length === 0
-                          ? "0"
-                          : cartProducts?.reduce(
-                              (accumulator, currentValue) =>
-                                accumulator +
-                                parseInt(currentValue.price) *
-                                  currentValue.quantity,
-                              0
-                            )
+                        {Math.round(
+                          cartProducts?.length === 0
+                            ? "0"
+                            : cartProducts?.reduce(
+                                (accumulator, currentValue) =>
+                                  accumulator +
+                                  parseInt(currentValue.price) *
+                                    (currentValue?.discount
+                                      ? (100 -
+                                          parseInt(currentValue?.discount)) /
+                                        100
+                                      : 1) *
+                                    currentValue.quantity,
+                                0
+                              )
                         ).toLocaleString("vi-VN")}
                       </span>
                     </li>

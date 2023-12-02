@@ -56,7 +56,7 @@ const ProductPage = () => {
   const [listSupplier, setListSupplier] = useState([]);
   const [getProduct, setGetProduct] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [currentLimit, setCurrentLimit] = useState(2);
+  const [currentLimit, setCurrentLimit] = useState(9);
   const [totalPages, setTotalPages] = useState(0);
   const [supplierActive, setSupplierActive] = useState("");
   const [filterPrice, setFilterPrice] = useState([0, 0]);

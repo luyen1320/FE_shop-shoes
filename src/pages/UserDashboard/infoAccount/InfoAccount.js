@@ -274,7 +274,15 @@ const InfoAccount = () => {
                                   )}
                                 </td>
                                 <td>{formattedDate}</td>
-                                <td>{item?.status}</td>
+                                <td>
+                                  {item?.status === "PENDING"
+                                    ? "Chờ xác nhận"
+                                    : item?.status === "CONFIRM"
+                                    ? "Xác nhận"
+                                    : item?.status === "SHIPPING"
+                                    ? "Đang giao hàng"
+                                    : "Đã giao"}
+                                </td>
                               </tr>
                             );
                           })}

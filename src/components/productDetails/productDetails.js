@@ -132,6 +132,8 @@ const ProductDetails = () => {
     );
     window.location.href = "/order";
   };
+
+  console.log(getProduct);
   return (
     <>
       <Navbar />
@@ -158,7 +160,9 @@ const ProductDetails = () => {
                 {/* {parseInt(getProduct?.price).toLocaleString("vi-VN")} */}
                 {Math.round(
                   parseInt(getProduct?.price) *
-                    ((100 - parseInt(getProduct?.discount)) / 100)
+                    (getProduct?.discount
+                      ? (100 - parseInt(getProduct?.discount)) / 100
+                      : 1)
                 ).toLocaleString("vi-VN")}
                 <sup>đ</sup>
               </p>
@@ -210,7 +214,8 @@ const ProductDetails = () => {
                   type="button"
                   className="flex items-center justify-center qty-dec fs-14"
                   onClick={() => {
-                    if (product?.quantity <= 0) {
+                    if (product?.quantity <= 1) {
+                      toast.error("Số lượng không hợp lệ");
                       return;
                     }
                     setProduct({
@@ -249,6 +254,9 @@ const ProductDetails = () => {
                         (item) => item?.sizeId === product?.sizeId
                       )?.quantityInStock
                     ) {
+                      toast.error(
+                        "Chỉ còn lại " + product?.quantity + " sản phẩm"
+                      );
                       return;
                     }
                     setProduct({
@@ -311,18 +319,11 @@ const ProductDetails = () => {
           className={
             active === 1 ? "content-desc content-active" : "content-none"
           }
+          dangerouslySetInnerHTML={{
+            __html: convertBase64ToImage(getProduct?.description),
+          }}
         >
-          Phiên bản năm 2023 của Air Jordan 11 Retro ‘Gratitude / Defining
-          Moments’, còn được gọi là ‘DMP’, mang lại một cách phối màu đáng thèm
-          muốn của mẫu cũ, ban đầu được kết hợp với Air Jordan 6 như một nửa của
-          ‘Gói khoảnh khắc xác định’ ‘ từ năm 2006. Lấy cảm hứng từ phối màu OG
-          ‘Concord’, hình dáng của giải vô địch có phần trên bằng da lộn màu
-          trắng với các lỗ dây vải cùng màu và tấm chắn bùn bằng da sáng chế màu
-          đen. Các điểm nhấn màu vàng kim loại xuất hiện trên các yếu tố thương
-          hiệu của giày, bao gồm logo Jumpman được dập nổi ở mắt cá chân bên và
-          con số ’23’ được đóng dấu trên tab gót chân. Giày thể thao chạy trên
-          đế giữa Phylon, được hỗ trợ bởi tấm đế bằng sợi carbon và đế ngoài
-          bằng cao su mờ.
+          {/* {convertBase64ToImage(getProduct?.description)} */}
         </div>
 
         <div

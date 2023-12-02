@@ -16,7 +16,7 @@ export const logout = () => {
 };
 
 export const getAllProductsInCart = async (id, dispatch, toast) => {
-  let res = await getAllProductInCart(id);
+  let res = await getAllProductInCart(id || null);
   if (res && res.errCode === 0) {
     dispatch(setProducts(res.DT));
   } else {

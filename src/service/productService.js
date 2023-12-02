@@ -37,6 +37,11 @@ const removeallproductcart = (data) => {
     withCredentials: true,
   });
 };
+const deleteOrder = (id) => {
+  return axios.delete(`/api/v1/deleteorder/${id}`, {
+    withCredentials: true,
+  });
+};
 
 const createOrder = (data) => {
   return axios.post("/api/v1/createOrder", data, {
@@ -130,4 +135,5 @@ export {
   getProductSale,
   removeallproductcart,
   getDataManageAdmin,
+  deleteOrder,
 };

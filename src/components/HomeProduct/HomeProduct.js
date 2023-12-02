@@ -11,18 +11,18 @@ import ItemProductCart from "../card/ItemProductCart";
 import SellingProducts from "./SellingProducts";
 
 function HomeProduct(props) {
-  const [getProduct, setGetProduct] = useState([]);
+  const [getProductByNike, setGetProductByNike] = useState([]);
   const [getProductByAdidas, setGetProductByAdidas] = useState([]);
   const getAllProductsByNike = async () => {
-    let res = await getAllProduct(1, 8);
+    let res = await getAllProduct(1, 8, "nike");
     if (res && res.errCode === 0) {
-      setGetProduct(res?.DT?.suppliers);
+      setGetProductByNike(res?.DT?.suppliers);
     } else {
       toast.error(res.errMessage);
     }
   };
   const getAllProductsByAdidas = async () => {
-    let res = await getAllProduct(1, 2, "adidas");
+    let res = await getAllProduct(1, 8, "adidas");
     if (res && res.errCode === 0) {
       setGetProductByAdidas(res?.DT?.suppliers);
     } else {
@@ -52,17 +52,17 @@ function HomeProduct(props) {
       </div> */}
       <SellingProducts />
 
-      <h2 className="uppercase">GIẦY jordan</h2>
+      <h2 className="uppercase">GIẦY Nike</h2>
       <div className="list">
-        {getProduct?.length > 0 &&
-          getProduct?.map((item, index) => {
+        {getProductByNike?.length > 0 &&
+          getProductByNike?.map((item, index) => {
             return <ItemProductCart item={item} key={index}></ItemProductCart>;
           })}
       </div>
 
       <div className="flex items-center justify-center next-category">
         <Link
-          to={"/product-page/jordan"}
+          to={"/product-page/nike"}
           className="flex items-center justify-center"
         >
           <span className="text-center ">Xem thêm giầy...&nbsp;</span>
