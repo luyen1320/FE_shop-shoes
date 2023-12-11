@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Navbar } from "../../../components";
 import "./Info.scss";
 import Col from "react-bootstrap/Col";
@@ -6,8 +6,60 @@ import Nav from "react-bootstrap/Nav";
 import Row from "react-bootstrap/Row";
 import Tab from "react-bootstrap/Tab";
 import { Table } from "react-bootstrap";
+import { toast } from "react-toastify";
+import { getOrderById } from "../../../service/productService";
+import { editCustomer } from "../../../service/userService";
 
 const InfoAccount = () => {
+  const [user, setUser] = useState({});
+  const [listOrder, setListOrder] = useState([]);
+  useEffect(() => {
+    // Kiểm tra xem có thông tin người dùng trong Local Storage không
+    const storedUser = localStorage.getItem("user");
+
+    // Nếu có, chuyển đổi chuỗi JSON thành đối tượng và cập nhật state
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
+  const getAllOrderById = async (id) => {
+    let res = await getOrderById(id);
+    if (res && res.errCode === 0) {
+      setListOrder(res.DT);
+    } else {
+      console.log(res.errMessage);
+      toast.error(res.errMessage);
+    }
+  };
+
+  useEffect(() => {
+    getAllOrderById(user?.id);
+  }, [user?.id]);
+
+  const handleUpdateUser = async (e) => {
+    e.preventDefault();
+    if (!user?.username) {
+      toast.error("Vui lòng nhập tên!");
+      return;
+    }
+    if (!user?.email) {
+      toast.error("Vui lòng nhập email!");
+      return;
+    }
+    try {
+      let res = await editCustomer(user);
+      if (res && res.errCode === 0) {
+        toast.success("Cập nhật thành công!");
+        localStorage.setItem("user", JSON.stringify(user));
+      } else {
+        toast.error(res.errMessage);
+      }
+    } catch (e) {
+      toast.error(e.message);
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -43,41 +95,117 @@ const InfoAccount = () => {
                       <form className="row g-3 needs-validation">
                         <div className="col-md-6">
                           <label className="form-label">Tên</label>
-                          <input type="text" className="form-input" />
+                          <input
+                            type="text"
+                            defaultValue={user?.username}
+                            className="form-input"
+                            onCanPlay={(e) =>
+                              setUser({
+                                ...user,
+                                username: e.target.value,
+                              })
+                            }
+                          />
                         </div>
 
                         <div className="col-md-6">
                           <label className="form-label">Email</label>
-                          <input type="text" className="form-input" />
+                          <input
+                            type="email"
+                            defaultValue={user?.email}
+                            className="form-input"
+                            onChange={(e) =>
+                              setUser({
+                                ...user,
+                                email: e.target.value,
+                              })
+                            }
+                          />
                         </div>
 
                         <div className="col-md-6">
                           <label className="form-label">Điện thoại</label>
-                          <input type="text" className="form-input" />
+                          <input
+                            type="text"
+                            className="form-input"
+                            onChange={(e) =>
+                              setUser({
+                                ...user,
+                                phone: e.target.value,
+                              })
+                            }
+                            defaultValue={user?.phone || ""}
+                          />
                         </div>
 
                         <div className="col-md-6">
                           <label className="form-label">Địa chỉ</label>
-                          <input type="text" className="form-input" />
+                          <input
+                            type="text"
+                            className="form-input"
+                            defaultValue={user?.addressDetails || ""}
+                            onChange={(e) =>
+                              setUser({
+                                ...user,
+                                addressDetails: e.target.value,
+                              })
+                            }
+                          />
                         </div>
 
                         <div className="col-md-4">
                           <label className="form-label">Tỉnh/Thành phố</label>
-                          <input type="text" className="form-input" />
+                          <input
+                            type="text"
+                            className="form-input"
+                            defaultValue={user?.province || ""}
+                            onChange={(e) =>
+                              setUser({
+                                ...user,
+                                province: e.target.value,
+                              })
+                            }
+                          />
                         </div>
 
                         <div className="col-md-4">
                           <label className="form-label">Quận/Huyện</label>
-                          <input type="text" className="form-input" />
+                          <input
+                            type="text"
+                            className="form-input"
+                            defaultValue={user?.district || ""}
+                            onChange={(e) =>
+                              setUser({
+                                ...user,
+                                district: e.target.value,
+                              })
+                            }
+                          />
                         </div>
 
                         <div className="col-md-4">
                           <label className="form-label">Xã/Phường</label>
-                          <input type="text" className="form-input" />
+                          <input
+                            type="text"
+                            className="form-input"
+                            defaultValue={user?.ward || ""}
+                            onChange={(e) =>
+                              setUser({
+                                ...user,
+                                ward: e.target.value,
+                              })
+                            }
+                          />
                         </div>
 
                         <div className="col-12">
-                          <button className="btn btn-primary" type="submit">
+                          <button
+                            className="btn btn-primary"
+                            onClick={(e) => {
+                              handleUpdateUser(e);
+                            }}
+                            type="submit"
+                          >
                             Cập nhật
                           </button>
                         </div>
@@ -91,20 +219,73 @@ const InfoAccount = () => {
                           <th>STT</th>
                           <th>Sản phẩm</th>
                           <th>Giá</th>
+                          <th>Số lượng</th>
+
                           <th>Tổng tiền</th>
                           <th>Ngày đặt</th>
                           <th>Trạng thái</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td>1</td>
-                          <td>Nike</td>
-                          <td>nike one 12</td>
-                          <td>1.200.000đ</td>
-                          <td>40</td>
-                          <td>1</td>
-                        </tr>
+                        {listOrder?.length > 0 &&
+                          listOrder.map((item, index) => {
+                            const createdAtDate = new Date(item?.createdAt);
+                            const formattedDate = `${createdAtDate.getDate()}/${
+                              createdAtDate.getMonth() + 1
+                            }/${createdAtDate.getFullYear()} ${createdAtDate.getHours()}:${
+                              createdAtDate.getMinutes() < 10
+                                ? "0" + createdAtDate.getMinutes()
+                                : createdAtDate.getMinutes()
+                            }`;
+                            return (
+                              <tr key={index}>
+                                <td>1</td>
+                                <td>
+                                  {item?.orderDetail?.length > 0 &&
+                                    item?.orderDetail?.map((product, i) => (
+                                      <p key={i}>
+                                        {product?.product?.productName}
+                                      </p>
+                                    ))}
+                                </td>
+                                <td>
+                                  {item?.orderDetail?.length > 0 &&
+                                    item?.orderDetail?.map((product, i) => (
+                                      <p key={i}>
+                                        {parseInt(
+                                          product?.price
+                                        ).toLocaleString("vi-VN")}
+                                      </p>
+                                    ))}
+                                </td>
+                                <td>
+                                  {item?.orderDetail?.length > 0 &&
+                                    item?.orderDetail?.map((product, i) => (
+                                      <p key={i}>
+                                        {parseInt(
+                                          product?.quantity
+                                        ).toLocaleString("vi-VN")}
+                                      </p>
+                                    ))}
+                                </td>
+                                <td>
+                                  {parseInt(item?.totalMoney).toLocaleString(
+                                    "vi-VN"
+                                  )}
+                                </td>
+                                <td>{formattedDate}</td>
+                                <td>
+                                  {item?.status === "PENDING"
+                                    ? "Chờ xác nhận"
+                                    : item?.status === "CONFIRM"
+                                    ? "Xác nhận"
+                                    : item?.status === "SHIPPING"
+                                    ? "Đang giao hàng"
+                                    : "Đã giao"}
+                                </td>
+                              </tr>
+                            );
+                          })}
                       </tbody>
                     </Table>
                   </Tab.Pane>

@@ -25,7 +25,7 @@ const ProvinceDropdown = ({ onChange }) => {
         Chọn
       </option>
       {provinces.map((province) => (
-        <option key={province.code} value={province.code}>
+        <option key={province.code} value={province.code} name={province.name}>
           {province.name}
         </option>
       ))}

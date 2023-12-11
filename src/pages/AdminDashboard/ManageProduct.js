@@ -1,12 +1,59 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./ManageProduct.scss";
 import Nav from "./Nav";
 import { Table } from "react-bootstrap";
 import ReactPaginate from "react-paginate";
 import { AiFillDelete } from "react-icons/ai";
 import { BiEdit } from "react-icons/bi";
+import { deleteProduct, getAllProduct } from "../../service/productService";
+import { toast } from "react-toastify";
+import { convertBase64ToImage } from "../../assets/data/image";
+import { NavLink } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const ManageProduct = () => {
+  const [getProduct, setGetProduct] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentLimit, setCurrentLimit] = useState(3);
+  const [totalPages, setTotalPages] = useState(0);
+  const getAllProducts = async () => {
+    let res = await getAllProduct(currentPage, currentLimit);
+    if (res && res.errCode === 0) {
+      setGetProduct(res.DT?.suppliers);
+      setTotalPages(res?.DT?.totalPages);
+    } else {
+      toast.error(res.errMessage);
+    }
+  };
+
+  useEffect(() => {
+    getAllProducts();
+  }, [currentPage]);
+
+  const handleDeleteProduct = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await deleteProduct(id);
+          Swal.fire("Deleted!", "Your file has been deleted.", "success");
+          setGetProduct(getProduct.filter((product) => product.id !== id));
+        } catch (e) {
+          Swal.fire("Error", e, "error");
+        }
+      }
+    });
+  };
+  const handlePageClick = async (event) => {
+    setCurrentPage(+event.selected + 1);
+  };
   return (
     <div className="manage-product auto">
       <Nav />
@@ -24,94 +71,65 @@ const ManageProduct = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>Nike</td>
-              <td>nike one 12</td>
-              <td>1.200.000đ</td>
-              <td>40</td>
-              <td>1</td>
-              <td>
-                <button className="btn btn-primary mx-3">
-                  <BiEdit />
-                </button>
-                <button className="btn btn-danger">
-                  <AiFillDelete />
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td>1</td>
-              <td>Đinh Ngọc Luyện</td>
-              <td>luyendinh1320@gmail.com</td>
-              <td>0336909524</td>
-              <td>9/4/2023</td>
-              <td>Xác nhận</td>
-              <td>
-                <button className="btn btn-primary mx-3">
-                  <BiEdit />
-                </button>
-                <button className="btn btn-danger">
-                  <AiFillDelete />
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td>1</td>
-              <td>Đinh Ngọc Luyện</td>
-              <td>luyendinh1320@gmail.com</td>
-              <td>0336909524</td>
-              <td>9/4/2023</td>
-              <td>Xác nhận</td>
-              <td>
-                <button className="btn btn-primary mx-3">
-                  <BiEdit />
-                </button>
-                <button className="btn btn-danger">
-                  <AiFillDelete />
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td>1</td>
-              <td>Đinh Ngọc Luyện</td>
-              <td>luyendinh1320@gmail.com</td>
-              <td>0336909524</td>
-              <td>9/4/2023</td>
-              <td>Xác nhận</td>
-              <td>
-                <button className="btn btn-primary mx-3">
-                  <BiEdit />
-                </button>
-                <button className="btn btn-danger">
-                  <AiFillDelete />
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td>1</td>
-              <td>Đinh Ngọc Luyện</td>
-              <td>luyendinh1320@gmail.com</td>
-              <td>0336909524</td>
-              <td>9/4/2023</td>
-              <td>Xác nhận</td>
-              <td>
-                <button className="btn btn-primary mx-3">
-                  <BiEdit />
-                </button>
-                <button className="btn btn-danger">
-                  <AiFillDelete />
-                </button>
-              </td>
-            </tr>
+            {getProduct?.length > 0 &&
+              getProduct?.map((item, index) => {
+                return (
+                  <tr key={item?.id}>
+                    <td>
+                      {currentPage * currentLimit - currentLimit + index + 1}
+                    </td>
+                    <td>{item?.productName}</td>
+                    <td>
+                      <img
+                        src={convertBase64ToImage(item?.image)}
+                        alt=""
+                        style={{
+                          height: "100px",
+                          width: "150px",
+                          objectFit: "cover",
+                        }}
+                      />
+                    </td>
+                    <td>{item?.price}đ</td>
+                    <td>{item?.discount}</td>
+                    <td>
+                      {item?.inventories?.reduce(
+                        (accumulator, currentValue) => {
+                          return (
+                            accumulator + parseInt(currentValue.quantityInStock)
+                          );
+                        },
+                        0
+                      )}
+                    </td>
+                    <td>
+                      <NavLink
+                        to={`/admin/edit-product/${item?.id}`}
+                        className="mx-3 btn btn-primary"
+                      >
+                        <BiEdit />
+                      </NavLink>
+                      <button
+                        className="btn btn-danger"
+                        onClick={() => {
+                          handleDeleteProduct(item?.id);
+                        }}
+                      >
+                        <AiFillDelete />
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
           </tbody>
         </Table>
         <ReactPaginate
           breakLabel="..."
           nextLabel=" >"
-          // onPageChange={handlePageClick}
-          pageRangeDisplayed={5}
-          // pageCount={totalPages}
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={3}
+          marginPagesDisplayed={4}
+          pageCount={totalPages}
           previousLabel="< "
           pageClassName="page-item"
           pageLinkClassName="page-link"

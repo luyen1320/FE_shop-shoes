@@ -1,18 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
+import { toast } from "react-toastify";
+import { reviewProduct } from "../../../service/reviewService";
 
 const colors = {
   orange: "#FFBA5A",
   grey: "#a9a9a9",
 };
 
-function Review() {
-  const [currentValue, setCurrentValue] = useState(0);
+function Review({ userId, productId }) {
   const [hoverValue, setHoverValue] = useState(undefined);
   const stars = Array(5).fill(0);
+  const [review, setReview] = useState({
+    userId: "",
+    productId: "",
+    content: "",
+    star: 0,
+  });
 
   const handleClick = (value) => {
-    setCurrentValue(value);
+    setReview({
+      ...review,
+      star: value,
+    });
   };
 
   const handleMouseOver = (newHoverValue) => {
@@ -23,6 +33,32 @@ function Review() {
     setHoverValue(undefined);
   };
 
+  useEffect(() => {
+    setReview({
+      ...review,
+      userId: userId,
+      productId: productId,
+    });
+  }, [userId, productId]);
+
+  const handleSubmit = async () => {
+    if (review?.star === 0) {
+      toast.error("Vui lòng chọn số sao");
+      return;
+    }
+    if (review?.content === "") {
+      toast.error("Vui lòng nhập nội dung");
+      return;
+    }
+
+    console.log(review);
+    let res = await reviewProduct(review);
+    if (res && res.errCode === 0) {
+      toast.success("Đánh giá thành công");
+    } else {
+      toast.error(res.errMessage);
+    }
+  };
   return (
     <div style={styles.container}>
       <h2> Đánh giá của bạn </h2>
@@ -36,7 +72,7 @@ function Review() {
               onMouseOver={() => handleMouseOver(index + 1)}
               onMouseLeave={handleMouseLeave}
               color={
-                (hoverValue || currentValue) > index
+                (hoverValue || review?.star) > index
                   ? colors.orange
                   : colors.grey
               }
@@ -48,9 +84,22 @@ function Review() {
           );
         })}
       </div>
-      <textarea placeholder="Nhận xét của bạn" style={styles.textarea} />
+      <textarea
+        placeholder="Nhận xét của bạn"
+        style={styles.textarea}
+        onChange={(e) => {
+          setReview({ ...review, content: e.target.value });
+        }}
+      />
 
-      <button style={styles.button}>Gửi</button>
+      <button
+        style={styles.button}
+        onClick={() => {
+          handleSubmit();
+        }}
+      >
+        Gửi
+      </button>
     </div>
   );
 }

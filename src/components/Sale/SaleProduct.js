@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../navbar/Navbar";
 import "./Sale.scss";
 import { Link } from "react-router-dom";
@@ -6,305 +6,52 @@ import shoe1 from "../../assets/images/nike02.jpeg";
 import nike from "../../assets/images/Giay-Air-Jordan-1-Retro-Hi-Premium-GS-Camo-822858-027.jpg";
 import Footer from "../footer/Footer";
 import ReactPaginate from "react-paginate";
+import { toast } from "react-toastify";
+import { getProductSale } from "../../service/productService";
+import ItemProductCart from "../card/ItemProductCart";
 
 const SaleProduct = () => {
+  const [getAllProductsSell, setGetAllProductsSell] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentLimit, setCurrentLimit] = useState(12);
+  const [totalPages, setTotalPages] = useState(0);
+
+  const getAllProducts = async () => {
+    let res = await getProductSale(currentPage, currentLimit);
+    if (res && res.errCode === 0) {
+      setGetAllProductsSell(res?.DT?.suppliers);
+      setTotalPages(res?.DT?.totalPages);
+    } else {
+      toast.error(res.errMessage);
+    }
+  };
+  const handlePageClick = async (event) => {
+    setCurrentPage(+event.selected + 1);
+  };
+  useEffect(() => {
+    getAllProducts();
+  }, [currentPage]);
+
   return (
     <>
       <Navbar />
       <div className="sale-product">
         <div className="list">
-          <div className="list-item">
-            <div className="cart-shopping">
-              <i className="fa-solid fa-cart-shopping"></i>
-            </div>
-            <div className="image">
-              <Link to="/jordan">
-                <img src={nike} alt="" />
-              </Link>
-            </div>
-            <div className="list-desc">
-              <p>
-                Giày Nike Off-White x Air Jordan 1 Retro High OG 'Chicago' //
-                AA3834-101
-              </p>
-            </div>
-            <div className="price">
-              <div>
-                <span className="price-new">1.000.000₫</span>
-                <span className="price-old">1.200.000₫</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="list-item">
-            <div className="cart-shopping">
-              <i className="fa-solid fa-cart-shopping"></i>
-            </div>
-            <div className="image">
-              <img src={shoe1} alt="" />
-            </div>
-            <div className="list-desc">
-              <p>
-                Giày Nike Off-White x Air Jordan 1 Retro High OG 'Chicago' //
-                AA3834-101
-              </p>
-            </div>
-            <div className="price">
-              {/* <p>
-              <del>1.200.000đ</del> - 1.000.000₫
-            </p> */}
-              <div>
-                <span className="price-new">1.000.000₫</span>
-                <span className="price-old">1.200.000₫</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="list-item">
-            <div className="cart-shopping">
-              <i className="fa-solid fa-cart-shopping"></i>
-            </div>
-            <div className="image">
-              <img src={shoe1} alt="" />
-            </div>
-            <div className="list-desc">
-              <p>
-                Giày Nike Off-White x Air Jordan 1 Retro High OG 'Chicago' //
-                AA3834-101
-              </p>
-            </div>
-            <div className="price">
-              {/* <p>
-              <del>1.200.000đ</del> - 1.000.000₫
-            </p> */}
-              <div>
-                <span className="price-new">1.000.000₫</span>
-                <span className="price-old">1.200.000₫</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="list-item">
-            <div className="cart-shopping">
-              <i className="fa-solid fa-cart-shopping"></i>
-            </div>
-            <div className="image">
-              <img src={shoe1} alt="" />
-            </div>
-            <div className="list-desc">
-              <p>
-                Giày Nike Off-White x Air Jordan 1 Retro High OG 'Chicago' //
-                AA3834-101
-              </p>
-            </div>
-            <div className="price">
-              {/* <p>
-              <del>1.200.000đ</del> - 1.000.000₫
-            </p> */}
-              <div>
-                <span className="price-new">1.000.000₫</span>
-                <span className="price-old">1.200.000₫</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="list-item">
-            <div className="cart-shopping">
-              <i className="fa-solid fa-cart-shopping"></i>
-            </div>
-            <div className="image">
-              <img src={shoe1} alt="" />
-            </div>
-            <div className="list-desc">
-              <p>
-                Giày Nike Off-White x Air Jordan 1 Retro High OG 'Chicago' //
-                AA3834-101
-              </p>
-            </div>
-            <div className="price">
-              {/* <p>
-              <del>1.200.000đ</del> - 1.000.000₫
-            </p> */}
-              <div>
-                <span className="price-new">1.000.000₫</span>
-                <span className="price-old">1.200.000₫</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="list-item">
-            <div className="cart-shopping">
-              <i className="fa-solid fa-cart-shopping"></i>
-            </div>
-            <div className="image">
-              <img src={shoe1} alt="" />
-            </div>
-            <div className="list-desc">
-              <p>
-                Giày Nike Off-White x Air Jordan 1 Retro High OG 'Chicago' //
-                AA3834-101
-              </p>
-            </div>
-            <div className="price">
-              {/* <p>
-              <del>1.200.000đ</del> - 1.000.000₫
-            </p> */}
-              <div>
-                <span className="price-new">1.000.000₫</span>
-                <span className="price-old">1.200.000₫</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="list-item">
-            <div className="cart-shopping">
-              <i className="fa-solid fa-cart-shopping"></i>
-            </div>
-            <div className="image">
-              <img src={shoe1} alt="" />
-            </div>
-            <div className="list-desc">
-              <p>
-                Giày Nike Off-White x Air Jordan 1 Retro High OG 'Chicago' //
-                AA3834-101
-              </p>
-            </div>
-            <div className="price">
-              {/* <p>
-              <del>1.200.000đ</del> - 1.000.000₫
-            </p> */}
-              <div>
-                <span className="price-new">1.000.000₫</span>
-                <span className="price-old">1.200.000₫</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="list-item">
-            <div className="cart-shopping">
-              <i className="fa-solid fa-cart-shopping"></i>
-            </div>
-            <div className="image">
-              <img src={shoe1} alt="" />
-            </div>
-            <div className="list-desc">
-              <p>
-                Giày Nike Off-White x Air Jordan 1 Retro High OG 'Chicago' //
-                AA3834-101
-              </p>
-            </div>
-            <div className="price">
-              {/* <p>
-              <del>1.200.000đ</del> - 1.000.000₫
-            </p> */}
-              <div>
-                <span className="price-new">1.000.000₫</span>
-                <span className="price-old">1.200.000₫</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="list-item">
-            <div className="cart-shopping">
-              <i className="fa-solid fa-cart-shopping"></i>
-            </div>
-            <div className="image">
-              <img src={shoe1} alt="" />
-            </div>
-            <div className="list-desc">
-              <p>
-                Giày Nike Off-White x Air Jordan 1 Retro High OG 'Chicago' //
-                AA3834-101
-              </p>
-            </div>
-            <div className="price">
-              {/* <p>
-              <del>1.200.000đ</del> - 1.000.000₫
-            </p> */}
-              <div>
-                <span className="price-new">1.000.000₫</span>
-                <span className="price-old">1.200.000₫</span>
-              </div>
-            </div>
-          </div>
-          <div className="list-item">
-            <div className="cart-shopping">
-              <i className="fa-solid fa-cart-shopping"></i>
-            </div>
-            <div className="image">
-              <img src={shoe1} alt="" />
-            </div>
-            <div className="list-desc">
-              <p>
-                Giày Nike Off-White x Air Jordan 1 Retro High OG 'Chicago' //
-                AA3834-101
-              </p>
-            </div>
-            <div className="price">
-              {/* <p>
-              <del>1.200.000đ</del> - 1.000.000₫
-            </p> */}
-              <div>
-                <span className="price-new">1.000.000₫</span>
-                <span className="price-old">1.200.000₫</span>
-              </div>
-            </div>
-          </div>
-          <div className="list-item">
-            <div className="cart-shopping">
-              <i className="fa-solid fa-cart-shopping"></i>
-            </div>
-            <div className="image">
-              <img src={shoe1} alt="" />
-            </div>
-            <div className="list-desc">
-              <p>
-                Giày Nike Off-White x Air Jordan 1 Retro High OG 'Chicago' //
-                AA3834-101
-              </p>
-            </div>
-            <div className="price">
-              {/* <p>
-              <del>1.200.000đ</del> - 1.000.000₫
-            </p> */}
-              <div>
-                <span className="price-new">1.000.000₫</span>
-                <span className="price-old">1.200.000₫</span>
-              </div>
-            </div>
-          </div>
-          <div className="list-item">
-            <div className="cart-shopping">
-              <i className="fa-solid fa-cart-shopping"></i>
-            </div>
-            <div className="image">
-              <img src={shoe1} alt="" />
-            </div>
-            <div className="list-desc">
-              <p>
-                Giày Nike Off-White x Air Jordan 1 Retro High OG 'Chicago' //
-                AA3834-101
-              </p>
-            </div>
-            <div className="price">
-              {/* <p>
-              <del>1.200.000đ</del> - 1.000.000₫
-            </p> */}
-              <div>
-                <span className="price-new">1.000.000₫</span>
-                <span className="price-old">1.200.000₫</span>
-              </div>
-            </div>
-          </div>
+          {getAllProductsSell?.length > 0 &&
+            getAllProductsSell?.map((item, index) => {
+              return (
+                <ItemProductCart item={item} key={index}></ItemProductCart>
+              );
+            })}
         </div>
         <div className="paginate">
           <ReactPaginate
             breakLabel="..."
             nextLabel=" >"
-            // onPageChange={handlePageClick}
+            onPageChange={handlePageClick}
             pageRangeDisplayed={3}
             marginPagesDisplayed={4}
-            // pageCount={totalPages}
+            pageCount={totalPages}
             previousLabel="< "
             pageClassName="page-item"
             pageLinkClassName="page-link"

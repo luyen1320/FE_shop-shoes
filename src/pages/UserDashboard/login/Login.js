@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Footer from "../../../components/footer/Footer";
 import { toast } from "react-toastify";
 import { loginUser } from "../../../service/userService";
+import { login } from "../../../utils/utils";
 
 function Login(props) {
   const navigate = useNavigate();
@@ -33,8 +34,14 @@ function Login(props) {
     let response = await loginUser(valueLogin, password);
 
     if (response && +response.errCode === 0) {
+      console.log(response.DT);
+      login(response.DT);
       //success
-      navigate("/");
+      if (response.DT.roleId === "USER") {
+        navigate("/");
+      } else {
+        navigate("/admin/home");
+      }
       //redux
     }
 
@@ -49,7 +56,7 @@ function Login(props) {
     <>
       <Navbar />
       <div className="login template d-flex justify-content-center align-items-center vh-100">
-        <div className="form-container p-5 rounded bg-white">
+        <div className="p-5 bg-white rounded form-container">
           <form>
             <h3 className="text-center">Đăng Nhập</h3>
             <div className="mb-2">
@@ -107,7 +114,7 @@ function Login(props) {
               Đăng nhập
             </button>
           </div>
-          <p className="text-end mt-2">
+          <p className="mt-2 text-end">
             Bạn chưa có tài khoản?
             <Link to="/register" className="ms-2">
               Đăng ký

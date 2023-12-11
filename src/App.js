@@ -1,5 +1,5 @@
-import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -8,10 +8,10 @@ import {
   Home,
   ManageOrder,
   ManageProduct,
-  ManageUser,
   CreateProduct,
-  Customer,
   Supplier,
+  ManageUser,
+  ManageCustomer,
 } from "./pages/AdminDashboard";
 import {
   ProductDetails,
@@ -24,6 +24,17 @@ import {
 import { Login, Cart, Register, InfoAccount } from "./pages/UserDashboard";
 
 function App() {
+  const [user, setUser] = useState({});
+  useEffect(() => {
+    // Kiểm tra xem có thông tin người dùng trong Local Storage không
+    const storedUser = localStorage.getItem("user");
+
+    // Nếu có, chuyển đổi chuỗi JSON thành đối tượng và cập nhật state
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
   return (
     <>
       <BrowserRouter>
@@ -32,8 +43,9 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/product-details" element={<ProductDetails />} />
+          <Route path="/product-details/:id" element={<ProductDetails />} />
           <Route path="/product-page" element={<ProductPage />} />
+          <Route path="/product-page/:slug" element={<ProductPage />} />
           <Route path="/order" element={<Order />} />
           <Route path="/info-account" element={<InfoAccount />} />
           <Route path="/sale-product" element={<SaleProduct />} />
@@ -41,15 +53,27 @@ function App() {
           <Route path="/contact" element={<Contact />} />
 
           {/*ADMIN */}
+          {/* {user && user.roleId !== "USER" ? ( */}
+          {/* <Route
+            path="/admin"
+            element={
+              user.roleId !== "USER" ? <AdminLayout /> : <Navigate to="/" />
+            }
+          > */}
           <Route path="/admin" element={<AdminLayout />}>
             <Route path="home" element={<Home />} />
-            <Route path="manage-user" element={<ManageUser />} />
+            <Route path="manage-user" element={<ManageCustomer />} />
             <Route path="manage-order" element={<ManageOrder />} />
             <Route path="manage-product" element={<ManageProduct />} />
             <Route path="create-product" element={<CreateProduct />} />
-            <Route path="manage-customer" element={<Customer />} />
+            <Route path="edit-product/:id" element={<CreateProduct />} />
+            <Route path="manage-customer" element={<ManageUser />} />
             <Route path="supplier" element={<Supplier />} />
+            {/* </Route> */}
           </Route>
+          {/* ) : (
+            
+          )} */}
         </Routes>
       </BrowserRouter>
       <ToastContainer
