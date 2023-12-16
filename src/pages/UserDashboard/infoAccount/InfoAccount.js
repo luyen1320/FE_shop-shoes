@@ -239,7 +239,7 @@ const InfoAccount = () => {
                             }`;
                             return (
                               <tr key={index}>
-                                <td>1</td>
+                                <td>{index + 1}</td>
                                 <td>
                                   {item?.orderDetail?.length > 0 &&
                                     item?.orderDetail?.map((product, i) => (

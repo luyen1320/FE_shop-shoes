@@ -34,7 +34,7 @@ const ProductSlider = (props) => {
         {props.images.map((item, index) => (
           <SwiperSlide key={index}>
             <div className="product-images-slider-thumbs-wrapper">
-              <img src={item} alt="product images" />
+              <img src={item} alt="product images" className="!aspect-square" />
             </div>
           </SwiperSlide>
         ))}

@@ -137,211 +137,220 @@ const ProductDetails = () => {
   return (
     <>
       <Navbar />
-      <div className="slider-product">
-        <div className="product-content">
-          <div className="slide-left">
-            <div className="product-img">
-              <ProductSlider images={listImage} />
-            </div>
-          </div>
-          <div className="slide-right">
-            <div className="product-content-right-name">
-              <h2>{getProduct?.productName}</h2>
-              <p>
-                Còn:{" "}
-                {getProduct?.inventory?.reduce((accumulator, currentValue) => {
-                  return accumulator + parseInt(currentValue.quantityInStock);
-                }, 0)}
-              </p>
-            </div>
-
-            <div className="product-content-right-price">
-              <p>
-                {/* {parseInt(getProduct?.price).toLocaleString("vi-VN")} */}
-                {Math.round(
-                  parseInt(getProduct?.price) *
-                    (getProduct?.discount
-                      ? (100 - parseInt(getProduct?.discount)) / 100
-                      : 1)
-                ).toLocaleString("vi-VN")}
-                <sup>đ</sup>
-              </p>
-            </div>
-
-            <div className="product-content-right-size">
-              <p style={{ fontWeight: "bold" }}>Size:</p>
-              <div className="size">
-                {getProduct?.inventory
-                  ?.sort((a, b) => a.sizeId - b.sizeId)
-                  ?.filter((item) => item.quantityInStock > 0)
-                  ?.map((item, index) => (
-                    <span
-                      key={index}
-                      onClick={() => {
-                        setProduct({ ...product, sizeId: item?.sizeId });
-                      }}
-                      className={`border  ${
-                        product?.sizeId === item?.sizeId
-                          ? "border-black"
-                          : "border-gray-400"
-                      }`}
-                    >
-                      {item?.sizeId === 1
-                        ? "38"
-                        : item?.sizeId === 2
-                        ? "39"
-                        : item?.sizeId === 3
-                        ? "40"
-                        : item?.sizeId === 4
-                        ? "41"
-                        : item?.sizeId === 5
-                        ? "42"
-                        : item?.sizeId === 6
-                        ? "43"
-                        : "44"}
-                    </span>
-                  ))}
+      <div>
+        <div className="slider-product">
+          <div className="product-content">
+            <div className="slide-left">
+              <div className="product-img">
+                <ProductSlider images={listImage} />
               </div>
             </div>
-
-            <div className="quantity">
-              <p style={{ fontWeight: "bold", marginBottom: "0px" }}>
-                Số lượng:
-              </p>
-              &nbsp;
-              <div className="flex gap-3 qty-change">
-                <button
-                  type="button"
-                  className="flex items-center justify-center qty-dec fs-14"
-                  onClick={() => {
-                    if (product?.quantity <= 1) {
-                      toast.error("Số lượng không hợp lệ");
-                      return;
-                    }
-                    setProduct({
-                      ...product,
-                      total_money:
-                        (product?.quantity - 1) * parseInt(getProduct.price),
-                      quantity: product?.quantity - 1,
-                    });
-                  }}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-6 h-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M19.5 12h-15"
-                    />
-                  </svg>
-                </button>
-                <span className="flex qty-value flex-center">
-                  {product?.quantity}
-                </span>
-                <button
-                  type="button"
-                  className="flex items-center justify-center qty-inc fs-14"
-                  onClick={() => {
-                    if (
-                      product?.quantity >=
-                      getProduct?.inventory?.find(
-                        (item) => item?.sizeId === product?.sizeId
-                      )?.quantityInStock
-                    ) {
-                      toast.error(
-                        "Chỉ còn lại " + product?.quantity + " sản phẩm"
+            <div className="slide-right">
+              <div className="product-content-right-name">
+                <h2>{getProduct?.productName}</h2>
+                <p>
+                  Còn:{" "}
+                  {getProduct?.inventory?.reduce(
+                    (accumulator, currentValue) => {
+                      return (
+                        accumulator + parseInt(currentValue.quantityInStock)
                       );
-                      return;
-                    }
-                    setProduct({
-                      ...product,
-                      total_money:
-                        (product?.quantity + 1) * parseInt(getProduct.price),
-                      quantity: product?.quantity + 1,
-                    });
+                    },
+                    0
+                  )}
+                </p>
+              </div>
+
+              <div className="product-content-right-price">
+                <p>
+                  {/* {parseInt(getProduct?.price).toLocaleString("vi-VN")} */}
+                  {Math.round(
+                    parseInt(getProduct?.price) *
+                      (getProduct?.discount
+                        ? (100 - parseInt(getProduct?.discount)) / 100
+                        : 1)
+                  ).toLocaleString("vi-VN")}
+                  <sup>đ</sup>
+                </p>
+              </div>
+
+              <div className="product-content-right-size">
+                <p style={{ fontWeight: "bold" }}>Size:</p>
+                <div className="size">
+                  {getProduct?.inventory
+                    ?.sort((a, b) => a.sizeId - b.sizeId)
+                    ?.filter((item) => item.quantityInStock > 0)
+                    ?.map((item, index) => (
+                      <span
+                        key={index}
+                        onClick={() => {
+                          setProduct({ ...product, sizeId: item?.sizeId });
+                        }}
+                        className={`border  ${
+                          product?.sizeId === item?.sizeId
+                            ? "border-black"
+                            : "border-gray-400"
+                        }`}
+                      >
+                        {item?.sizeId === 1
+                          ? "38"
+                          : item?.sizeId === 2
+                          ? "39"
+                          : item?.sizeId === 3
+                          ? "40"
+                          : item?.sizeId === 4
+                          ? "41"
+                          : item?.sizeId === 5
+                          ? "42"
+                          : item?.sizeId === 6
+                          ? "43"
+                          : "44"}
+                      </span>
+                    ))}
+                </div>
+              </div>
+
+              <div className="quantity">
+                <p style={{ fontWeight: "bold", marginBottom: "0px" }}>
+                  Số lượng:
+                </p>
+                &nbsp;
+                <div className="flex gap-3 qty-change">
+                  <button
+                    type="button"
+                    className="flex items-center justify-center qty-dec fs-14"
+                    onClick={() => {
+                      if (product?.quantity <= 1) {
+                        toast.error("Số lượng không hợp lệ");
+                        return;
+                      }
+                      setProduct({
+                        ...product,
+                        total_money:
+                          (product?.quantity - 1) * parseInt(getProduct.price),
+                        quantity: product?.quantity - 1,
+                      });
+                    }}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M19.5 12h-15"
+                      />
+                    </svg>
+                  </button>
+                  <span className="flex qty-value flex-center">
+                    {product?.quantity}
+                  </span>
+                  <button
+                    type="button"
+                    className="flex items-center justify-center qty-inc fs-14"
+                    onClick={() => {
+                      if (
+                        product?.quantity >=
+                        getProduct?.inventory?.find(
+                          (item) => item?.sizeId === product?.sizeId
+                        )?.quantityInStock
+                      ) {
+                        toast.error(
+                          "Chỉ còn lại " + product?.quantity + " sản phẩm"
+                        );
+                        return;
+                      }
+                      setProduct({
+                        ...product,
+                        total_money:
+                          (product?.quantity + 1) * parseInt(getProduct.price),
+                        quantity: product?.quantity + 1,
+                      });
+                    }}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 4.5v15m7.5-7.5h-15"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div className="product-content-right-button">
+                <button
+                  className="btn btn-lg button-cart add-cart"
+                  onClick={() => {
+                    handleAddToCart();
                   }}
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-6 h-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 4.5v15m7.5-7.5h-15"
-                    />
-                  </svg>
+                  Thêm vào giỏ hàng
+                </button>
+                <button
+                  className="btn btn-lg button-cart buy-now"
+                  onClick={() => {
+                    handleOrder();
+                  }}
+                >
+                  Đặt hàng
                 </button>
               </div>
-            </div>
-
-            <div className="product-content-right-button">
-              <button
-                className="btn btn-lg button-cart add-cart"
-                onClick={() => {
-                  handleAddToCart();
-                }}
-              >
-                Thêm vào giỏ hàng
-              </button>
-              <button
-                className="btn btn-lg button-cart buy-now"
-                onClick={() => {
-                  handleOrder();
-                }}
-              >
-                Đặt hàng
-              </button>
             </div>
           </div>
         </div>
       </div>
-
-      <div className="desc col-12">
-        <ul className="tabs">
-          <li onClick={() => handleToggleClick(1)}>Description</li>
-          <li onClick={() => handleToggleClick(2)}>Đánh giá</li>
-        </ul>
-      </div>
-
-      <div className="content">
-        <div
-          className={
-            active === 1 ? "content-desc content-active" : "content-none"
-          }
-          dangerouslySetInnerHTML={{
-            __html: convertBase64ToImage(getProduct?.description),
-          }}
-        >
-          {/* {convertBase64ToImage(getProduct?.description)} */}
+      <div className="mt-10">
+        <div className="desc col-12">
+          <ul className="tabs">
+            <li onClick={() => handleToggleClick(1)}>Description</li>
+            <li onClick={() => handleToggleClick(2)}>Đánh giá</li>
+          </ul>
         </div>
 
-        <div
-          className={
-            active === 2 ? "content-review content-active" : "content-none"
-          }
-        >
-          {!user?.id ? (
-            <button className="px-4 py-2 text-white bg-red-500 rounded-md">
-              Vui lòng đăng nhập để đánh giá
-            </button>
-          ) : (
-            <Review productId={id} userId={user?.id} />
-          )}
-          {/* <Review /> */}
-          <ReviewComments reviews={reviews} />
+        <div className="content">
+          <div
+            className={
+              active === 1 ? "content-desc content-active" : "content-none"
+            }
+            dangerouslySetInnerHTML={{
+              __html: convertBase64ToImage(getProduct?.description),
+            }}
+          >
+            {/* {convertBase64ToImage(getProduct?.description)} */}
+          </div>
+
+          <div
+            className={
+              active === 2 ? "content-review content-active" : "content-none"
+            }
+          >
+            {!user?.id ? (
+              <button className="px-4 py-2 text-white bg-red-500 rounded-md">
+                Vui lòng đăng nhập để đánh giá
+              </button>
+            ) : (
+              <Review productId={id} userId={user?.id} />
+            )}
+            {/* <Review /> */}
+            <ReviewComments reviews={reviews} />
+          </div>
         </div>
       </div>
+
       <Footer />
     </>
   );

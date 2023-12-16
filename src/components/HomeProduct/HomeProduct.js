@@ -22,7 +22,7 @@ function HomeProduct(props) {
     }
   };
   const getAllProductsByAdidas = async () => {
-    let res = await getAllProduct(1, 8, "adidas");
+    let res = await getAllProduct(1, 8, "jordan");
     if (res && res.errCode === 0) {
       setGetProductByAdidas(res?.DT?.suppliers);
     } else {
@@ -70,7 +70,7 @@ function HomeProduct(props) {
         </Link>
       </div>
 
-      <h2>GIẦY ADIDAS</h2>
+      <h2>GIẦY Jordan</h2>
       <div className="list">
         {getProductByAdidas?.length > 0 &&
           getProductByAdidas?.map((item, index) => {
