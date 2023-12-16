@@ -56,17 +56,17 @@ export const routes = [
       },
     ],
   },
-  {
-    name: "Bài viết",
-    icon: <AiTwotoneFileExclamation />,
-    subRoutes: [
-      {
-        path: "/settings/profile",
-        name: "Profile ",
-        icon: <FaUser />,
-      },
-    ],
-  },
+  // {
+  //   name: "Bài viết",
+  //   icon: <AiTwotoneFileExclamation />,
+  //   subRoutes: [
+  //     {
+  //       path: "/settings/profile",
+  //       name: "Profile ",
+  //       icon: <FaUser />,
+  //     },
+  //   ],
+  // },
 
   {
     path: "/saved",
@@ -81,19 +81,19 @@ export const routes = [
     subRoutes: [
       {
         path: "/settings/profile",
-        name: "Profile ",
+        name: "Logout",
         icon: <FaUser />,
       },
-      {
-        path: "/settings/2fa",
-        name: "2FA",
-        icon: <FaLock />,
-      },
-      {
-        path: "/settings/billing",
-        name: "Billing",
-        icon: <FaMoneyBill />,
-      },
+      // {
+      //   path: "/settings/2fa",
+      //   name: "2FA",
+      //   icon: <FaLock />,
+      // },
+      // {
+      //   path: "/settings/billing",
+      //   name: "Billing",
+      //   icon: <FaMoneyBill />,
+      // },
     ],
   },
 ];

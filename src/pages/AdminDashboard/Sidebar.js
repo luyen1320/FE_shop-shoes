@@ -3,6 +3,7 @@ import "./SideBar.scss";
 import { AnimatePresence, motion } from "framer-motion";
 import { NavLink } from "react-router-dom";
 import { FaAngleDown } from "react-icons/fa";
+import { logout } from "../../utils/utils";
 
 const menuAnimation = {
   hidden: {
@@ -86,10 +87,21 @@ const Sidebar = ({ route, showAnimation, isOpen, setOpen }) => {
           >
             {route.subRoutes.map((subRoute, idx) => (
               <motion.div key={idx} variants={menuItemAnimation} custom={idx}>
-                <NavLink to={subRoute.path} className="link">
-                  <div className="icon">{subRoute.icon}</div>
-                  <motion.div className="link_text">{subRoute.name}</motion.div>
-                </NavLink>
+                {subRoute?.name === "Logout" ? (
+                  <button className="w-full link" onClick={() => logout()}>
+                    <div className="icon">{subRoute.icon}</div>
+                    <motion.div className="link_text">
+                      {subRoute.name}
+                    </motion.div>
+                  </button>
+                ) : (
+                  <NavLink to={subRoute.path} className="link">
+                    <div className="icon">{subRoute.icon}</div>
+                    <motion.div className="link_text">
+                      {subRoute.name}
+                    </motion.div>
+                  </NavLink>
+                )}
               </motion.div>
             ))}
           </motion.div>

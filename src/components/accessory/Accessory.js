@@ -1,7 +1,16 @@
 import React from "react";
+import Navbar from "../navbar/Navbar";
+import Footer from "../footer/Footer";
+import "./Accessory.scss";
 
 const Accessory = () => {
-  return <div>Halo</div>;
+  return (
+    <>
+      <Navbar />
+      <div className="accessory"></div>
+      <Footer />
+    </>
+  );
 };
 
 export default Accessory;

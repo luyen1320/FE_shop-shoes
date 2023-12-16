@@ -1,15 +1,37 @@
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./SideBar.scss";
 import { FaBars } from "react-icons/fa";
 import { NavLink, Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import { routes } from "../../assets/data/menu";
 import { memo } from "react";
+import { logout } from "../../utils/utils";
 
 const AdminLayout = ({ children }) => {
   const [isOpen, setOpen] = useState(false);
+  const [user, setUser] = useState({});
 
+  const slug = window.location.pathname;
+
+  useEffect(() => {
+    if (slug === "/admin") {
+      window.location.href = "/admin/home";
+    }
+  }, [slug]);
+  console.log(slug);
+  useEffect(() => {
+    // Kiểm tra xem có thông tin người dùng trong Local Storage không
+    const storedUser = localStorage.getItem("user");
+
+    if (!storedUser) {
+      window.location.href = "/login";
+    }
+    // Nếu có, chuyển đổi chuỗi JSON thành đối tượng và cập nhật state
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
   const toggle = () => setOpen(!isOpen);
 
   const inputAnimation = {
@@ -97,38 +119,45 @@ const AdminLayout = ({ children }) => {
             {routes.map((route, index) => {
               if (route.subRoutes) {
                 return (
-                  <Sidebar
-                    key={index}
-                    route={route}
-                    isOpen={isOpen}
-                    setOpen={setOpen}
-                    showAnimation={showAnimation}
-                  />
+                  <>
+                    <Sidebar
+                      key={index}
+                      route={route}
+                      isOpen={isOpen}
+                      setOpen={setOpen}
+                      showAnimation={showAnimation}
+                    />
+                  </>
                 );
               }
 
               return (
-                <NavLink
-                  className="link"
-                  activeclassname="active"
-                  to={route.path}
-                  key={index}
-                >
-                  <div className="icon">{route.icon}</div>
-                  {isOpen && (
-                    <AnimatePresence>
-                      <motion.div
-                        className="link_text"
-                        initial="hidden"
-                        animate="show"
-                        exit="hidden"
-                        variants={showAnimation}
-                      >
-                        {route.name}
-                      </motion.div>
-                    </AnimatePresence>
-                  )}
-                </NavLink>
+                <>
+                  <NavLink
+                    className="link"
+                    activeclassname="active"
+                    onMouseDown={() => {
+                      if (route.path === "/settings/profile") logout();
+                    }}
+                    to={route.path}
+                    key={index}
+                  >
+                    <div className="icon">{route.icon}</div>
+                    {isOpen && (
+                      <AnimatePresence>
+                        <motion.div
+                          className="link_text"
+                          initial="hidden"
+                          animate="show"
+                          exit="hidden"
+                          variants={showAnimation}
+                        >
+                          {route.name}
+                        </motion.div>
+                      </AnimatePresence>
+                    )}
+                  </NavLink>
+                </>
               );
             })}
           </section>

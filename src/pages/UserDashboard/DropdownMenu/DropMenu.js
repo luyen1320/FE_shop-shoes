@@ -1,27 +1,31 @@
 import React from "react";
 import "./DropMenu.scss";
 import { Link } from "react-router-dom";
+import { logout } from "../../../utils/utils";
 
 const Menus = [
   {
     path: "/info-account",
     name: "Thông tin tài khoản",
   },
-  {
-    path: "",
-    name: "Đăng xuất",
-  },
 ];
 
 const DropMenu = () => {
   return (
-    <div className="drop-menu">
-      <ul className=" gap-5">
+    <div className="absolute left-0 -translate-x-[24px] w-[180px] drop-menu top-[50px]">
+      <ul className="w-auto gap-5 whitespace-nowrap">
         {Menus.map((menu) => (
           <li key={menu}>
             <Link to={menu.path}>{menu.name}</Link>
           </li>
         ))}
+        <li
+          onClick={() => {
+            logout();
+          }}
+        >
+          <span>Đăng xuất</span>
+        </li>
       </ul>
     </div>
   );
