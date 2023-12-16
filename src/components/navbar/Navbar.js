@@ -62,15 +62,7 @@ function Navbar(props) {
               </li>
             </ul> */}
           </li>
-          <li>
-            <Link to="/sale-product">Sale</Link>
-          </li>
-          <li>
-            <Link to="/accessory">Phụ kiện</Link>
-          </li>
-          <li>
-            <Link to="/contact">Liên hệ</Link>
-          </li>
+          
         </ul>
       </nav>
       <div className="flex items-center gap-4">
