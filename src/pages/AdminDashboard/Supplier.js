@@ -12,6 +12,7 @@ const Supplier = () => {
   //create
   const [isShowModal, setIsShowModal] = useState(false);
   const [isShowModalDelete, setIsShowModalDelete] = useState(false);
+  const [sortByName, setSortByName] = useState(false);
 
   const [dataModal, setDataModal] = useState({});
   const [actionModal, setActionModal] = useState("CREATE");
@@ -28,10 +29,10 @@ const Supplier = () => {
 
   useEffect(() => {
     fetchSupplier();
-  }, [currentPage]);
+  }, [currentPage, sortByName]);
 
   const fetchSupplier = async () => {
-    let res = await fetchAllSupplier(currentPage, currentLimit);
+    let res = await fetchAllSupplier(currentPage, currentLimit, sortByName);
     if (res && res.errCode === 0) {
       setTotalPages(res.DT.totalPages);
       setListSupplier(res.DT.suppliers);
@@ -87,7 +88,13 @@ const Supplier = () => {
               <i className="fa-solid fa-circle-plus"></i> Thêm
             </Button>
           </div>
-          <div className="filter-user" style={{ color: "black" }}>
+          <div
+            className="filter-user"
+            style={{ color: "black" }}
+            onClick={() => {
+              setSortByName(!sortByName);
+            }}
+          >
             Lọc
             <BiMenuAltLeft />
           </div>
@@ -119,7 +126,7 @@ const Supplier = () => {
 
                       <td>
                         <button
-                          className="btn btn-primary mx-3"
+                          className="mx-3 btn btn-primary"
                           onClick={() => handleEditSupplier(item)}
                         >
                           <BiEdit />

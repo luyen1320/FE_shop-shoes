@@ -4,7 +4,8 @@ import "./ModalOrder.scss";
 import { Table } from "react-bootstrap";
 
 const ModalOrder = (props) => {
-  const { show, handleClose } = props;
+  const { show, handleClose, valueModal } = props;
+  console.log(valueModal);
   return (
     <>
       <Modal show={show} onHide={handleClose} size="xl" className="modal-order">
@@ -33,19 +34,25 @@ const ModalOrder = (props) => {
               <div className="info-customer">
                 <h5>Người nhận</h5>
                 <ul>
-                  <strong>TaiOke</strong>
-                  <li>Tầng 2 - Số 2 -Ngõ 80</li>
-                  <li>Phố Thành Trung -Trâu Quỳ -Gia Lâm -Hà Nội</li>
-                  <li>Phone: 1234567890</li>
-                  <li>Email: support@shopshoes.com</li>
+                  <strong>{valueModal?.username}</strong>
+                  <li>{valueModal?.addressDetail}</li>
+                  <li>
+                    {valueModal?.ward} - {valueModal?.district} -{" "}
+                    {valueModal?.province}
+                  </li>
+                  <li>Phone: {valueModal?.phone}</li>
+                  <li>Email: {valueModal?.email}</li>
                 </ul>
               </div>
               <div className="info-delivery">
                 <h5>Thông tin giao dịch</h5>
                 <ul>
-                  <li>Mã đơn hàng: 1</li>
+                  <li>Mã đơn hàng: {valueModal?.id}</li>
                   <li>Thanh toán: nhận hàng</li>
-                  <li>Phí vận chuyển: 65.000đ</li>
+                  <li>
+                    Phí vận chuyển:{" "}
+                    {valueModal?.deliveryType === "FAST" ? "65.000" : "45.000"}đ
+                  </li>
                 </ul>
               </div>
             </div>
@@ -57,40 +64,54 @@ const ModalOrder = (props) => {
                     <th>Sản phẩm</th>
                     <th>Số lượng</th>
                     <th>Giá</th>
-                    <th>Trạng Thái</th>
+                    {/* <th>Trạng Thái</th> */}
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>
-                      <ul>
-                        <li>
-                          Giày Air Jordan 1 Retro Hi Premium GS 'Camo'
-                          822858-027
-                        </li>
-                        <li>Size: 40</li>
-                      </ul>
-                    </td>
-                    <td>1</td>
-                    <td>4.990.000đ</td>
-                    <td>
-                      <select className="form-select">
-                        <option>Chờ xử lý</option>
-                        <option>Đã duyệt</option>
-                        <option>Đang giao hàng</option>
-                        <option>Đã Giao hàng</option>
-                      </select>
-                    </td>
-                  </tr>
+                  {valueModal?.orderDetail?.length > 0 &&
+                    valueModal?.orderDetail?.map((item, index) => (
+                      <tr>
+                        <td>{index + 1}</td>
+                        <td>
+                          <ul>
+                            <li>{item?.product?.productName}</li>
+                            <li>Size: {item?.size}</li>
+                          </ul>
+                        </td>
+                        <td>{item?.quantity}</td>
+                        <td>
+                          {parseInt(item?.price).toLocaleString("vi-VN")}đ
+                        </td>
+                        {/* <td>
+                          <select className="form-select">
+                            <option>Chờ xử lý</option>
+                            <option>Đã duyệt</option>
+                            <option>Đang giao hàng</option>
+                            <option>Đã Giao hàng</option>
+                          </select>
+                        </td> */}
+                      </tr>
+                    ))}
                 </tbody>
               </Table>
-              <div className="total-money">Tổng: 5.055.000đ</div>
+              <div className="total-money">
+                Tổng:{" "}
+                {(
+                  (valueModal?.orderDetail?.length > 0 &&
+                    valueModal?.orderDetail?.reduce(
+                      (acc, cur) =>
+                        acc + parseInt(cur?.price) * parseInt(cur?.quantity),
+                      0
+                    )) +
+                  parseInt(valueModal?.deliveryType === "FAST" ? 65000 : 45000)
+                ).toLocaleString("vi-VN")}
+                đ
+              </div>
             </div>
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={props.onHide}>Lưu</Button>
+          {/* <Button onClick={props.onHide}>Lưu</Button> */}
           <Button variant="secondary" onClick={handleClose}>
             Đóng
           </Button>

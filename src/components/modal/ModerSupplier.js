@@ -155,7 +155,7 @@ const ModalSupplier = (props) => {
               />
             </Form.Group>
 
-            <Form.Group className=" col-md-6">
+            <Form.Group className="">
               <Form.Label>Địa chỉ</Form.Label>
               <Form.Control
                 type="text"

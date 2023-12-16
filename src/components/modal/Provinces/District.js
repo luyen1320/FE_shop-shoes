@@ -28,7 +28,7 @@ const DistrictDropDwon = ({ provinceCode, onChange }) => {
         Chọn
       </option>
       {districts.map((district) => (
-        <option key={district.code} value={district.code}>
+        <option key={district.code} value={district.code} name={district.name}>
           {district.name}
         </option>
       ))}

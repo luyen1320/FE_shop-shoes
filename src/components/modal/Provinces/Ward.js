@@ -28,7 +28,7 @@ const WardDropdown = ({ districtCode, onChange }) => {
         Chọn
       </option>
       {wards.map((ward) => (
-        <option key={ward.code} value={ward.code}>
+        <option key={ward.code} value={ward.code} name={ward.name}>
           {ward.name}
         </option>
       ))}
