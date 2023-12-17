@@ -5,17 +5,17 @@ import { FaMoneyBillAlt } from "react-icons/fa";
 import { MdOutlineBorderColor } from "react-icons/md";
 import Nav from "./Nav";
 import ApexCharts from "react-apexcharts";
-import axios from "axios";
-import { getDataManageAdmin } from "../../service/productService";
+// import axios from "axios";
+import { getAllOrder, getDataManageAdmin } from "../../service/productService";
 import { toast } from "react-toastify";
 import { Table } from "react-bootstrap";
-import "react-date-range/dist/styles.css"; // main style file
-import "react-date-range/dist/theme/default.css"; // theme css file
-import { DateRange } from "react-date-range";
-import format from "date-fns/format";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import ReactPaginate from "react-paginate";
 
-const Home = () => {
-  const today = new Date();
+const Home = (props) => {
+  const { valueModal } = props;
+
   function formatDay(item) {
     const date = new Date(item.day);
     const day = date.getDate();
@@ -45,16 +45,12 @@ const Home = () => {
 
   const [dataManage, setDataManage] = useState([]);
   const [dataChartMonth, setDataChartMonth] = useState(dataChartMonthDf);
-  const [selectedRange, setSelectionRange] = useState([
-    {
-      startDate: today,
-      endDate: today,
-      key: "selection",
-    },
-  ]);
-  const [open, setOpen] = useState(false);
-
-  const refOne = useRef(null);
+  const [dateRange, setDateRange] = useState([null, null]);
+  const [startDate, endDate] = dateRange;
+  const [dataOrder, setDataOrder] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentLimit, setCurrentLimit] = useState(5);
+  const [totalPages, setTotalPages] = useState(0);
 
   const fectchDtManage = async () => {
     let res = await getDataManageAdmin();
@@ -71,12 +67,6 @@ const Home = () => {
 
   useEffect(() => {
     fectchDtManage();
-  }, []);
-
-  useEffect(() => {
-    // event listeners
-    document.addEventListener("keydown", hideOnEscape, true);
-    document.addEventListener("click", hideOnClickOutside, true);
   }, []);
 
   console.log(dataChartMonth);
@@ -135,38 +125,22 @@ const Home = () => {
     },
   };
 
-  const handleSelect = (ranges) => {
-    // Kiểm tra nếu endDate là ngày trong tương lai thì đặt lại thành ngày hôm nay
-    if (ranges.selection.endDate > today) {
-      ranges.selection.endDate = today;
-    }
-
-    // Kiểm tra nếu startDate là ngày sau tháng hiện tại thì đặt lại thành ngày đầu tháng
-    if (ranges.selection.startDate > today) {
-      ranges.selection.startDate = new Date(
-        today.getFullYear(),
-        today.getMonth(),
-        1
-      );
-    }
-
-    setSelectionRange([ranges.selection]);
-  };
-
-  const hideOnEscape = (e) => {
-    // console.log(e.key)
-    if (e.key === "Escape") {
-      setOpen(false);
+  const getDataOrder = async () => {
+    let res = await getAllOrder();
+    if (res && res.errCode === 0) {
+      setDataOrder(res?.DT);
+      setTotalPages(res?.DT?.totalPages);
+    } else {
+      toast.error(res.errMessage);
     }
   };
 
-  // Hide on outside click
-  const hideOnClickOutside = (e) => {
-    // console.log(refOne.current)
-    // console.log(e.target)
-    if (refOne.current && !refOne.current.contains(e.target)) {
-      setOpen(false);
-    }
+  useEffect(() => {
+    getDataOrder();
+  }, []);
+
+  const handlePageClick = (event) => {
+    setCurrentPage(+event.selected + 1);
   };
 
   return (
@@ -207,9 +181,11 @@ const Home = () => {
           <h1>{dataManage?.totalOrdersPending}</h1>
         </div>
       </div>
+
       <h2 className="mt-8 font-semibold text-center text-black">
         Thống kê doanh thu theo tháng và năm
       </h2>
+
       <div className="grid items-center w-full grid-cols-7 gap-4 mt-4">
         <div id="chartByMonth" ref={chartRef} className="col-span-5">
           <ApexCharts
@@ -239,30 +215,16 @@ const Home = () => {
 
       <div className="date-picker">
         <div className="date-range">
-          <input
-            value={`${format(
-              selectedRange[0].startDate,
-              "MM/dd/yyyy"
-            )} to ${format(selectedRange[0].endDate, "MM/dd/yyyy")}`}
-            readOnly
-            className="inputBox"
-            onClick={() => setOpen((open) => !open)}
+          <h6>Chọn ngày:</h6>
+          <DatePicker
+            selectsRange={true}
+            startDate={startDate}
+            endDate={endDate}
+            onChange={(update) => {
+              setDateRange(update);
+            }}
+            isClearable={true}
           />
-
-          <div className="date" ref={refOne}>
-            {open && (
-              <DateRange
-                ranges={selectedRange}
-                onChange={handleSelect}
-                singleDateRange={true}
-                editableDateInputs={true}
-                moveRangeOnFirstSelection={false}
-                months={1}
-                direction="horizontal"
-                className="calendarElement"
-              />
-            )}
-          </div>
         </div>
         <Table>
           <thead>
@@ -271,21 +233,49 @@ const Home = () => {
               <th>Khách hàng</th>
               <th>Sản phẩm</th>
               <th>Giá</th>
-              <th>Số lượng</th>
+              <th>Ngày đặt</th>
               <th>Trạng thái</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
+            {dataOrder?.length > 0 &&
+              dataOrder?.map((item, index) => {
+                return (
+                  <tr key={item?.id}>
+                    <td>#{item?.id}</td>
+                    <td>{item?.username}</td>
+                    <td>
+                      <ul>
+                        <li>{item?.orderDetail?.product?.productName}</li>
+                        <li>{item?.orderDetail?.size}</li>
+                      </ul>
+                    </td>
+                    <td>{item?.totalMoney}</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                );
+              })}
           </tbody>
         </Table>
+        {/* <ReactPaginate
+          breakLabel="..."
+          nextLabel=" >"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={3}
+          marginPagesDisplayed={4}
+          pageCount={totalPages}
+          previousLabel="< "
+          pageClassName="page-item"
+          pageLinkClassName="page-link"
+          previousLinkClassName="page-link"
+          nextClassName="page-item"
+          nextLinkClassName="page-link"
+          breakClassName="page-item"
+          breakLinkClassName="page-link"
+          containerClassName="pagination"
+          activeClassName="active"
+        /> */}
       </div>
     </div>
   );

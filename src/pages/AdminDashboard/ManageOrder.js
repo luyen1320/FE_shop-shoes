@@ -58,6 +58,7 @@ const ManageOrder = () => {
     } else {
       toast.error(res.errMessage);
     }
+    console.log("Check: ", res);
   };
 
   const handleUpdateOrder = async (id, value) => {
