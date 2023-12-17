@@ -1,11 +1,10 @@
 @import '../../styles/setting';
 
-.home{    
-    
-    .title{
-        background: rgb(0, 7, 61);
-        border-radius: 5px;
-    }
+.home{
+    // .title{
+    //     background: rgb(0, 7, 61);
+    //     border-radius: 5px;
+    // }
 
     .main-card{
         display: grid;
@@ -51,6 +50,13 @@
 
         .card:nth-child(4) {
             background-color: #d50000;
+        }
+    }
+
+    .date-picker{
+        .date-range{
+            color: black;
+            margin-bottom: 5px;
         }
     }
 }
