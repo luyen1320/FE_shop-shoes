@@ -60,18 +60,26 @@ const getAllProduct = (
   supplierName = "",
   minPrice = "",
   maxPrice = "",
-  sizes = "1,2,3,4,5,6,7"
+  sizes = "1,2,3,4,5,6,7",
+  search = ""
 ) => {
   return axios.get(
-    `/api/v1/product?page=${page}&limit=${limit}&supplierName=${supplierName}&minPrice=${minPrice}&maxPrice=${maxPrice}&sizes=${sizes}`,
+    `/api/v1/product?page=${page}&limit=${limit}&supplierName=${supplierName}&minPrice=${minPrice}&maxPrice=${maxPrice}&sizes=${sizes}&search=${search}`,
     {
       withCredentials: true,
     }
   );
 };
-const getAllOrder = (page, limit, sortByName) => {
+const getAllOrder = (
+  page,
+  limit,
+  sortByName,
+  startDate = "",
+  endDate = "",
+  dashboard = ""
+) => {
   return axios.get(
-    `/api/v1/getallorder?page=${page}&limit=${limit}&sortByName=${sortByName}`,
+    `/api/v1/getallorder?page=${page}&limit=${limit}&sortByName=${sortByName}&startDate=${startDate}&endDate=${endDate}&dashboard=${dashboard}`,
     {
       withCredentials: true,
     }
@@ -82,7 +90,6 @@ const getOrderById = (id) => {
     withCredentials: true,
   });
 };
-
 const getAllProductInCart = (id) => {
   return axios.get(`/api/v1/getproductincart/${id}`, {
     withCredentials: true,

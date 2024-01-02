@@ -92,10 +92,11 @@ const ManageOrder = () => {
       searchData = searchData.filter((item) => item.email.includes(term));
       setGetOrders(searchData);
     } else {
-      getAllOrders();
+      getAllOrders(currentPage);
     }
-  }, 500);
+  }, 100);
 
+  // console.log(getOrders);
   return (
     <div className="manage-order">
       <Nav />
@@ -176,6 +177,10 @@ const ManageOrder = () => {
                         <select
                           name="status"
                           id="status"
+                          disabled={
+                            item?.status === "SUCCESS" ||
+                            item?.status === "CANCEL"
+                          }
                           className="w-full h-[100%] border-none outline-none"
                           // value={item?.status}
                           defaultValue={item?.status}
@@ -183,8 +188,8 @@ const ManageOrder = () => {
                             handleUpdateOrder(item?.id, e.target.value);
                           }}
                         >
-                          <option value="PENDING">Chờ xử lý</option>
-                          <option value="CONFIRM">Xác nhận</option>
+                          <option value="PENDING">Chờ xác nhận</option>
+                          <option value="CONFIRM">Chờ lấy hàng</option>
                           <option value="SHIPPING">Đang giao hàng</option>
                           <option value="SUCCESS">Đã giao</option>
                           <option value="CANCEL">Đã Hủy</option>

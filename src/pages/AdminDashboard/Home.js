@@ -14,8 +14,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import ReactPaginate from "react-paginate";
 
 const Home = (props) => {
-  const { valueModal } = props;
-
   function formatDay(item) {
     const date = new Date(item.day);
     const day = date.getDate();
@@ -126,9 +124,16 @@ const Home = (props) => {
   };
 
   const getDataOrder = async () => {
-    let res = await getAllOrder();
+    let res = await getAllOrder(
+      currentPage,
+      currentLimit,
+      "",
+      startDate || "",
+      endDate || "",
+      1
+    );
     if (res && res.errCode === 0) {
-      setDataOrder(res?.DT);
+      setDataOrder(res?.DT?.suppliers);
       setTotalPages(res?.DT?.totalPages);
     } else {
       toast.error(res.errMessage);
@@ -137,7 +142,7 @@ const Home = (props) => {
 
   useEffect(() => {
     getDataOrder();
-  }, []);
+  }, [dateRange]);
 
   const handlePageClick = (event) => {
     setCurrentPage(+event.selected + 1);
@@ -226,39 +231,83 @@ const Home = (props) => {
             isClearable={true}
           />
         </div>
-        <Table>
+        <Table bordered hover>
           <thead>
             <tr>
               <th>Mã</th>
-              <th>Khách hàng</th>
+              <th>Tên khách hàng</th>
               <th>Sản phẩm</th>
               <th>Giá</th>
+              <th>Số lượng</th>
+              <th>Tổng tiền</th>
               <th>Ngày đặt</th>
+              <th>Ngày Giao</th>
               <th>Trạng thái</th>
             </tr>
           </thead>
           <tbody>
             {dataOrder?.length > 0 &&
-              dataOrder?.map((item, index) => {
+              dataOrder.map((item, index) => {
+                const createdAtDate = new Date(item?.createdAt);
+                const formattedDate = `${createdAtDate.getDate()}/${
+                  createdAtDate.getMonth() + 1
+                }/${createdAtDate.getFullYear()} ${createdAtDate.getHours()}:${
+                  createdAtDate.getMinutes() < 10
+                    ? "0" + createdAtDate.getMinutes()
+                    : createdAtDate.getMinutes()
+                }`;
+
+                const updatedAtDate = new Date(item?.updatedAt);
+                const dateUpdate = `${updatedAtDate.getDate()}/${
+                  createdAtDate.getMonth() + 1
+                }/${updatedAtDate.getFullYear()} ${updatedAtDate.getHours()}:${
+                  updatedAtDate.getMinutes() < 10
+                    ? "0" + updatedAtDate.getMinutes()
+                    : updatedAtDate.getMinutes()
+                }`;
                 return (
-                  <tr key={item?.id}>
+                  <tr key={index}>
                     <td>#{item?.id}</td>
                     <td>{item?.username}</td>
                     <td>
-                      <ul>
-                        <li>{item?.orderDetail?.product?.productName}</li>
-                        <li>{item?.orderDetail?.size}</li>
-                      </ul>
+                      {item?.orderDetail?.length > 0 &&
+                        item?.orderDetail?.map((product, i) => (
+                          <ul key={i}>
+                            <li>{product?.product?.productName}</li>
+                            <li>size:{product?.size}</li>
+                          </ul>
+                        ))}
                     </td>
-                    <td>{item?.totalMoney}</td>
-                    <td></td>
-                    <td></td>
+                    <td>
+                      {item?.orderDetail?.length > 0 &&
+                        item?.orderDetail?.map((product, i) => (
+                          <p key={i}>
+                            {parseInt(product?.price).toLocaleString("vi-VN")}đ
+                          </p>
+                        ))}
+                    </td>
+                    <td>
+                      {item?.orderDetail?.length > 0 &&
+                        item?.orderDetail?.map((product, i) => (
+                          <p key={i}>
+                            {parseInt(product?.quantity).toLocaleString(
+                              "vi-VN"
+                            )}
+                          </p>
+                        ))}
+                    </td>
+                    <td>
+                      {parseInt(item?.totalMoney).toLocaleString("vi-VN")}đ
+                    </td>
+                    <td>{formattedDate}</td>
+                    <td>{dateUpdate}</td>
+                    <td>Đã giao</td>
                   </tr>
                 );
               })}
           </tbody>
         </Table>
-        {/* <ReactPaginate
+        <ReactPaginate
           breakLabel="..."
           nextLabel=" >"
           onPageChange={handlePageClick}
@@ -275,7 +324,7 @@ const Home = (props) => {
           breakLinkClassName="page-link"
           containerClassName="pagination"
           activeClassName="active"
-        /> */}
+        />
       </div>
     </div>
   );

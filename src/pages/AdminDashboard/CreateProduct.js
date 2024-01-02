@@ -230,7 +230,7 @@ const CreateProduct = () => {
         <form className="row g-3 needs-validation">
           <div className="col-md-12">
             <label className="form-label" style={{ color: "black" }}>
-              Tên sản phẩm
+              Tên sản phẩm <span className="star">*</span>
             </label>
             <input
               type="text"
@@ -245,7 +245,7 @@ const CreateProduct = () => {
 
           <div className="col-md-4">
             <label className="form-label" style={{ color: "black" }}>
-              Giá
+              Giá <span className="star">*</span>
             </label>
             <input
               type="text"
@@ -275,7 +275,7 @@ const CreateProduct = () => {
           </div>
           <div className="col-md-4">
             <label className="form-label" style={{ color: "black" }}>
-              Nhà cung cấp
+              Nhà cung cấp <span className="star">*</span>
             </label>
             <select
               className="form-select"
@@ -309,7 +309,7 @@ const CreateProduct = () => {
 
           <div className="col-md-5">
             <label className="form-label" style={{ color: "black" }}>
-              Size và số lượng
+              Size và số lượng <span className="star">*</span>
             </label>
             <div className="size-shoes" style={{ color: "black" }}>
               {shoeSize.map((item, index) => {
@@ -365,7 +365,8 @@ const CreateProduct = () => {
 
           <div className="col-md-6">
             <label className="mt-3 form-label" style={{ color: "black" }}>
-              Ảnh <i className="fas fa-upload"></i>
+              Ảnh <i className="fas fa-upload"></i>{" "}
+              <span className="star">*</span>
             </label>
             <Dropzone
               onDrop={handleSingleImage}
@@ -401,7 +402,8 @@ const CreateProduct = () => {
           </div>
           <div className="col-md-6">
             <label className="mt-3 form-label" style={{ color: "black" }}>
-              Tải ảnh của sản phẩm <i className="fas fa-upload"></i>
+              Tải ảnh của sản phẩm <i className="fas fa-upload"></i>{" "}
+              <span className="star">*</span>
             </label>
 
             <Dropzone

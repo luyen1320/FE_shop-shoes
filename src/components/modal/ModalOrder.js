@@ -2,10 +2,35 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import "./ModalOrder.scss";
 import { Table } from "react-bootstrap";
+import { useState } from "react";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 const ModalOrder = (props) => {
   const { show, handleClose, valueModal } = props;
+  const [loader, setLoader] = useState(false);
+
   console.log(valueModal);
+
+  const downloadPDF = () => {
+    const capture = document.querySelector(".order-detail");
+    setLoader(true);
+    html2canvas(capture, {
+      logging: true,
+      letterRendering: 1,
+      useCORS: true,
+    }).then((canvas) => {
+      const imgData = canvas.toDataURL("img/png");
+      const imgWidth = 208;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      const doc = new jsPDF("p", "mm", "a4");
+      // const componentWidth = doc.internal.pageSize.getWidth();
+      // const componentHeight = doc.internal.pageSize.getHeight();
+      doc.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+      setLoader(false);
+      doc.save("hoadon.pdf");
+    });
+  };
   return (
     <>
       <Modal show={show} onHide={handleClose} size="xl" className="modal-order">
@@ -112,6 +137,9 @@ const ModalOrder = (props) => {
         </Modal.Body>
         <Modal.Footer>
           {/* <Button onClick={props.onHide}>Lưu</Button> */}
+          <Button onClick={downloadPDF} disabled={!(loader === false)}>
+            {loader ? <span>Downloading</span> : <span>Download</span>}
+          </Button>
           <Button variant="secondary" onClick={handleClose}>
             Đóng
           </Button>

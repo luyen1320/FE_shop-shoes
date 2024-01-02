@@ -1,20 +1,22 @@
 .sale-product{
     margin-top: 100px;
-        .list{
-        --spacing: 4.9rem;
-        // font-size: 62.5%;
-        display: flex;
-        align-items: stretch;
-        justify-content: flex-start;
+    .list{
+        // --spacing: 4.9rem;
+        display: grid;
+        grid-template-columns: auto auto auto auto;
+        justify-content: center;
+        // align-items: stretch;
+        // justify-content: flex-start;
         flex-wrap: wrap;
-        margin: 0 var(--spacing);
+        // margin: 0 var(--spacing);
 
         .list-item{
+             // flex: 1 0 calc(33.333% - 10px);
             border: 1px solid #e7e7e7;
-            margin: 20px;
-            // width: calc(27% - var(--spacing) *2);
+            // margin: 20px;
             width: 300px;
-            height: 26rem;
+            // height: 26rem;
+            margin: 10px 25px 30px 25px;
 
             &:hover{
                 box-shadow: 0 0 2px;

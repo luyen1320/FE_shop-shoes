@@ -83,7 +83,9 @@ function Register(props) {
           <form>
             <h3 className="text-center">Đăng ký</h3>
             <div className="mb-2">
-              <label htmlFor="text">HỌ TÊN</label>
+              <label htmlFor="text">
+                HỌ TÊN <span className="important">*</span>
+              </label>
               <input
                 type="text"
                 value={username}
@@ -96,7 +98,9 @@ function Register(props) {
               />
             </div>
             <div className="mb-2">
-              <label htmlFor="email">EMAIL</label>
+              <label htmlFor="email">
+                EMAIL <span className="important">*</span>
+              </label>
               <input
                 type="text"
                 value={email}
@@ -109,7 +113,9 @@ function Register(props) {
               />
             </div>
             <div className="mb-2">
-              <label htmlFor="password">MẬT KHẨU</label>
+              <label htmlFor="password">
+                MẬT KHẨU <span className="important">*</span>
+              </label>
               <input
                 type="password"
                 value={password}
@@ -122,7 +128,9 @@ function Register(props) {
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="password">NHẬP LẠI MẬT KHẨU</label>
+              <label htmlFor="password">
+                NHẬP LẠI MẬT KHẨU <span className="important">*</span>
+              </label>
               <input
                 type="password"
                 value={confirmPassword}

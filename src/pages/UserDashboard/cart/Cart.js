@@ -27,7 +27,7 @@ function Cart(props) {
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
-  }, [user]);
+  }, []);
 
   const handleSetQuantity = async (number, id, size) => {
     const newArray = [...cartProducts];
@@ -60,6 +60,7 @@ function Cart(props) {
     }
   };
 
+  console.log(cartProducts);
   return (
     <>
       <Navbar />
@@ -198,6 +199,28 @@ function Cart(props) {
                                 onClick={() => {
                                   handleSetQuantity(1, item?.id, item?.size);
                                 }}
+                                // onClick={() => {
+                                //   if (
+                                //     product?.quantity >=
+                                //     getProduct?.inventory?.find(
+                                //       (item) => item?.sizeId === product?.sizeId
+                                //     )?.quantityInStock
+                                //   ) {
+                                //     toast.error(
+                                //       "Chỉ còn lại " +
+                                //         product?.quantity +
+                                //         " sản phẩm"
+                                //     );
+                                //     return;
+                                //   }
+                                //   setProduct({
+                                //     ...product,
+                                //     total_money:
+                                //       (product?.quantity + 1) *
+                                //       parseInt(getProduct.price),
+                                //     quantity: product?.quantity + 1,
+                                //   });
+                                // }}
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
@@ -331,7 +354,7 @@ function Cart(props) {
                     </li> */}
                   </ul>
                   <div className="flex cart-summary-total flex-between fs-18">
-                    <span className="fw-6">Tạm tính: </span>
+                    {/* <span className="fw-6">Tạm tính: </span> */}
                     <span className="fw-6"></span>
                   </div>
                   <div className="cart-summary-btn">

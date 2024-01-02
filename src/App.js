@@ -12,6 +12,7 @@ import {
   Supplier,
   ManageUser,
   ManageCustomer,
+  ManageNotification,
 } from "./pages/AdminDashboard";
 import {
   ProductDetails,
@@ -69,7 +70,10 @@ function App() {
             <Route path="edit-product/:id" element={<CreateProduct />} />
             <Route path="manage-customer" element={<ManageUser />} />
             <Route path="supplier" element={<Supplier />} />
-            {/* </Route> */}
+            <Route
+              path="manage-notification"
+              element={<ManageNotification />}
+            />
           </Route>
           {/* ) : (
             
