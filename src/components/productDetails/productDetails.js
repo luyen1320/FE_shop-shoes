@@ -108,6 +108,7 @@ const ProductDetails = () => {
       toast.error(res.errMessage);
     }
   };
+
   const [active, setActive] = useState(1);
 
   const handleToggleClick = (id) => {
@@ -151,14 +152,18 @@ const ProductDetails = () => {
                 <h2>{getProduct?.productName}</h2>
                 <p>
                   Còn:{" "}
-                  {getProduct?.inventory?.reduce(
-                    (accumulator, currentValue) => {
-                      return (
-                        accumulator + parseInt(currentValue.quantityInStock)
-                      );
-                    },
-                    0
-                  )}
+                  {product?.sizeId === null
+                    ? getProduct?.inventory?.reduce(
+                        (accumulator, currentValue) => {
+                          return (
+                            accumulator + parseInt(currentValue.quantityInStock)
+                          );
+                        },
+                        0
+                      )
+                    : getProduct?.inventory?.filter(
+                        (item) => product?.sizeId === item?.sizeId
+                      )[0]?.quantityInStock}
                 </p>
               </div>
 

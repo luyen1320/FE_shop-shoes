@@ -1,11 +1,11 @@
-import { FaHome, FaLock, FaMoneyBill, FaUser } from "react-icons/fa";
+import { FaHome, FaUser, FaBell } from "react-icons/fa";
 import { BiCog } from "react-icons/bi";
-import {
-  AiFillFolderAdd,
-  AiFillHeart,
-  AiOutlineMenu,
-  AiTwotoneFileExclamation,
-} from "react-icons/ai";
+// import {
+//   AiFillFolderAdd,
+//   AiFillHeart,
+//   AiOutlineMenu,
+//   AiTwotoneFileExclamation,
+// } from "react-icons/ai";
 import { BsCartCheck, BsFillArchiveFill } from "react-icons/bs";
 
 export const routes = [
@@ -69,9 +69,9 @@ export const routes = [
   // },
 
   {
-    path: "/saved",
-    name: "Banner",
-    icon: <AiFillHeart />,
+    path: "/admin/manage-notification",
+    name: "Yêu cầu",
+    icon: <FaBell />,
   },
   {
     path: "/settings",

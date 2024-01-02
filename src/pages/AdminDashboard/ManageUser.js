@@ -3,7 +3,7 @@ import Nav from "./Nav";
 import "./Customer.scss";
 import { Table } from "react-bootstrap";
 import ReactPaginate from "react-paginate";
-import { BiEdit } from "react-icons/bi";
+// import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import { deleteUser, getUser } from "../../service/userService";
 import { toast } from "react-toastify";
@@ -15,6 +15,7 @@ const ManageUser = () => {
   const [currentLimit, setCurrentLimit] = useState(2);
   const [totalPages, setTotalPages] = useState(0);
   const [sortByName, setSortByName] = useState(false);
+
   const getAllUsers = async () => {
     let res = await getUser(currentPage, currentLimit);
     if (res && res.errCode === 0) {
@@ -51,9 +52,11 @@ const ManageUser = () => {
       }
     });
   };
+
   const handlePageClick = async (event) => {
     setCurrentPage(+event.selected + 1);
   };
+
   return (
     <div className="manage-customer auto">
       <Nav />

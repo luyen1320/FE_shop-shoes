@@ -113,7 +113,9 @@ const ModalSupplier = (props) => {
         <Modal.Body>
           <Form className="row g-3 needs-validation">
             <Form.Group className="" controlId="formBasicName">
-              <Form.Label>Tên</Form.Label>
+              <Form.Label>
+                Tên <span style={{ color: "red" }}>*</span>
+              </Form.Label>
               <Form.Control
                 type="text"
                 value={selectedData.name}
@@ -127,7 +129,9 @@ const ModalSupplier = (props) => {
             </Form.Group>
 
             <Form.Group className="" controlId="formBasicEmail">
-              <Form.Label>Email</Form.Label>
+              <Form.Label>
+                Email <span style={{ color: "red" }}>*</span>
+              </Form.Label>
               <Form.Control
                 className={
                   validInputs.email ? "form-control" : "form-control is-invalid"
@@ -142,7 +146,9 @@ const ModalSupplier = (props) => {
             </Form.Group>
 
             <Form.Group className="" controlId="formBasicNumber">
-              <Form.Label>Phone</Form.Label>
+              <Form.Label>
+                Phone <span style={{ color: "red" }}>*</span>
+              </Form.Label>
               <Form.Control
                 type="text"
                 className={
@@ -156,7 +162,9 @@ const ModalSupplier = (props) => {
             </Form.Group>
 
             <Form.Group className="">
-              <Form.Label>Địa chỉ</Form.Label>
+              <Form.Label>
+                Địa chỉ <span style={{ color: "red" }}>*</span>
+              </Form.Label>
               <Form.Control
                 type="text"
                 className={

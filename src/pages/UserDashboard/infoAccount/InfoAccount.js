@@ -31,6 +31,7 @@ const InfoAccount = () => {
       console.log(res.errMessage);
       toast.error(res.errMessage);
     }
+    console.log("check user:", res);
   };
 
   useEffect(() => {
@@ -278,10 +279,12 @@ const InfoAccount = () => {
                                   {item?.status === "PENDING"
                                     ? "Chờ xác nhận"
                                     : item?.status === "CONFIRM"
-                                    ? "Xác nhận"
+                                    ? "Chờ lấy hàng"
                                     : item?.status === "SHIPPING"
                                     ? "Đang giao hàng"
-                                    : "Đã giao"}
+                                    : item?.status === "SUCCESS"
+                                    ? "Đã giao"
+                                    : "Đã hủy"}
                                 </td>
                               </tr>
                             );

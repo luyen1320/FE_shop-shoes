@@ -29,7 +29,7 @@ const Order = () => {
     district: "",
     ward: "",
   });
-  console.log(detailOrder);
+  // console.log(detailOrder);
   useEffect(() => {
     // Kiểm tra xem có thông tin người dùng trong Local Storage không
     const chooseProduct = localStorage.getItem("chooseProduct");
@@ -160,8 +160,8 @@ const Order = () => {
 
   useEffect(() => {
     const init = detailOrder?.deliveryType === "FAST" ? 65000 : 45000;
+
     if (orderProduct?.length > 0) {
-      console.log(123);
       setDetailOrder({
         ...detailOrder,
         userId: user?.id,
@@ -190,14 +190,14 @@ const Order = () => {
           (accumulator, currentValue) =>
             accumulator +
             parseInt(currentValue?.price) *
-              ((100 - parseInt(currentValue?.discount)) / 100) *
+              ((100 - parseInt(currentValue?.discount || 0)) / 100) *
               currentValue?.quantity,
           init
         ),
       });
     }
   }, [detailOrder.deliveryType, orderProduct, cartProducts, user]);
-  console.log(cartProducts);
+  // console.log(cartProducts);
   return (
     <Suspense>
       <Navbar />
@@ -207,7 +207,9 @@ const Order = () => {
           <div className="content-left">
             <form className="row g-3 needs-validation">
               <div className="col-md-12">
-                <label className="form-label">Người nhận</label>
+                <label className="form-label">
+                  Người nhận <span>*</span>
+                </label>
                 <input
                   type="text"
                   className="form-input"
@@ -222,7 +224,9 @@ const Order = () => {
               </div>
 
               <div className="col-md-12">
-                <label className="form-label">Email</label>
+                <label className="form-label">
+                  Email <span>*</span>
+                </label>
                 <input
                   type="email"
                   className="form-input"
@@ -234,7 +238,9 @@ const Order = () => {
               </div>
 
               <div className="col-md-12">
-                <label className="form-label">Điện thoại</label>
+                <label className="form-label">
+                  Điện thoại <span>*</span>
+                </label>
                 <input
                   type="text"
                   className="form-input"
@@ -246,7 +252,9 @@ const Order = () => {
               </div>
 
               <div className="col-md-12">
-                <label className="form-label">Địa chỉ</label>
+                <label className="form-label">
+                  Địa chỉ <span>*</span>
+                </label>
                 <input
                   type="text"
                   className="form-input"
@@ -261,12 +269,16 @@ const Order = () => {
               </div>
 
               <div className="col-md-4">
-                <label className="form-label">Tỉnh/Thành phố</label>
+                <label className="form-label">
+                  Tỉnh/Thành phố <span>*</span>
+                </label>
                 <ProvinceDropdown onChange={handleProvinceChange} />
               </div>
 
               <div className="col-md-4">
-                <label className="form-label">Quận/Huyện</label>
+                <label className="form-label">
+                  Quận/Huyện <span>*</span>
+                </label>
                 <DistrictDropDwon
                   provinceCode={selectedProvinceCode}
                   onChange={handleDistrictChange}
@@ -274,7 +286,9 @@ const Order = () => {
               </div>
 
               <div className="col-md-4">
-                <label className="form-label">Xã/Phường</label>
+                <label className="form-label">
+                  Xã/Phường <span>*</span>
+                </label>
                 <WardDropdown
                   districtCode={selectedDistrictCode}
                   onChange={handleWardChange}
@@ -313,7 +327,7 @@ const Order = () => {
                   />
                   <label>
                     Giao hàng nhanh trong ngày:
-                    <span>65.000đ</span>
+                    <span>65.000₫</span>
                   </label>
                 </li>
                 <li>
@@ -331,7 +345,7 @@ const Order = () => {
                   />
                   <label>
                     Giao hàng tiêu chuẩn(3-5 ngày toàn quốc):
-                    <span>45.000đ</span>
+                    <span>45.000₫</span>
                   </label>
                 </li>
               </ul>
@@ -366,6 +380,14 @@ const Order = () => {
                     }
                   />
                   <label>Chuyển khoản ngân hàng</label>
+                </li>
+
+                <li>
+                  <p>
+                    <strong>Chú ý:</strong>Sau khi đặt hàng thành công vào email
+                    kiểm tra lại đơn hàng của bạn. Cảm ơn bạn đã đặt hàng tại
+                    Shoes
+                  </p>
                 </li>
               </ul>
             </div>
@@ -464,9 +486,9 @@ const Order = () => {
             <div className="order-total">
               Phí ship:{" "}
               {detailOrder?.deliveryType === "FAST" ? (
-                <span>65.000đ</span>
+                <span>65.000₫</span>
               ) : (
-                <span>45.000đ</span>
+                <span>45.000₫</span>
               )}
             </div>
             <div className="text-lg font-semibold order-total">

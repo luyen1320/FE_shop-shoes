@@ -33,6 +33,7 @@ const ManageCustomer = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [currentLimit, setCurrentLimit] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
+
   const getAllCustomers = async () => {
     let res = await getCustomer(currentPage, currentLimit, sortByName);
     if (res && res.errCode === 0) {

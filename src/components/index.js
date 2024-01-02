@@ -12,3 +12,4 @@ export { default as Order } from "./order/Order";
 export { default as SaleProduct } from "./Sale/SaleProduct";
 export { default as Accessory } from "./accessory/Accessory";
 export { default as Contact } from "./contact/Contact";
+export { default as ModalNotification } from "./modal/ModelNotification";

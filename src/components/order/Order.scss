@@ -7,6 +7,10 @@
 
         .content-left{
             width: 33.3%;
+
+            span{
+                color: red;
+            }
         }
 
         .middle-content{
@@ -28,11 +32,17 @@
 
                         label{
                             display: contents;
+                            font-size: 16px;
 
                             span{
                                 float: right;
                             }
                         }
+
+                        p{
+                            margin-left: 4px;
+                        }
+
                     }
                 }
              }
