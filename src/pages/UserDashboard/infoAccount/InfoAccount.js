@@ -7,12 +7,25 @@ import Row from "react-bootstrap/Row";
 import Tab from "react-bootstrap/Tab";
 import { Table } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { getOrderById } from "../../../service/productService";
+import { getOrderById, updateOrder } from "../../../service/productService";
 import { editCustomer } from "../../../service/userService";
+import Swal from "sweetalert2";
 
 const InfoAccount = () => {
   const [user, setUser] = useState({});
   const [listOrder, setListOrder] = useState([]);
+
+  const handleUpdateOrder = async (id, value) => {
+    console.log(id);
+    let res = await updateOrder(id, { status: value });
+    if (res && res.errCode === 0) {
+      toast.success("Cập nhật thành công");
+      getAllOrderById(user?.id);
+    } else {
+      toast.error(res.errMessage);
+    }
+  };
+
   useEffect(() => {
     // Kiểm tra xem có thông tin người dùng trong Local Storage không
     const storedUser = localStorage.getItem("user");
@@ -225,6 +238,7 @@ const InfoAccount = () => {
                           <th>Tổng tiền</th>
                           <th>Ngày đặt</th>
                           <th>Trạng thái</th>
+                          <th>Hành động</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -285,6 +299,48 @@ const InfoAccount = () => {
                                     : item?.status === "SUCCESS"
                                     ? "Đã giao"
                                     : "Đã hủy"}
+                                </td>
+                                <td>
+                                  <button
+                                    className={`${
+                                      item?.status === "PENDING"
+                                        ? "bg-red-400 rounded-md"
+                                        : "hidden"
+                                    } px-2 cursor-pointer py-1 text-sm text-white `}
+                                    onClick={async () => {
+                                      Swal.fire({
+                                        title: "Bạn có muốn hủy?",
+                                        text: "Đơn hàng sẽ bị hủy!",
+                                        icon: "warning",
+                                        showCancelButton: true,
+                                        confirmButtonColor: "#3085d6",
+                                        cancelButtonColor: "#d33",
+                                        confirmButtonText: "Yes, delete it!",
+                                      }).then(async (result) => {
+                                        if (result.isConfirmed) {
+                                          try {
+                                            // await deleteOrder(item?.id);
+                                            // fectchDtManage();
+                                            // setGetOrders(
+                                            //   getOrders.filter((x) => x.id !== item.id)
+                                            // );
+                                            await handleUpdateOrder(
+                                              item?.id,
+                                              "CANCEL"
+                                            );
+                                            Swal.fire(
+                                              "Đã hủy!",
+                                              "Đơn hàng đã được hủy."
+                                            );
+                                          } catch (e) {
+                                            Swal.fire("Error", e, "error");
+                                          }
+                                        }
+                                      });
+                                    }}
+                                  >
+                                    Hủy đơn hàng
+                                  </button>
                                 </td>
                               </tr>
                             );
