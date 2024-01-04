@@ -5,6 +5,9 @@ import DropMenu from "../../pages/UserDashboard/DropdownMenu/DropMenu";
 // import { IoPersonCircleOutline } from "react-icons/io5";
 // import { FaShoppingCart } from "react-icons/fa";
 // import { getAllProductInCart } from "../../service/productService";
+import { IoPersonCircleOutline } from "react-icons/io5";
+import { FaShoppingCart } from "react-icons/fa";
+import { getAllProductInCart } from "../../service/productService";
 import { useDispatch, useSelector } from "react-redux";
 import { setProducts } from "../../redux/cartSlice";
 import { toast } from "react-toastify";
@@ -29,7 +32,6 @@ function Navbar(props) {
   useEffect(() => {
     getAllProductsInCart(user?.id, dispatch, toast);
   }, [user?.id]);
-
   const handleOnChangeMenu = () => {
     setOpenProfile(true);
   };
@@ -65,12 +67,6 @@ function Navbar(props) {
           </li>
           <li>
             <Link to="/sale-product">Sale</Link>
-          </li>
-          <li>
-            <Link to="/accessory">Phụ kiện</Link>
-          </li>
-          <li>
-            <Link to="/contact">Liên hệ</Link>
           </li>
         </ul>
       </nav>

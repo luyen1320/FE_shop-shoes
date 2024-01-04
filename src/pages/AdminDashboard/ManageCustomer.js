@@ -33,7 +33,6 @@ const ManageCustomer = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [currentLimit, setCurrentLimit] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
-
   const getAllCustomers = async () => {
     let res = await getCustomer(currentPage, currentLimit, sortByName);
     if (res && res.errCode === 0) {
@@ -165,7 +164,6 @@ const ManageCustomer = () => {
             <div className="flex items-center justify-center col-span-2 mb-3">
               <h2 className="">{edit ? "Sửa nhân viên" : "Thêm nhân viên"}</h2>
             </div>
-
             <input
               type="text"
               className="col-span-1 px-3 py-1 border border-[#cccc] rounded-md"
@@ -183,7 +181,6 @@ const ManageCustomer = () => {
               placeholder="Nhập email..."
               onChange={handleChange}
             />
-
             <input
               type="text"
               className="w-full px-3 py-1 border border-[#cccc] rounded-md"
@@ -220,7 +217,6 @@ const ManageCustomer = () => {
               <option value="STAFF">Nhân viên</option>
               <option value="ADMIN">Admin</option>
             </select>
-
             <div className="flex items-center justify-center col-span-2 mt-3">
               <button
                 className="px-6 py-2 text-white bg-blue-500 rounded-lg"

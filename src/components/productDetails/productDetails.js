@@ -42,7 +42,6 @@ const ProductDetails = () => {
       setUser(JSON.parse(storedUser));
     }
   }, []);
-
   const getOnePrd = async () => {
     let res = await getOneProduct(id);
     if (res && res.errCode === 0) {
@@ -108,7 +107,6 @@ const ProductDetails = () => {
       toast.error(res.errMessage);
     }
   };
-
   const [active, setActive] = useState(1);
 
   const handleToggleClick = (id) => {
@@ -355,6 +353,7 @@ const ProductDetails = () => {
           </div>
         </div>
       </div>
+
       <Footer />
     </>
   );

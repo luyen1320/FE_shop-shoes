@@ -2,17 +2,15 @@
     height: 540px;
     .swiper-slide {
         // height: inherit;
-        padding-top: 55%;
-        overflow: hidden;
         position: relative;
         background-color: #fff;
 
         img {
-            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: fit-content;
+            aspect-ratio: 16/13 !important;
+            object-fit: cover;
         }
     }
 
@@ -39,15 +37,17 @@
 
     &-wrapper {
         width: 100%;
-        padding-top: 65%;
-        overflow: hidden;
+        // padding-top: 65%;
+        // overflow: hidden;
         position: relative;
 
         img {
-            position: absolute;
+            // position: absolute;
             top: 0;
             left: 0;
             width: 100%;
+            object-fit: cover;
+            aspect-ratio: 16/13 !important;
         }
     }
 

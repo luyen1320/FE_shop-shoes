@@ -54,7 +54,7 @@ function HomeProduct(props) {
         </Link>
       </div>
 
-      <h2>GIẦY ADIDAS</h2>
+      <h2>GIẦY Jordan</h2>
       <div className="list">
         {getProductByAdidas?.length > 0 &&
           getProductByAdidas?.map((item, index) => {
