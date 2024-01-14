@@ -32,7 +32,7 @@ const ManageNotification = () => {
               <th>Khách hàng</th>
               <th>Nội dung</th>
               <th>Ngày hủy</th>
-              <th>Hành Động</th>
+              {/* <th>Hành Động</th> */}
             </tr>
           </thead>
           <tbody>
@@ -65,7 +65,7 @@ const ManageNotification = () => {
                     <td>
                       {date} {time}
                     </td>
-                    <td>
+                    {/* <td>
                       <button
                         className="mx-3 btn btn-primary"
                         onClick={() => setShowModal(true)}
@@ -75,7 +75,7 @@ const ManageNotification = () => {
                       <button className="btn btn-danger">
                         <AiFillDelete />
                       </button>
-                    </td>
+                    </td> */}
                   </tr>
                 );
               })}
@@ -83,7 +83,7 @@ const ManageNotification = () => {
         </Table>
       </div>
 
-      <ModalNotification show={showModal} handleClose={handleClose} />
+      {/* <ModalNotification show={showModal} handleClose={handleClose} /> */}
     </div>
   );
 };
