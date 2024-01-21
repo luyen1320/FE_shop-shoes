@@ -15,7 +15,6 @@ const ManageUser = () => {
   const [currentLimit, setCurrentLimit] = useState(2);
   const [totalPages, setTotalPages] = useState(0);
   const [sortByName, setSortByName] = useState(false);
-
   const getAllUsers = async () => {
     let res = await getUser(currentPage, currentLimit);
     if (res && res.errCode === 0) {

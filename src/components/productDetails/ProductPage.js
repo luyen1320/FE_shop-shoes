@@ -61,7 +61,6 @@ const ProductPage = () => {
   const [supplierActive, setSupplierActive] = useState("");
   const [filterPrice, setFilterPrice] = useState([0, 0]);
   const [filterSize, setFilterSize] = useState([]);
-
   const getAllProducts = async () => {
     let res = await getAllProduct(
       currentPage,
@@ -79,7 +78,6 @@ const ProductPage = () => {
       toast.error(res.errMessage);
     }
   };
-
   //fetch supplier
   const fetchSupplier = async () => {
     let res = await fetchAllSupplierNoLimit();
@@ -93,7 +91,6 @@ const ProductPage = () => {
       setSupplierActive(slug);
     }
   }, [slug]);
-
   useEffect(() => {
     fetchSupplier();
   }, []);

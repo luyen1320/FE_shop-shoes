@@ -64,7 +64,6 @@ const SellingProducts = () => {
   useEffect(() => {
     getAllProductBestSale();
   }, []);
-
   console.log(getProduct);
   return (
     <div className="sell-products">

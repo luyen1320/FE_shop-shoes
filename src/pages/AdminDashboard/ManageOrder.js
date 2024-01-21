@@ -49,7 +49,6 @@ const ManageOrder = () => {
   };
 
   const [getOrders, setGetOrders] = useState([]);
-
   const getAllOrders = async () => {
     let res = await getAllOrder(currentPage, currentLimit, sortByName);
     if (res && res.errCode === 0) {
@@ -75,7 +74,6 @@ const ManageOrder = () => {
   useEffect(() => {
     fectchDtManage();
   }, []);
-
   useEffect(() => {
     getAllOrders();
   }, [currentPage, sortByName]);
